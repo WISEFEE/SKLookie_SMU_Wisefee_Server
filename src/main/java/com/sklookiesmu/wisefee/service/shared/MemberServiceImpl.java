@@ -19,7 +19,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public Long join(Member member){
         memberRepository.create(member);
-        return member.getId();
+        return member.getMemberId();
     }
 
     @Transactional
