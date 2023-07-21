@@ -9,8 +9,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
-
-
+import java.util.Optional;
 
 
 @Repository
@@ -68,6 +67,20 @@ public class MemberRepository {
         em.persist(member);
     }
 
+
+
+    /**
+     * [Member 엔티티 단일조회 by Email/PWD]
+     * 로그인 시, 이메일로 회원 조회.
+     * @param [email 이메일]
+     * @return [Member 엔티티]
+     */
+    public Optional<Member> findByEmail(String email){
+        TypedQuery typedQuery = em.createQuery("select m from Member m where m.email = :email", Member.class);
+        typedQuery.setParameter("email", email);
+        Member member = (Member) typedQuery.getSingleResult();
+        return Optional.ofNullable(member);
+    }
 
 }
 

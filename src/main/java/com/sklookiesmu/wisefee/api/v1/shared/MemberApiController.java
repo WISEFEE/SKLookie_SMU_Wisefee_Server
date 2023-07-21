@@ -1,6 +1,8 @@
 package com.sklookiesmu.wisefee.api.v1.shared;
 
 import com.sklookiesmu.wisefee.domain.Member;
+import com.sklookiesmu.wisefee.dto.shared.jwt.TokenInfo;
+import com.sklookiesmu.wisefee.dto.shared.member.LoginRequestDto;
 import com.sklookiesmu.wisefee.dto.shared.member.MemberRequestDto;
 import com.sklookiesmu.wisefee.dto.shared.member.MemberResponseDto;
 import com.sklookiesmu.wisefee.service.shared.MemberService;
@@ -58,6 +60,16 @@ public class MemberApiController {
         Member entity = modelMapper.map(member, Member.class);
         Long id = memberService.join(entity);
         return ResponseEntity.status(HttpStatus.OK).body(id);
+    }
+
+
+
+    @PostMapping("/api/v1/login")
+    public ResponseEntity<TokenInfo> login(@RequestBody LoginRequestDto memberLoginRequestDto) {
+        String memberId = memberLoginRequestDto.getEmail();
+        String password = memberLoginRequestDto.getPassword();
+        TokenInfo tokenInfo = memberService.login(memberId, password);
+        return ResponseEntity.status(HttpStatus.OK).body(tokenInfo);
     }
 
 
