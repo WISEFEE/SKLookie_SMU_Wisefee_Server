@@ -3,6 +3,8 @@ package com.sklookiesmu.wisefee.api.v1.shared;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.dto.shared.member.MemberRequestDto;
 import com.sklookiesmu.wisefee.dto.shared.member.MemberResponseDto;
+import com.sklookiesmu.wisefee.dto.shared.member.MemberUpdateRequestDto;
+import com.sklookiesmu.wisefee.repository.MemberRepository;
 import com.sklookiesmu.wisefee.service.shared.MemberService;
 import io.swagger.annotations.*;
 
@@ -12,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +25,8 @@ public class MemberApiController {
     private final MemberService memberService;
 
     private final ModelMapper modelMapper;
+
+    private final EntityManager em;
 
     @ApiOperation(value = "회원 전체 조회")
     @GetMapping("/api/v1/member")
@@ -51,13 +56,23 @@ public class MemberApiController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-
     @ApiOperation(value = "회원 신규 추가")
     @PostMapping("/api/v1/member")
     public ResponseEntity<Long> addMember(@RequestBody MemberRequestDto member){
         Member entity = modelMapper.map(member, Member.class);
         Long id = memberService.join(entity);
         return ResponseEntity.status(HttpStatus.OK).body(id);
+    }
+
+    @ApiOperation(value = "회원 수정")
+    @PostMapping("/api/v1/member/{id}")
+    public ResponseEntity<Long> updateMember(
+            @ApiParam(value = "회원 PK", required = true)
+            @PathVariable("id") Long id,
+            @RequestBody MemberUpdateRequestDto member){
+        Member entity = modelMapper.map(member, Member.class);
+        Long result =  memberService.updateMember(id, entity);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
 

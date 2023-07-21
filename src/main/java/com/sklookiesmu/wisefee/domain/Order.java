@@ -18,20 +18,34 @@ public class Order {
     @Column(name = "ORDER_ID")
     private Long orderId;
 
-    @Column(name = "TUMBLR_STATUS", nullable = false, length = 1)
+    @Column(name = "TUMBLR_STATUS")
     private String tumblrStatus;
 
     @Column(name = "PRODUCT_RECEIVE_TIME")
     private LocalDateTime productReceiveTime;
 
-    @Column(name = "PRODUCT_STATUS", nullable = false, length = 30)
+    @Column(name = "PRODUCT_STATUS")
     private String productStatus;
 
-    @Column(name = "CREATED_AT", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
 
-    @Column(name = "UPDATED_AT", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Column(name = "UPDATED_AT")
     private LocalDateTime updatedAt;
+
+    /**
+     * 생성일, 수정일 값 세팅
+     */
+    @PrePersist
+    public void prePersist(){
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate(){
+        this.updatedAt = LocalDateTime.now();
+    }
 
     /**
      * 연관관계 매핑

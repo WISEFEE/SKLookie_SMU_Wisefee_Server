@@ -1,5 +1,6 @@
 package com.sklookiesmu.wisefee.service.shared;
 
+import com.sklookiesmu.wisefee.common.error.MemberNotFoundException;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,4 +41,19 @@ public class MemberServiceImpl implements MemberService {
 
         return member;
     }
+
+    @Transactional
+    public Long updateMember(Long id, Member updateMember) {
+        Member member = memberRepository.find(id);
+
+        /* 예외 처리 */
+        if(member == null) {
+            throw new MemberNotFoundException("Member not found with id " + id);
+        }
+
+        return member.updateMember(updateMember);
+
+    }
+
+
 }

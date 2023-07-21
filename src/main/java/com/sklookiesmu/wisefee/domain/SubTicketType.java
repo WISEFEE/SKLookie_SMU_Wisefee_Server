@@ -40,14 +40,28 @@ public class SubTicketType {
     @Column(name = "SUBTCT_MAX_DISCNT_RATE", nullable = false)
     private int subTicketMaxDiscountRate;
 
-    @Column(name = "SUBTCT_DESC", columnDefinition = "TEXT")
+    @Column(name = "SUBTCT_DESC")
     private String subTicketDescription;
 
-    @Column(name = "CREATED_AT", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
 
-    @Column(name = "UPDATED_AT", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Column(name = "UPDATED_AT")
     private LocalDateTime updatedAt;
+
+    /**
+     * 생성일, 수정일 값 세팅
+     */
+    @PrePersist
+    public void prePersist(){
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate(){
+        this.updatedAt = LocalDateTime.now();
+    }
 
 
     /**

@@ -33,5 +33,12 @@ public interface MemberService {
      */
     public abstract Member getMember(Long id);
 
+    /**
+     * [Member 엔티티 수정]
+     * 회원 수정
+     * @param [Member Member 엔티티(수정사항 반영된 상태)]
+     * @return [id (실행결과)]
+     */
+    public abstract Long updateMember(Long id, Member updateMember);
 
 }

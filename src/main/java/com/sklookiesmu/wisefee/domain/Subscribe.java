@@ -18,10 +18,10 @@ public class Subscribe {
     @Column(name = "SUB_ID")
     private Long subId;
 
-    @Column(name = "TOTAL_PRICE", nullable = true)
+    @Column(name = "TOTAL_PRICE")
     private Integer totalPrice;
 
-    @Column(name = "SUB_COMMENT", nullable = true, length = 3000)
+    @Column(name = "SUB_COMMENT")
     private String subComment;
 
     @Column(name = "SUB_TYPE", nullable = false, length = 100)
@@ -30,11 +30,25 @@ public class Subscribe {
     @Column(name = "SUB_PEOPLE", nullable = false)
     private Integer subPeople;
 
-    @Column(name = "CREATED_AT", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
 
-    @Column(name = "UPDATED_AT", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Column(name = "UPDATED_AT")
     private LocalDateTime updatedAt;
+
+    /**
+     * 생성일, 수정일 값 세팅
+     */
+    @PrePersist
+    public void prePersist(){
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate(){
+        this.updatedAt = LocalDateTime.now();
+    }
 
     /**
      * 연관관계 매핑
