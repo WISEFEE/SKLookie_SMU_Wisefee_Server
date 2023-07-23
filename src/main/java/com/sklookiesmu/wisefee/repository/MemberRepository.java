@@ -70,10 +70,10 @@ public class MemberRepository {
 
 
     /**
-     * [Member 엔티티 단일조회 by Email/PWD]
+     * [Member 엔티티 단일조회 by Email]
      * 로그인 시, 이메일로 회원 조회.
      * @param [email 이메일]
-     * @return [Member 엔티티]
+     * @return [Member || Null]
      */
     public Optional<Member> findByEmail(String email){
         TypedQuery typedQuery = em.createQuery("select m from Member m where m.email = :email", Member.class);

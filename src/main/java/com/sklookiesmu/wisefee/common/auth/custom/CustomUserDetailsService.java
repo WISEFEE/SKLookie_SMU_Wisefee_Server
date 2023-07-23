@@ -13,6 +13,11 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.Collections;
 
+
+
+/**
+ * [JWT 인증 커스텀 필터에서 사용될 재정의된 UserDetailsService]
+ */
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
@@ -20,6 +25,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
+
+    /**
+     * [JWT 토큰의 인증 계정 찾기]
+     * UserDetailsService의 메서드를 오버라이딩하여, MemberRepository의 로직으로 인증 계정을 찾음
+     */
     @Override
     public CustomUserDetail loadUserByUsername(String username) throws UsernameNotFoundException {
         return memberRepository.findByEmail(username)
@@ -27,10 +37,15 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("해당하는 유저를 찾을 수 없습니다."));
     }
 
-    // 해당하는 User 의 데이터가 존재한다면 UserDetails 객체로 만들어서 리턴
+    /**
+     * [CustomUserDetail 형태로 반환]
+     * 해당 계정 정보가 존재 시, CustomUserDetail의 형태로 리턴
+     * @param [Member 찾은 멤버 엔티티 객체]
+     * @return [CustomUserDetail]
+     */
     private CustomUserDetail createUserDetails(Member member) {
         Collection<? extends GrantedAuthority> authorities =
-                Collections.singleton(new SimpleGrantedAuthority(member.getAccountType().toString()));
+                Collections.singleton(new SimpleGrantedAuthority("ROLE_" + member.getAccountType().toString()));
         return new CustomUserDetail(
                 member.getEmail(),
                 passwordEncoder.encode(member.getPassword()),

@@ -1,7 +1,6 @@
 package com.sklookiesmu.wisefee.service.shared;
 
 import com.sklookiesmu.wisefee.domain.Member;
-import com.sklookiesmu.wisefee.dto.shared.jwt.TokenInfo;
 
 import java.util.List;
 
@@ -33,15 +32,6 @@ public interface MemberService {
      * @return [회원 반환]
      */
     public abstract Member getMember(Long id);
-
-
-    /**
-     * [회원 조회]
-     * 회원을 PK를 통해서 조회한다.
-     * @param [id 회원 엔티티 PK]
-     * @return [TokenInfo]
-     */
-    public abstract TokenInfo login(String email, String password);
 
 
 }
