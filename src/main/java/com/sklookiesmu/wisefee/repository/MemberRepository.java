@@ -6,12 +6,8 @@ import com.sklookiesmu.wisefee.domain.QMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -92,10 +88,14 @@ public class MemberRepository {
      * @return [Member || Null]
      */
     public Optional<Member> findByEmail(String email){
-        TypedQuery typedQuery = em.createQuery("select m from Member m where m.email = :email", Member.class);
+        TypedQuery<Member> typedQuery = em.createQuery("select m from Member m where m.email = :email", Member.class);
         typedQuery.setParameter("email", email);
-        Member member = (Member) typedQuery.getSingleResult();
-        return Optional.ofNullable(member);
+        try{
+            Member member = (Member) typedQuery.getSingleResult();
+            return Optional.ofNullable(member);
+        } catch (NoResultException e){
+               return Optional.empty();
+        }
     }
 
 }

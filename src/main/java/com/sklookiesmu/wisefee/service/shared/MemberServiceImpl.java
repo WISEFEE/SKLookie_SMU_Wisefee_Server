@@ -1,6 +1,7 @@
 package com.sklookiesmu.wisefee.service.shared;
 
 import com.sklookiesmu.wisefee.common.error.MemberNotFoundException;
+import com.sklookiesmu.wisefee.common.error.ValidateMemberException;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -19,6 +21,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     public Long join(Member member){
+        Optional<Member> vailMember = memberRepository.findByEmail(member.getEmail());
+        if(vailMember.isPresent()) {
+            throw new ValidateMemberException("This member email is already exist. " + member.getEmail());
+        }
         memberRepository.create(member);
         return member.getMemberId();
     }
@@ -53,6 +59,12 @@ public class MemberServiceImpl implements MemberService {
 
         return member.updateMember(updateMember);
 
+    }
+
+    @Transactional
+    public Optional<Member> getMemberByEmail(String email) {
+        Optional<Member> member = memberRepository.findByEmail(email);
+        return member;
     }
 
 

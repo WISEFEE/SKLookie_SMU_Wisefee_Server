@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Api(tags = "회원 API")
@@ -53,6 +54,22 @@ public class MemberApiController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         MemberResponseDto result = modelMapper.map(member, MemberResponseDto.class);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @ApiOperation(value = "해당 Email의 회원 조회")
+    @GetMapping("/api/v1/member/find/{email}")
+    public ResponseEntity<MemberRequestDto> findMemberByEmail(
+            @ApiParam(value = "회원 Email", required = true)
+            @PathVariable("email") String email
+    ){
+        Optional<Member> optionalMember = memberService.getMemberByEmail(email);
+        if(optionalMember.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        Member member = optionalMember.get();
+        MemberRequestDto result = modelMapper.map(member, MemberRequestDto.class);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
