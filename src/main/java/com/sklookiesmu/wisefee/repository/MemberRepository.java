@@ -13,8 +13,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.List;
-
-
+import java.util.Optional;
 
 
 @Repository
@@ -82,6 +81,21 @@ public class MemberRepository {
      */
     public void create(Member member){
         em.persist(member);
+    }
+    
+
+
+    /**
+     * [Member 엔티티 단일조회 by Email]
+     * 로그인 시, 이메일로 회원 조회.
+     * @param [email 이메일]
+     * @return [Member || Null]
+     */
+    public Optional<Member> findByEmail(String email){
+        TypedQuery typedQuery = em.createQuery("select m from Member m where m.email = :email", Member.class);
+        typedQuery.setParameter("email", email);
+        Member member = (Member) typedQuery.getSingleResult();
+        return Optional.ofNullable(member);
     }
 
 }
