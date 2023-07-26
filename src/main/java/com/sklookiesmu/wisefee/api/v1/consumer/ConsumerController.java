@@ -3,6 +3,7 @@ package com.sklookiesmu.wisefee.api.v1.consumer;
 import com.sklookiesmu.wisefee.dto.consumer.CafeDto;
 import com.sklookiesmu.wisefee.dto.consumer.CafeOrderDto;
 import com.sklookiesmu.wisefee.dto.consumer.CafeProductDto;
+import com.sklookiesmu.wisefee.dto.consumer.OrderOptionDto;
 import com.sklookiesmu.wisefee.service.consumer.ConsumerServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,8 +40,8 @@ public class ConsumerController {
 
     @ApiOperation(value = "주문 옵션 정보 조회")
     @GetMapping("/{cafeId}/order/{orderId}")
-    public ResponseEntity<CafeOrderDto.CafeOrderResponseDto> getOrderOption(@PathVariable("cafeId") Long cafeId,
-                                                                            @PathVariable("orderId") Long orderId){
-        return ResponseEntity.status(HttpStatus.OK).body()
+    public ResponseEntity<OrderOptionDto.OrderOptionResponseDto> getOrderOption(@PathVariable("cafeId") Long cafeId,
+                                                         @PathVariable("orderId") Long orderId){
+        return ResponseEntity.status(HttpStatus.OK).body(consumerService.getOrderOptionInfo(cafeId));
     }
 }
