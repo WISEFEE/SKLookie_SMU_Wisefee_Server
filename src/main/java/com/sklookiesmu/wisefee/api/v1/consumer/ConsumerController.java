@@ -1,11 +1,9 @@
 package com.sklookiesmu.wisefee.api.v1.consumer;
 
 import com.sklookiesmu.wisefee.dto.consumer.CafeDto;
-import com.sklookiesmu.wisefee.dto.consumer.CafeOrderDto;
 import com.sklookiesmu.wisefee.dto.consumer.CafeProductDto;
 import com.sklookiesmu.wisefee.dto.consumer.OrderOptionDto;
 import com.sklookiesmu.wisefee.service.consumer.ConsumerServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

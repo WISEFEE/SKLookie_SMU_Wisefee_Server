@@ -3,7 +3,6 @@ package com.sklookiesmu.wisefee.repository.cafe;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sklookiesmu.wisefee.domain.Cafe;
-import com.sklookiesmu.wisefee.dto.consumer.CafeDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -28,7 +27,6 @@ public class CafeRepositoryCustomImpl implements CafeRepositoryCustom {
                 .orderBy(cafe.title.asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize()+1); // limit보다 데이터를 1개 더 들고와서 해당 데이터가 있으면 hasNext 변수에 true 넣어서 알림
-
 
         List<Long> content = new ArrayList<>();
         content = cafeListResponse.fetch();

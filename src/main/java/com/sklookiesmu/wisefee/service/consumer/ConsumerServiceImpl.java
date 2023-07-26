@@ -4,7 +4,6 @@ import com.sklookiesmu.wisefee.domain.Cafe;
 import com.sklookiesmu.wisefee.domain.OrderOption;
 import com.sklookiesmu.wisefee.domain.Product;
 import com.sklookiesmu.wisefee.dto.consumer.CafeDto;
-import com.sklookiesmu.wisefee.dto.consumer.CafeOrderDto;
 import com.sklookiesmu.wisefee.dto.consumer.CafeProductDto;
 import com.sklookiesmu.wisefee.dto.consumer.OrderOptionDto;
 import com.sklookiesmu.wisefee.repository.cafe.CafeRepository;
@@ -27,9 +26,6 @@ public class ConsumerServiceImpl implements ConsumerService {
     private final ProductRepository productRepository;
     private final OrderOptionRepository orderOptionRepository;
 
-    /**
-     * 매장 리스트 조회 -> 페이징 처리
-     */
     @Override
     public CafeDto.CafeListResponseDto getCafeList(Pageable pageable){
         Slice<Cafe> cafeList = cafeRepository.findWithNameFilter(pageable);
@@ -62,8 +58,6 @@ public class ConsumerServiceImpl implements ConsumerService {
         OrderOption orderOption = orderOptionRepository.findOptionByCafeId(cafeId).orElseThrow();
         return OrderOptionDto.OrderOptionResponseDto.from(orderOption);
     }
-
-
 
     /**
      * 정기구독 체결

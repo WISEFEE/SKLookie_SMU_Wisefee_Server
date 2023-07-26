@@ -1,6 +1,7 @@
 package com.sklookiesmu.wisefee.dto.consumer;
 
 import com.sklookiesmu.wisefee.domain.Product;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,8 +17,14 @@ public class CafeProductDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class CafeProductResponseDto{
+
+        @ApiModelProperty(value = "제품명", required = true)
         private String productName;
+
+        @ApiModelProperty(value = "제품가격", required = true)
         private int productPrice;
+
+        @ApiModelProperty(value = "제품정보", required = true)
         private String productInfo;
 
         public static CafeProductResponseDto from(Product product){

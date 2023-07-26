@@ -1,6 +1,7 @@
 package com.sklookiesmu.wisefee.dto.consumer;
 
 import com.sklookiesmu.wisefee.domain.Cafe;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,27 +13,36 @@ import java.util.stream.Collectors;
 
 public class CafeDto {
 
-
     /**
-     *  매장 위치 정보 필요 !!
+     *  TODO: 매장 위치 정보 필요 !!
      */
     @Getter @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class CafeRequest{
 
+        @ApiModelProperty(value = "매장명", required = true)
         private String title;
-        private String content;
-        private String cafePhone;
 
+        @ApiModelProperty(value = "매장 설명", required = true)
+        private String content;
+
+        @ApiModelProperty(value = "매장 연락처", required = true)
+        private String cafePhone;
     }
 
     @Getter @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class CafeResponseDto{
+
+        @ApiModelProperty(value = "매장명", required = true)
         private String title;
+
+        @ApiModelProperty(value = "매장 설명", required = true)
         private String content;
+
+        @ApiModelProperty(value = "매장 연락처", required = true)
         private String cafePhone;
         // private String location;
 

@@ -11,6 +11,12 @@ import java.util.Optional;
 @Repository
 public interface OrderOptionRepository extends JpaRepository<OrderOption, Long> {
 
+    /**
+     * [주문 옵션 정보 조회 쿼리]
+     * 매장 PK와 주문옵션과 연관관계를 가진 매장의 PK 일치 여부를 통해 옵션정보를 조회한다.
+     * @param cafeId
+     * @return
+     */
     @Query(value = "select op from OrderOption op where op.cafe.cafeId = :cafeId")
     Optional<OrderOption> findOptionByCafeId(@Param("cafeId") Long cafeId);
 
