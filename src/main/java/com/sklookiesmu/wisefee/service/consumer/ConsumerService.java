@@ -1,8 +1,12 @@
 package com.sklookiesmu.wisefee.service.consumer;
 
+import com.sklookiesmu.wisefee.domain.Cafe;
+import com.sklookiesmu.wisefee.domain.SubTicketType;
+import com.sklookiesmu.wisefee.domain.Subscribe;
 import com.sklookiesmu.wisefee.dto.consumer.CafeDto;
 import com.sklookiesmu.wisefee.dto.consumer.CafeProductDto;
 import com.sklookiesmu.wisefee.dto.consumer.OrderOptionDto;
+import com.sklookiesmu.wisefee.dto.consumer.SubscribeDto;
 import org.springframework.data.domain.Pageable;
 
 public interface ConsumerService{
@@ -38,4 +42,12 @@ public interface ConsumerService{
      * @return [주문 옵션 정보 DTO 반환]
      */
     OrderOptionDto.OrderOptionResponseDto getOrderOptionInfo(Long cafeId);
+
+    /**
+     * [구독하기]
+     * 고객이 매장의 구독권을 구독한다.
+     * @param request
+     */
+    void createSubscribe(SubscribeDto.SubscribeRequestDto request, Long cafeId, Long subTicketTypeId);
+
 }

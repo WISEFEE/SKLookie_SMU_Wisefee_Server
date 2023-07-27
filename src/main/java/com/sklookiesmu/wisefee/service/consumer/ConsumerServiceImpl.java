@@ -1,11 +1,12 @@
 package com.sklookiesmu.wisefee.service.consumer;
 
-import com.sklookiesmu.wisefee.domain.Cafe;
-import com.sklookiesmu.wisefee.domain.OrderOption;
-import com.sklookiesmu.wisefee.domain.Product;
+import com.sklookiesmu.wisefee.domain.*;
 import com.sklookiesmu.wisefee.dto.consumer.CafeDto;
 import com.sklookiesmu.wisefee.dto.consumer.CafeProductDto;
 import com.sklookiesmu.wisefee.dto.consumer.OrderOptionDto;
+import com.sklookiesmu.wisefee.dto.consumer.SubscribeDto;
+import com.sklookiesmu.wisefee.repository.SubTicketTypeRepository;
+import com.sklookiesmu.wisefee.repository.SubscribeRepository;
 import com.sklookiesmu.wisefee.repository.cafe.CafeRepository;
 import com.sklookiesmu.wisefee.repository.OrderOptionRepository;
 import com.sklookiesmu.wisefee.repository.ProductRepository;
@@ -25,6 +26,8 @@ public class ConsumerServiceImpl implements ConsumerService {
     private final CafeRepository cafeRepository;
     private final ProductRepository productRepository;
     private final OrderOptionRepository orderOptionRepository;
+    private final SubscribeRepository subscribeRepository;
+    private final SubTicketTypeRepository subTicketTypeRepository;
 
     @Override
     public CafeDto.CafeListResponseDto getCafeList(Pageable pageable){
@@ -37,7 +40,7 @@ public class ConsumerServiceImpl implements ConsumerService {
      */
     @Override
     public CafeProductDto.CafeProductListResponseDto getProductList(Long cafeId){
-        List<Product> productList = productRepository.findAll();
+        List<Product> productList = productRepository.findAllByCafeId(cafeId);
         return CafeProductDto.CafeProductListResponseDto.of(productList);
     }
 
@@ -59,7 +62,16 @@ public class ConsumerServiceImpl implements ConsumerService {
         return OrderOptionDto.OrderOptionResponseDto.from(orderOption);
     }
 
+
     /**
      * 정기구독 체결
      */
+    @Override
+    public void createSubscribe(SubscribeDto.SubscribeRequestDto request, Long cafeId, Long subTicketTypeId) {
+
+        Cafe cafe = cafeRepository.findById(cafeId).orElseThrow();
+        SubTicketType subTicketType = subTicketTypeRepository.findById(subTicketTypeId).orElseThrow();
+
+        subscribeRepository.save(request.toEntity(cafe, subTicketType));
+    }
 }

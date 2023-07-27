@@ -1,5 +1,6 @@
 package com.sklookiesmu.wisefee.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Builder
 @Table(name = "SUBSCRIBE")
 public class Subscribe {
     @Id

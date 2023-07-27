@@ -27,7 +27,6 @@ public class MemberServiceImpl implements MemberService {
         List<Member> members = memberRepository.findAll(order);
         return members;
     }
-
     @Transactional
     public Member getMember(Long id) {
         Member member = memberRepository.find(id);

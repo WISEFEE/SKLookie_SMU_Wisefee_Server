@@ -3,6 +3,7 @@ package com.sklookiesmu.wisefee.api.v1.consumer;
 import com.sklookiesmu.wisefee.dto.consumer.CafeDto;
 import com.sklookiesmu.wisefee.dto.consumer.CafeProductDto;
 import com.sklookiesmu.wisefee.dto.consumer.OrderOptionDto;
+import com.sklookiesmu.wisefee.dto.consumer.SubscribeDto;
 import com.sklookiesmu.wisefee.service.consumer.ConsumerServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -42,4 +43,14 @@ public class ConsumerController {
                                                          @PathVariable("orderId") Long orderId){
         return ResponseEntity.status(HttpStatus.OK).body(consumerService.getOrderOptionInfo(cafeId));
     }
+
+    @ApiOperation(value = "정기 구독하기")
+    @PostMapping("{cafeId}/subscribe/{subTicketTypeId}")
+    public ResponseEntity<?> createSubscribe(@PathVariable("cafeId") Long cafeId,
+                                             @PathVariable("subTicketTypeId") Long subTicketTypeId,
+                                             @RequestBody SubscribeDto.SubscribeRequestDto request){
+        consumerService.createSubscribe(request, cafeId, subTicketTypeId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
