@@ -8,8 +8,8 @@ import com.sklookiesmu.wisefee.dto.consumer.SubscribeDto;
 import com.sklookiesmu.wisefee.repository.SubTicketTypeRepository;
 import com.sklookiesmu.wisefee.repository.SubscribeRepository;
 import com.sklookiesmu.wisefee.repository.cafe.CafeRepository;
-import com.sklookiesmu.wisefee.repository.OrderOptionRepository;
-import com.sklookiesmu.wisefee.repository.ProductRepository;
+import com.sklookiesmu.wisefee.repository.OrderOptionV2Repository;
+import com.sklookiesmu.wisefee.repository.ProductV2Repository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -24,8 +24,8 @@ import java.util.List;
 public class ConsumerServiceImpl implements ConsumerService {
 
     private final CafeRepository cafeRepository;
-    private final ProductRepository productRepository;
-    private final OrderOptionRepository orderOptionRepository;
+    private final ProductV2Repository productRepository;
+    private final OrderOptionV2Repository orderOptionRepository;
     private final SubscribeRepository subscribeRepository;
     private final SubTicketTypeRepository subTicketTypeRepository;
 

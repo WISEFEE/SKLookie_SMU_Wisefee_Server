@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface OrderOptionRepository extends JpaRepository<OrderOption, Long> {
+public interface OrderOptionV2Repository extends JpaRepository<OrderOption, Long> {
 
     /**
      * [주문 옵션 정보 조회 쿼리]

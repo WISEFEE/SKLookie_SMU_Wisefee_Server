@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductV2Repository extends JpaRepository<Product, Long> {
 
     /**
      * [매장 음료제품 리스트 조회]
