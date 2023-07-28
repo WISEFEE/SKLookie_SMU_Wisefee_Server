@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,6 +30,9 @@ public class OrderOption {
     @Column(name = "UPDATED_AT")
     private LocalDateTime updatedAt;
 
+    @Column(name = "DELETED_AT")
+    private LocalDateTime deletedAt;
+
     /**
      * 생성일, 수정일 값 세팅
      */
@@ -46,9 +51,14 @@ public class OrderOption {
      * 연관관계 매핑
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CAFE_ID")
+    @JoinColumn(name = "CAFE_ID", nullable = false)
     private Cafe cafe;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ORDER_ID", nullable = false)
-    private Order order;
+
+
+    @ManyToMany
+    @JoinTable(name = "ORDER_ORDEROPTION",
+            joinColumns = @JoinColumn(name = "ORDER_OPTION_ID"),
+            inverseJoinColumns = @JoinColumn(name = "ORDER_ID")
+    )
+    private List<Order> orders = new ArrayList<>();
 }

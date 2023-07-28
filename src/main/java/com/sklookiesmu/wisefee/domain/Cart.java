@@ -28,6 +28,9 @@ public class Cart {
     @Column(name = "UPDATED_AT")
     private LocalDateTime updatedAt;
 
+    @Column(name = "DELETED_AT")
+    private LocalDateTime deletedAt;
+
     /**
      * 생성일, 수정일 값 세팅
      */
