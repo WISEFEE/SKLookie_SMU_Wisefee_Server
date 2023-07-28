@@ -31,6 +31,7 @@ public class CafeApiController {
         return new CreateCafeResponseDto(id);
     }
 
+
     @ApiOperation(value = "매장 정보 수정")
     @PutMapping("/api/v1/cafe/{cafeId}")
     public UpdateCafeResponseDto updateCafe(@PathVariable("cafeId") Long cafeId,
@@ -40,6 +41,7 @@ public class CafeApiController {
 
         return new UpdateCafeResponseDto(findCafe.getCafeId(), findCafe.getTitle(), findCafe.getContent(), findCafe.getCafePhone());
     }
+
 
     @ApiOperation(value = "매장 삭제")
     @DeleteMapping("/api/v1/cafe/{cafeId}")
@@ -57,6 +59,7 @@ public class CafeApiController {
         return new CreateOrderOptionResponseDto(orderOptionId);
     }
 
+
     @ApiOperation(value = "주문 옵션 수정")
     @PutMapping("/api/v1/{cafeId}/orderOption/{orderOptionId}")
     public UpdateOrderOptionResponseDto updateOrderOption(@PathVariable("cafeId") Long cafeId,
@@ -68,12 +71,14 @@ public class CafeApiController {
         return new UpdateOrderOptionResponseDto(findOrderOption.getOrderOptionId(), findOrderOption.getOrderOptionName(), findOrderOption.getOrderOptionPrice());
     }
 
+
     @ApiOperation(value = "주문 옵션 삭제")
     @DeleteMapping("/api/v1/{cafeId}/orderOption/{orderOptionId}")
     public void deleteOrderOption(@PathVariable("cafeId") Long cafeId,
                                   @PathVariable("orderOptionId") Long orderOptionId) {
         cafeService.deleteOrderOption(cafeId, orderOptionId);
     }
+
 
     @ApiOperation(value = "상품 추가")
     @PostMapping("/api/v1/{cafeId}/product")
@@ -84,6 +89,7 @@ public class CafeApiController {
 
         return new CreateProductResponseDto(productId);
     }
+
 
     @ApiOperation(value = "상품 수정")
     @PutMapping("/api/v1/{cafeId}/product/{productId}")
@@ -96,12 +102,14 @@ public class CafeApiController {
         return new UpdateProductResponseDto(findProduct.getProductId(), findProduct.getProductName(), findProduct.getProductPrice(), findProduct.getProductInfo());
     }
 
+
     @ApiOperation(value = "상품 삭제")
     @DeleteMapping("/api/v1/{cafeId}/product/{productId}")
     public void deleteProduct(@PathVariable("cafeId") Long cafeId,
                               @PathVariable("productId") Long productId) {
         cafeService.deleteProduct(cafeId, productId);
     }
+
 
     @ApiOperation(value = "상품 옵션 추가")
     @PostMapping("/api/v1/{productId}/productOption")
@@ -112,6 +120,7 @@ public class CafeApiController {
 
         return new CreateProductOptionResponseDto(productOptionId);
     }
+
 
     @ApiOperation(value = "상품 옵션 수정")
     @PutMapping("/api/v1/{productId}/productOption/{productOptionId}")
@@ -125,6 +134,7 @@ public class CafeApiController {
         return new UpdateProductOptionResponseDto(findProductOption.getProductOptionId(), findProductOption.getProductOptionName());
     }
 
+
     @ApiOperation(value = "상품 옵션 삭제")
     @DeleteMapping("/api/v1/{productId}/productOption/{productOptionId}")
     public void deleteProductOption(@PathVariable("productId") Long productId,
@@ -132,6 +142,7 @@ public class CafeApiController {
     {
         cafeService.deleteProductOption(productId, productOptionId);
     }
+
 
     @ApiOperation(value = "상품 옵션 선택지 추가")
     @PostMapping("/api/v1/{productOptionId}/productOptionChoice")
@@ -142,6 +153,7 @@ public class CafeApiController {
 
         return new CreateProductOptionChoiceResponseDto(productOptionChoiceId);
     }
+
 
     @ApiOperation(value = "상품 옵션 선택지 수정")
     @PutMapping("/api/v1/{productId}/productOption/{productOptionId}/productOptionChoice/{productOptionChoiceId}")
@@ -154,6 +166,7 @@ public class CafeApiController {
 
         return new UpdateProductOptionChoiceResponseDto(findProductOptionChoice.getProductOptionChoiceId(), findProductOptionChoice.getProductOptionChoiceName(), findProductOptionChoice.getProductOptionChoicePrice());
     }
+
 
     @ApiOperation(value = "상품 옵션 선택지 삭제")
     @DeleteMapping("/api/v1/{productId}/productOption/{productOptionId}/productOptionChoice/{productOptionChoiceId}")
