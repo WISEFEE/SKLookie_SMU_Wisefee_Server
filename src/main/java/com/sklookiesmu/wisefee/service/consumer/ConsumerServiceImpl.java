@@ -62,7 +62,6 @@ public class ConsumerServiceImpl implements ConsumerService {
         return OrderOptionDto.OrderOptionResponseDto.from(orderOption);
     }
 
-
     /**
      * 정기구독 체결
      */

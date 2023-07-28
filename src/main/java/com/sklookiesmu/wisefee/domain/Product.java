@@ -27,11 +27,25 @@ public class Product {
     @Column(name = "PRODUCT_INFO", length = 2000)
     private String productInfo;
 
-    @Column(name = "CREATED_AT", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
 
-    @Column(name = "UPDATED_AT", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Column(name = "UPDATED_AT")
     private LocalDateTime updatedAt;
+
+    /**
+     * 생성일, 수정일 값 세팅
+     */
+    @PrePersist
+    public void prePersist(){
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate(){
+        this.updatedAt = LocalDateTime.now();
+    }
 
     /**
      * 연관관계 매핑

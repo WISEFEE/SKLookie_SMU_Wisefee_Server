@@ -3,6 +3,7 @@ package com.sklookiesmu.wisefee.service.shared;
 import com.sklookiesmu.wisefee.domain.Member;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MemberService {
 
@@ -33,5 +34,22 @@ public interface MemberService {
      */
     public abstract Member getMember(Long id);
 
+    /**
+     * [Member 엔티티 수정]
+     * 회원 수정
+     * @param [Member Member 엔티티(수정사항 반영된 상태)]
+     * @return [id (실행결과)]
+     */
+    public abstract Long updateMember(Long id, Member updateMember);
+
+    /**
+     * [멤버 조회]
+     * email을 이용해 회원 정보를 조회한다.
+     * 조회하는 정보는 회원가입 시 입력한 정보와 동일
+     *
+     * @param email
+     * @return
+     */
+    public abstract Optional<Member> getMemberByEmail(String email);
 
 }

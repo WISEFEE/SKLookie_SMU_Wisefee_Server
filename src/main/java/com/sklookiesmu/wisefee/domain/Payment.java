@@ -19,11 +19,19 @@ public class Payment {
     @Column(name = "PAYMENT_PRICE", nullable = false)
     private Integer paymentPrice;
 
-    @Column(name = "PAYMENT_INFO", nullable = false, length = 1000)
+    @Column(name = "PAYMENT_INFO")
     private String paymentInfo;
 
-    @Column(name = "CREATED_AT", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
+
+    /**
+     * 생성일 값 세팅
+     */
+    @PrePersist
+    public void prePersist(){
+        this.createdAt = LocalDateTime.now();
+    }
 
     /**
      * 연관관계 매핑

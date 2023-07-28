@@ -19,20 +19,34 @@ public class Notification {
     @Column(name = "NOTIFICATION_MESSAGE", nullable = false, length = 2000)
     private String notificationMessage;
 
-    @Column(name = "NOTIFICATION_STATUS", nullable = false, length = 1)
+    @Column(name = "NOTIFICATION_STATUS")
     private String notificationStatus;
 
-    @Column(name = "NOTIFICATION_TYPE", nullable = false, length = 30)
+    @Column(name = "NOTIFICATION_TYPE")
     private String notificationType;
 
     @Column(name = "REFERENCE_ID", length = 50)
     private String referenceId;
 
-    @Column(name = "CREATED_AT", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
 
-    @Column(name = "UPDATED_AT", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Column(name = "UPDATED_AT")
     private LocalDateTime updatedAt;
+
+    /**
+     * 생성일, 수정일 값 세팅
+     */
+    @PrePersist
+    public void prePersist(){
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate(){
+        this.updatedAt = LocalDateTime.now();
+    }
 
     /**
      * 연관관계 매핑
