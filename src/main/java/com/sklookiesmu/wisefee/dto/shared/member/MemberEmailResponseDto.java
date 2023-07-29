@@ -2,8 +2,8 @@ package com.sklookiesmu.wisefee.dto.shared.member;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import jdk.jfr.Description;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(description = "회원 이메일 기반 정보 조회 DTO")
-public class MemberEmailRequestDto {
+public class MemberEmailResponseDto {
     @ApiModelProperty(value = "회원 닉네임", required = true)
     @NotNull
     private String nickname;

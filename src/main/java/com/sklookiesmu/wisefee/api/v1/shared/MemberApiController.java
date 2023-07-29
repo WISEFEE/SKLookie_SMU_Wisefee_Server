@@ -2,22 +2,23 @@ package com.sklookiesmu.wisefee.api.v1.shared;
 
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
 import com.sklookiesmu.wisefee.domain.Member;
-import com.sklookiesmu.wisefee.dto.shared.member.MemberEmailRequestDto;
+import com.sklookiesmu.wisefee.dto.shared.member.MemberEmailResponseDto;
 import com.sklookiesmu.wisefee.dto.shared.member.MemberRequestDto;
 import com.sklookiesmu.wisefee.dto.shared.member.MemberResponseDto;
 import com.sklookiesmu.wisefee.dto.shared.member.MemberUpdateRequestDto;
-import com.sklookiesmu.wisefee.repository.MemberRepository;
 import com.sklookiesmu.wisefee.service.shared.MemberService;
 import io.swagger.annotations.*;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.internal.Errors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -113,27 +114,25 @@ public class MemberApiController {
 
     @ApiOperation(
             value = "회원 신규 추가",
-            notes = "본 Api는 새로운 회원을 데이터베이스에 추가하는 기능입니다.<br>" +
-                    "json 형식으로 회원 정보를 입력받아 DB에 회원을 등록합니다.<br><br>" +
+            notes = "본 API는 새로운 회원을 데이터베이스에 추가하는 기능입니다.\n\n" +
                     "입력 데이터:\n" +
-                    "```json\n"+
+                    "```json\n" +
                     "{\n" +
-                    "  \"회원 닉네임\": \"nickname\",\n" +
-                    "  \"회원 이메일\": \"email\",\n" +
-                    "  \"회원 연락처\": \"phone\",\n" +
-                    "  \"회원 사무용 연락처\": \"phoneOffice\",\n" +
-                    "  \"회원 생년월일\": \"birth\",\n" +
-                    "  \"회원 비밀번호\": \"password\",\n" +
-                    "  \"회원 계정 타입\": \"accountType\",\n" +
-                    "  \"회원 인증 타입\": \"authType\",\n" +
-                    "  \"이메일 인증 여부\": \"isAuthEmail\",\n" +
-                    "  \"알림 수신 여부\": \"isAllowPushMsg\",\n" +
-                    "  }\n" +
-                    "```\n"+
-                    "새로운 회원이 성공적으로 추가되면 새로운 회원의 아이디를 반환합니다.\n"
+                    "  \"회원 닉네임\": \"nickname\",               // 닉네임은 필수 입력 값입니다.\n" +
+                    "  \"회원 이메일\": \"email\",                  // 이메일은 aaa@aaa.com 형식을 지켜야 합니다.\n" +
+                    "  \"회원 연락처\": \"phone\",                  // 전화번호는 9자리 이상 11자리 이하의 숫자만 가능합니다.\n" +
+                    "  \"회원 사무용 연락처\": \"phoneOffice\",       // 전화번호는 9자리 이상 11자리 이하의 숫자만 가능합니다.\n" +
+                    "  \"회원 생년월일\": \"birth\",                 // 생년월일은 yyyyMMdd 형식으로 입력해야 합니다.\n" +
+                    "  \"회원 비밀번호\": \"password\",              // 비밀번호는 영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8자 ~ 20자의 비밀번호여야 합니다.\n" +
+                    "  \"회원 계정 타입\": \"accountType\",          // 계정 타입은 CONSUMER, SELLER 중 하나여야 합니다.\n" +
+                    "  \"회원 인증 타입\": \"authType\",             // 회원 인증 타입은 Kakao, Google, Naver 중 하나여야 합니다.\n" +
+                    "  \"이메일 인증 여부\": \"isAuthEmail\",         // 이메일 인증 여부는 TURE, FALSE 중 하나여야 합니다.\n" +
+                    "  \"알림 수신 여부\": \"isAllowPushMsg\"        // 알림 수신 여부는 TRUE, FALSE 중 하나여야 합니다.\n" +
+                    "}\n" +
+                    "```"
     )
     @PostMapping("/api/v1/member")
-    public ResponseEntity<Long> addMember(@RequestBody MemberRequestDto member){
+    public ResponseEntity<Long> addMember(@Valid @RequestBody MemberRequestDto member){
         Member entity = modelMapper.map(member, Member.class);
         Long id = memberService.join(entity);
         return ResponseEntity.status(HttpStatus.OK).body(id);
@@ -159,7 +158,7 @@ public class MemberApiController {
                     "```\n"
     )
     @GetMapping("/api/v1/member/find/{email}")
-    public ResponseEntity<MemberEmailRequestDto> findMemberByEmail(
+    public ResponseEntity<MemberEmailResponseDto> findMemberByEmail(
             @ApiParam(value = "회원 Email", required = true)
             @PathVariable("email") String email
     ){
@@ -169,7 +168,7 @@ public class MemberApiController {
         }
 
         Member member = optionalMember.get();
-        MemberEmailRequestDto result = modelMapper.map(member, MemberEmailRequestDto.class);
+        MemberEmailResponseDto result = modelMapper.map(member, MemberEmailResponseDto.class);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -179,25 +178,24 @@ public class MemberApiController {
             notes = "본 Api는 회원 전용으로 Email을 통해 회원의 정보를 수정합니다.<br>" +
                     "Email을 통해 회원 정보를 json파일에 맞춰 수정합니다. <br><br>" +
                     "입력 데이터:\n" +
-                    "```json\n"+
+                    "```json\n" +
                     "{\n" +
-                    "  \"회원 닉네임\": \"nickname\",\n" +
-                    "  \"회원 연락처\": \"phone\",\n" +
-                    "  \"회원 사무용 연락처\": \"phoneOffice\",\n" +
-                    "  \"회원 생년월일\": \"birth\",\n" +
-                    "  \"회원 비밀번호\": \"password\",\n" +
-                    "  \"회원 계정 타입\": \"accountType\",\n" +
-                    "  \"회원 인증 타입\": \"authType\",\n" +
-                    "  \"이메일 인증 여부\": \"isAuthEmail\",\n" +
-                    "  \"알림 수신 여부\": \"isAllowPushMsg\",\n" +
-                    "  }\n" +
-                    "```\n"
+                    "  \"회원 닉네임\": \"nickname\",               // 닉네임은 필수 입력 값입니다.\n" +
+                    "  \"회원 연락처\": \"phone\",                  // 전화번호는 9자리 이상 11자리 이하의 숫자만 가능합니다.\n" +
+                    "  \"회원 사무용 연락처\": \"phoneOffice\",       // 전화번호는 9자리 이상 11자리 이하의 숫자만 가능합니다.\n" +
+                    "  \"회원 생년월일\": \"birth\",                 // 생년월일은 yyyyMMdd 형식으로 입력해야 합니다.\n" +
+                    "  \"회원 비밀번호\": \"password\",              // 비밀번호는 영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8자 ~ 20자의 비밀번호여야 합니다.\n" +
+                    "  \"회원 계정 타입\": \"accountType\",          // 계정 타입은 CONSUMER, SELLER 중 하나여야 합니다.\n" +
+                    "  \"이메일 인증 여부\": \"isAuthEmail\",         // 이메일 인증 여부는 TURE, FALSE 중 하나여야 합니다.\n" +
+                    "  \"알림 수신 여부\": \"isAllowPushMsg\"        // 알림 수신 여부는 TRUE, FALSE 중 하나여야 합니다.\n" +
+                    "}\n" +
+                    "```"
     )
     @PostMapping("/api/v1/member/{email}")
     public ResponseEntity<Long> updateMember(
             @ApiParam(value = "회원 Email", required = true)
             @PathVariable("email") String email,
-            @RequestBody MemberUpdateRequestDto member){
+            @Valid @RequestBody MemberUpdateRequestDto member){
         Member entity = modelMapper.map(member, Member.class);
         Long result =  memberService.updateMember(email, entity);
         return ResponseEntity.status(HttpStatus.OK).body(result);
