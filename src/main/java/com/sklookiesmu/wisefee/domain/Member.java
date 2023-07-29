@@ -1,4 +1,5 @@
 package com.sklookiesmu.wisefee.domain;
+import com.sklookiesmu.wisefee.dto.shared.member.MemberUpdateRequestDto;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
@@ -103,7 +104,6 @@ public class Member {
      */
     public Long updateMember(Member member){
         this.nickname = member.nickname;
-        this.email = member.email;
         this.phone = member.phone;
         this.phoneOffice = member.phoneOffice;
         this.birth = member.birth;

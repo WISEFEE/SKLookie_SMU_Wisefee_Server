@@ -5,10 +5,8 @@ import com.sklookiesmu.wisefee.common.error.ValidateMemberException;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,37 +30,49 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public List<Member> getMembers(String order){
         List<Member> members = memberRepository.findAll(order);
+
+        /* 예외 처리 */
+        if(members.isEmpty()){
+            throw new MemberNotFoundException("Any member doesn't exists.");
+        }
+
         return members;
     }
     @Transactional
     public Member getMember(Long id) {
         Member member = memberRepository.find(id);
-        /* 강제 예외처리 예시 */
 
-        if(id == 1){
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "강제 예외 처리");
-            //throw new IllegalStateException("Forbidden");
-        }
+//        /* 강제 예외처리 예시 */
+//        if(id == 1){
+//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "강제 예외 처리");
+//            //throw new IllegalStateException("Forbidden");
+//        }
 
         return member;
     }
 
     @Transactional
-    public Long updateMember(Long id, Member updateMember) {
-        Member member = memberRepository.find(id);
+    public Long updateMember(String email, Member updateMember) {
+        Optional<Member> member = memberRepository.findByEmail(email);
 
         /* 예외 처리 */
-        if(member == null) {
-            throw new MemberNotFoundException("Member not found with id " + id);
+        if(member.isEmpty()) {
+            throw new MemberNotFoundException("Member not found with email " + email);
         }
 
-        return member.updateMember(updateMember);
+        return member.get().updateMember(updateMember);
 
     }
 
     @Transactional
     public Optional<Member> getMemberByEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
+
+        /* 예외 처리 */
+        if(member.isEmpty()) {
+            throw new MemberNotFoundException("Member not found with email " + email);
+        }
+
         return member;
     }
 

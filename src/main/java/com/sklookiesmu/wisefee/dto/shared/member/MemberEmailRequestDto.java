@@ -2,19 +2,18 @@ package com.sklookiesmu.wisefee.dto.shared.member;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import jdk.jfr.Description;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
-
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(description = "회원 수정 요청 DTO")
-public class MemberUpdateRequestDto {
-
-
+@ApiModel(description = "회원 이메일 기반 정보 조회 DTO")
+public class MemberEmailRequestDto {
     @ApiModelProperty(value = "회원 닉네임", required = true)
     @NotNull
     private String nickname;
@@ -49,4 +48,5 @@ public class MemberUpdateRequestDto {
     @ApiModelProperty(value = "알림 수신 여부", required = true)
     @NotNull
     private String isAllowPushMsg;
+
 }

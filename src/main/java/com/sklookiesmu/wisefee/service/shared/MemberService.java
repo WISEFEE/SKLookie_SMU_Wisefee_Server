@@ -20,6 +20,7 @@ public interface MemberService {
     /**
      * [회원 리스트 조회]
      * 회원 전체 리스트를 조회한다.
+     *
      * @param [order 정렬 순서(asc/desc)]
      * @return [회원 전체 리스트 반환]
      */
@@ -36,11 +37,12 @@ public interface MemberService {
 
     /**
      * [Member 엔티티 수정]
-     * 회원 수정
+     * 이메일을 통해 회원 정보를 수정한다.
+     * @param [email 회원 이메일]
      * @param [Member Member 엔티티(수정사항 반영된 상태)]
      * @return [id (실행결과)]
      */
-    public abstract Long updateMember(Long id, Member updateMember);
+    public abstract Long updateMember(String email, Member updateMember);
 
     /**
      * [멤버 조회]
