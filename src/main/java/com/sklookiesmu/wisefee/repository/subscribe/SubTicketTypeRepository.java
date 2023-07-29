@@ -1,4 +1,4 @@
-package com.sklookiesmu.wisefee.repository;
+package com.sklookiesmu.wisefee.repository.subscribe;
 
 import com.sklookiesmu.wisefee.domain.SubTicketType;
 import org.springframework.data.jpa.repository.JpaRepository;

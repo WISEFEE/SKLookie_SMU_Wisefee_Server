@@ -1,4 +1,4 @@
-package com.sklookiesmu.wisefee.repository;
+package com.sklookiesmu.wisefee.repository.order;
 
 import com.sklookiesmu.wisefee.domain.OrderOption;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface OrderOptionV2Repository extends JpaRepository<OrderOption, Long> {
+public interface OrderOptionJpaRepository extends JpaRepository<OrderOption, Long> {
 
     /**
      * [주문 옵션 정보 조회 쿼리]
