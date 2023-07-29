@@ -11,7 +11,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CafeRepository {
 
-
     private final EntityManager em;
 
     /**
