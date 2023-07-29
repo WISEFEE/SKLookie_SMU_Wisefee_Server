@@ -1,11 +1,8 @@
 package com.sklookiesmu.wisefee.domain;
-import com.sklookiesmu.wisefee.dto.shared.member.MemberUpdateRequestDto;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -113,5 +110,9 @@ public class Member {
         this.isAuthEmail = member.isAuthEmail;
         this.isAllowPushMsg = member.isAllowPushMsg;
         return 1L;
+    }
+
+    public void encodePassword(String encodePassword) {
+        this.password = encodePassword;
     }
 }

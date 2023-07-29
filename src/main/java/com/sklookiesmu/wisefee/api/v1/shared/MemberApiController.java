@@ -47,7 +47,6 @@ public class MemberApiController {
                     "    \"회원 연락처\": \"phone\",\n" +
                     "    \"회원 사무용 연락처\": \"phoneOffice\",\n" +
                     "    \"회원 생년월일\": \"birth\",\n" +
-                    "    \"회원 비밀번호\": \"password\",\n" +
                     "    \"회원 계정 타입\": \"accountType\",\n" +
                     "    \"회원 인증 타입\": \"authType\",\n" +
                     "    \"이메일 인증 여부\": \"isAuthEmail\",\n" +
@@ -87,7 +86,6 @@ public class MemberApiController {
                     "    \"회원 연락처\": \"phone\",\n" +
                     "    \"회원 사무용 연락처\": \"phoneOffice\",\n" +
                     "    \"회원 생년월일\": \"birth\",\n" +
-                    "    \"회원 비밀번호\": \"password\",\n" +
                     "    \"회원 계정 타입\": \"accountType\",\n" +
                     "    \"회원 인증 타입\": \"authType\",\n" +
                     "    \"이메일 인증 여부\": \"isAuthEmail\",\n" +
@@ -153,7 +151,6 @@ public class MemberApiController {
                     "  \"회원 연락처\": \"phone\",\n" +
                     "  \"회원 사무용 연락처\": \"phoneOffice\",\n" +
                     "  \"회원 생년월일\": \"birth\",\n" +
-                    "  \"회원 비밀번호\": \"password\",\n" +
                     "  \"회원 계정 타입\": \"accountType\",\n" +
                     "  \"회원 인증 타입\": \"authType\",\n" +
                     "  \"이메일 인증 여부\": \"isAuthEmail\",\n" +

@@ -5,6 +5,7 @@ import com.sklookiesmu.wisefee.common.error.ValidateMemberException;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder encoder;
 
     @Transactional
     public Long join(Member member){
@@ -23,6 +25,8 @@ public class MemberServiceImpl implements MemberService {
         if(vailMember.isPresent()) {
             throw new ValidateMemberException("This member email is already exist. " + member.getEmail());
         }
+        // 비밀번호 해시 처리
+        member.encodePassword(encoder.encode(member.getPassword()));
         memberRepository.create(member);
         return member.getMemberId();
     }
@@ -60,6 +64,8 @@ public class MemberServiceImpl implements MemberService {
             throw new MemberNotFoundException("Member not found with email " + email);
         }
 
+        /* 비밀번호 해시 처리. */
+        updateMember.encodePassword(encoder.encode(updateMember.getPassword()));
         return member.get().updateMember(updateMember);
 
     }
