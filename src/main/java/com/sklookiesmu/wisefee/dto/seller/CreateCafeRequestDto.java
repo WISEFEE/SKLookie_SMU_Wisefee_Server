@@ -24,4 +24,9 @@ public class CreateCafeRequestDto {
     @ApiModelProperty(value = "매장 연락처", required = true)
     @NotNull
     private String cafePhone;
+
+    @ApiModelProperty(value = "매장 주소 ID", required = true)
+    @NotNull
+    private Long addrId;
+
 }

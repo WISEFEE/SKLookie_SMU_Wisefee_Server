@@ -23,4 +23,5 @@ public class UpdateCafeResponseDto {
 
     @ApiModelProperty(value = "매장 연락처")
     private String cafePhone;
+
 }

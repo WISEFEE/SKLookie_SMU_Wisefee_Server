@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -56,5 +57,16 @@ public class OrderOptionRepository {
         return em.createQuery("select o from OrderOption o join fetch o.cafe where o.cafe = :cafe", OrderOption.class)
                 .setParameter("cafe", cafe)
                 .getResultList();
+    }
+
+
+    /**
+     * [OrderOption 소프트 삭제로 업데이트]
+     * OrderOption 엔티티를 소프트 삭제로 업데이트한다.
+     * @param orderOption 소프트 삭제할 OrderOption 엔티티
+     */
+    public void softDelete(OrderOption orderOption) {
+        orderOption.setDeletedAt(LocalDateTime.now());
+        em.persist(orderOption);
     }
 }
