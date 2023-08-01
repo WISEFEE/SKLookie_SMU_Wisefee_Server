@@ -14,14 +14,12 @@ services:
     ports:
       - 3308:3306
     volumes:
-      - ../../local-mariadb:/var/lib/mysql
+      - ./volumes/mariadb:/var/lib/mysql
     networks: #사용할 네트워크 지정
       - wisefee-network
 
   wisefee-app:
-    build: #image를 DockerFile 기반으로 사용한다
-      context: ../..    #DockerFile이 있는 디렉토리
-      dockerfile: ./Dockerfile    #기존에 설정해둔 DockerFile을 지정히여 build 된 jar 파일을 container에 올린다.
+    image: sjh9708/devserver-wisefee-app:latest
     restart: always        #컨테이너 재실행
     depends_on: #database service가 실행된 이후에 실행
       - wisefee-database
