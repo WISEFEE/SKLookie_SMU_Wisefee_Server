@@ -15,7 +15,6 @@ public class ProductDto {
 
     // TODO: 카페 음료 리스트 -> 음료 옵션 -> 음료 옵션 선택
     @Getter
-    @Setter
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
@@ -51,11 +50,11 @@ public class ProductDto {
     @Getter
     @AllArgsConstructor
     public static class ProductListResponseDto{
-        private List<ProductDto.ProductResponseDto> products;
+        private List<ProductResponseDto> products;
         public static ProductListResponseDto of(List<Product> productList){
-            List<ProductDto.ProductResponseDto> productResponses = productList
+            List<ProductResponseDto> productResponses = productList
                     .stream()
-                    .map(ProductDto.ProductResponseDto::from)
+                    .map(ProductResponseDto::from)
                     .collect(Collectors.toList());
 
             return new ProductListResponseDto(productResponses);
@@ -63,7 +62,6 @@ public class ProductDto {
     }
 
     @Getter
-    @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ProductOptionResponseDto{
@@ -75,13 +73,15 @@ public class ProductDto {
         private String productOptionName;
 
         @ApiModelProperty(value = "제품옵션 선택", required = true)
-        private List<ProductOptChoice> productOptChoice;
+        private List<ProductOptChoiceResponseDto> productOptChoice;
 
         public static ProductOptionResponseDto from (ProductOption productOption){
             return new ProductOptionResponseDto(
                     productOption.getProductOptionId(),
                     productOption.getProductOptionName(),
-                    productOption.getProductOptChoices());
+                    productOption.getProductOptChoices().stream()
+                            .map(ProductOptChoiceResponseDto::from)
+                            .collect(Collectors.toList()));
         }
     }
 
@@ -101,7 +101,6 @@ public class ProductDto {
     }
 
     @Getter
-    @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ProductOptChoiceResponseDto{

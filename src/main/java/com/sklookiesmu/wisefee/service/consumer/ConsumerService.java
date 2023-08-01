@@ -1,5 +1,7 @@
 package com.sklookiesmu.wisefee.service.consumer;
 
+import com.sklookiesmu.wisefee.domain.Payment;
+import com.sklookiesmu.wisefee.dto.consumer.PaymentDto;
 import com.sklookiesmu.wisefee.dto.consumer.SubscribeDto;
 
 
@@ -11,5 +13,20 @@ public interface ConsumerService{
      * @param request
      */
     void createSubscribe(SubscribeDto.SubscribeRequestDto request, Long cafeId, Long subTicketTypeId);
+
+    /**
+     * [구독 조회]
+     * 고객이 구독한 내역과 결제 내역을 조회한다.
+     * @param userId
+     * @return SubScribeResponseDto
+     */
+    SubscribeDto.SubscribeListResponseDto getSubscribe(Long userId);
+
+    /**
+     * [구독 결제]
+     * 선택한 정기 구독권을 결제한다.
+     * @param request
+     */
+    void createPayment(PaymentDto.PaymentRequestDto request, Long cafeId, Long subscribeId);
 
 }

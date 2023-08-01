@@ -1,8 +1,8 @@
 package com.sklookiesmu.wisefee.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.lang.Nullable;
+
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,6 +13,8 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "SUBSCRIBE")
 public class Subscribe {
     @Id
@@ -61,14 +63,18 @@ public class Subscribe {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CAFE_ID")
     private Cafe cafe;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PAYMENT_ID", nullable = false)
     private Payment payment;
+
     @OneToMany(mappedBy = "subscribe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SUBTCT_ID")
     private SubTicketType subTicketType;
