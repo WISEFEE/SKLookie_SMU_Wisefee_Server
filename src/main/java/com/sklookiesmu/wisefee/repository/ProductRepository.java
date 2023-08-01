@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -57,5 +58,16 @@ public class ProductRepository {
         return em.createQuery("select p from Product p join fetch p.cafe where p.cafe = :cafe", Product.class)
                 .setParameter("cafe", cafe)
                 .getResultList();
+    }
+
+
+    /**
+     * [Product 소프트 삭제로 업데이트]
+     * Product 엔티티를 소프트 삭제로 업데이트한다.
+     * @param product 소프트 삭제할 Product 엔티티
+     */
+    public void softDelete(Product product) {
+        product.setDeletedAt(LocalDateTime.now());
+        em.persist(product);
     }
 }
