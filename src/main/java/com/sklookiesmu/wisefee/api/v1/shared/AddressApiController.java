@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,6 +35,7 @@ public class AddressApiController {
                     "<br><br>" +
                     "해당 API는 KaKao 주소 OpenAPI를 기반으로 만들어졌습니다. OpenAPI를 이용하여 얻어낸 응답값들을 기반으로 요청으로 보내주시면 됩니다."
     )
+    @PreAuthorize(AuthConstant.AUTH_ROLE_COMMON_USER)
     @PostMapping("")
     public ResponseEntity<Long> addAddress(@Valid @RequestBody AddressRequestDto address){
         Address entity = modelMapper.map(address, Address.class);
@@ -46,6 +48,7 @@ public class AddressApiController {
             value = "주소 ID로 검색",
             notes = "주소를 ID(PK)로 검색하는 API입니다. 실제 서비스에서 사용할 일이 있으실거 같지는 않지만, 개발 시 확인할 수 있는 용도로 만들었습니다."
     )
+    @PreAuthorize(AuthConstant.AUTH_ROLE_COMMON_USER)
     @GetMapping("/{id}")
     public ResponseEntity<AddressResponseDto> findMemberByEmail(
             @ApiParam(value = "주소 ID", required = true)
