@@ -5,6 +5,8 @@ import com.sklookiesmu.wisefee.domain.OrderOption;
 import com.sklookiesmu.wisefee.dto.seller.CreateOrderOptionRequestDto;
 import com.sklookiesmu.wisefee.dto.seller.UpdateOrderOptionRequestDto;
 import com.sklookiesmu.wisefee.repository.*;
+import com.sklookiesmu.wisefee.repository.cafe.CafeRepository;
+import com.sklookiesmu.wisefee.repository.order.OrderOptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
