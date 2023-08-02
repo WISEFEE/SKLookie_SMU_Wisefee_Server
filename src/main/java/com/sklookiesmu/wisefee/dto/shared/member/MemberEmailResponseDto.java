@@ -3,6 +3,7 @@ package com.sklookiesmu.wisefee.dto.shared.member;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,19 +12,11 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(description = "회원 추가 요청 DTO")
-public class MemberResponseDto {
-
-    @ApiModelProperty(value = "회원 아이디")
-    private String memberId;
-
+@ApiModel(description = "회원 이메일 기반 정보 조회 DTO")
+public class MemberEmailResponseDto {
     @ApiModelProperty(value = "회원 닉네임", required = true)
     @NotNull
     private String nickname;
-
-    @ApiModelProperty(value = "회원 이메일", required = true)
-    @NotNull
-    private String email;
 
     @ApiModelProperty(value = "회원 연락처", required = true)
     @NotNull
@@ -52,15 +45,4 @@ public class MemberResponseDto {
     @NotNull
     private String isAllowPushMsg;
 
-    @ApiModelProperty(value = "푸시 알림 토큰")
-    private String pushMsgToken;
-
-    @ApiModelProperty(value = "회원 상태")
-    private String memberStatus;
-
-    @ApiModelProperty(value = "생성일")
-    private String createdAt;
-
-    @ApiModelProperty(value = "수정일")
-    private String updatedAt;
 }

@@ -1,10 +1,12 @@
 package com.sklookiesmu.wisefee.repository.cafe;
 
 import com.sklookiesmu.wisefee.domain.Cafe;
+import com.sklookiesmu.wisefee.domain.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -53,5 +55,27 @@ public class CafeRepository {
      */
     public void delete(Cafe cafe) {
         em.remove(cafe);
+    }
+
+
+    /**
+     * [소프트 삭제되지 않은 모든 Cafe 조회]
+     * 소프트 삭제되지 않은 모든 Cafe 엔티티들을 조회한다.
+     * @return 소프트 삭제되지 않은 모든 Cafe 엔티티 리스트
+     */
+    public List<Cafe> findAllNotDeleted() {
+        return em.createQuery("select c from Cafe c where c.deletedAt is null", Cafe.class)
+                .getResultList();
+    }
+
+
+    /**
+     * [Cafe 소프트 삭제로 업데이트]
+     * Cafe 엔티티를 소프트 삭제로 업데이트한다.
+     * @param cafe 소프트 삭제할 Cafe 엔티티
+     */
+    public void softDelete(Cafe cafe) {
+        cafe.setDeletedAt(LocalDateTime.now());
+        em.persist(cafe);
     }
 }
