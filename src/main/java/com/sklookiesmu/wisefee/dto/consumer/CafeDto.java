@@ -36,6 +36,9 @@ public class CafeDto {
     @NoArgsConstructor
     public static class CafeResponseDto{
 
+        @ApiModelProperty(value = "매장 PK", required = true)
+        private Long cafeId;
+
         @ApiModelProperty(value = "매장명", required = true)
         private String title;
 
@@ -48,6 +51,7 @@ public class CafeDto {
 
         public static CafeResponseDto from(Cafe cafe){
             return new CafeResponseDto(
+                    cafe.getCafeId(),
                     cafe.getTitle(),
                     cafe.getContent(),
                     cafe.getCafePhone());

@@ -1,5 +1,8 @@
 package com.sklookiesmu.wisefee.api.v1.seller;
 
+import io.swagger.annotations.Api;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RestController;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
 import com.sklookiesmu.wisefee.domain.OrderOption;
 import com.sklookiesmu.wisefee.dto.seller.CreateOrderOptionRequestDto;
@@ -7,15 +10,13 @@ import com.sklookiesmu.wisefee.dto.seller.CreateOrderOptionResponseDto;
 import com.sklookiesmu.wisefee.dto.seller.UpdateOrderOptionRequestDto;
 import com.sklookiesmu.wisefee.dto.seller.UpdateOrderOptionResponseDto;
 import com.sklookiesmu.wisefee.service.seller.CafeOrderService;
-import com.sklookiesmu.wisefee.service.seller.CafeService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
 
 @Api(tags = "매장 주문 API")
 @RestController
@@ -23,7 +24,6 @@ import javax.validation.Valid;
 public class CafeOrderController {
 
     private final CafeOrderService cafeOrderService;
-
 
     @ApiOperation(value = "주문 옵션 추가")
     @PostMapping("/api/v1/seller/{cafeId}/orderOption")

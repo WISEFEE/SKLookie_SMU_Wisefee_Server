@@ -1,4 +1,4 @@
-package com.sklookiesmu.wisefee.repository;
+package com.sklookiesmu.wisefee.repository.product;
 
 import com.sklookiesmu.wisefee.domain.ProductOptChoice;
 import com.sklookiesmu.wisefee.domain.ProductOption;

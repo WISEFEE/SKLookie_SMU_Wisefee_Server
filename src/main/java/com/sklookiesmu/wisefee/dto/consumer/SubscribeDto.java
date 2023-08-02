@@ -1,12 +1,12 @@
 package com.sklookiesmu.wisefee.dto.consumer;
 
-import com.sklookiesmu.wisefee.domain.Cafe;
-import com.sklookiesmu.wisefee.domain.SubTicketType;
-import com.sklookiesmu.wisefee.domain.Subscribe;
+import com.sklookiesmu.wisefee.domain.*;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SubscribeDto {
 
@@ -16,7 +16,7 @@ public class SubscribeDto {
     @Getter @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class SubScribeResponseDto{
+    public static class SubscribeResponseDto{
 
         @ApiModelProperty(value = "구독 PK", required = true)
         private Long subId;
@@ -40,11 +40,13 @@ public class SubscribeDto {
         private LocalDateTime updatedAt;
 
         @ApiModelProperty(value = "구독권", required = true)
-        private SubTicketType subTicketType;
+        private SubTicketTypeDto.SubTicketTypeResponseDto subTicketDto;
 
+        @ApiModelProperty(value = "결제", required = true)
+        private PaymentDto.PaymentResponseDto paymentDto;
 
-        public static SubScribeResponseDto from(Subscribe subscribe){
-            return new SubScribeResponseDto(
+        public static SubscribeResponseDto from(Subscribe subscribe) {
+            return new SubscribeResponseDto(
                     subscribe.getSubId(),
                     subscribe.getTotalPrice(),
                     subscribe.getSubComment(),
@@ -52,7 +54,22 @@ public class SubscribeDto {
                     subscribe.getSubPeople(),
                     subscribe.getCreatedAt(),
                     subscribe.getUpdatedAt(),
-                    subscribe.getSubTicketType());
+                    SubTicketTypeDto.SubTicketTypeResponseDto.from(subscribe.getSubTicketType()), // DTO로 구현한 이유 : LAZY 로딩으로 인한 Json 반환 오류
+                    PaymentDto.PaymentResponseDto.from(subscribe.getPayment()));
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class SubscribeListResponseDto{
+        private List<SubscribeResponseDto> subscribes;
+
+        public static SubscribeListResponseDto of(List<Subscribe> subscribeList) {
+            List<SubscribeResponseDto> list = subscribeList.stream()
+                    .map(SubscribeResponseDto::from)
+                    .collect(Collectors.toList());
+
+            return new SubscribeListResponseDto(list);
         }
     }
 
@@ -72,13 +89,15 @@ public class SubscribeDto {
         private String subComment;
 
 
-        public Subscribe toEntity(Cafe cafe, SubTicketType subTicketType){
+        public Subscribe toEntity(Cafe cafe, SubTicketType subTicketType, Payment payment, Member member){
             return Subscribe.builder()
                     .subType(subType)
                     .subPeople(subPeople)
                     .subComment(subComment)
                     .cafe(cafe)
                     .subTicketType(subTicketType)
+                    .payment(payment)
+                    .member(member)
                     .build();
         }
     }

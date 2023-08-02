@@ -1,16 +1,17 @@
 package com.sklookiesmu.wisefee.api.v1.seller;
 
+
+import io.swagger.annotations.Api;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
 import com.sklookiesmu.wisefee.domain.Product;
 import com.sklookiesmu.wisefee.domain.ProductOptChoice;
 import com.sklookiesmu.wisefee.domain.ProductOption;
 import com.sklookiesmu.wisefee.dto.seller.*;
-import com.sklookiesmu.wisefee.service.seller.CafeOrderService;
 import com.sklookiesmu.wisefee.service.seller.CafeProductService;
-import com.sklookiesmu.wisefee.service.seller.CafeService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -128,5 +129,4 @@ public class CafeProductController {
                                           @PathVariable("productOptionChoiceId") Long productOptionChoiceId) {
         cafeProductService.deleteProductOptionChoice(productId, productOptionId, productOptionChoiceId);
     }
-
 }
