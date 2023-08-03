@@ -29,9 +29,6 @@ public class SubscribeDto {
         @ApiModelProperty(value = "구독 요청사항", required = true)
         private String subComment;
 
-        @ApiModelProperty(value = "구독권 유형", required = true)
-        private String subType;
-
         @ApiModelProperty(value = "구독 인원", required = true)
         private Integer subPeople;
 
@@ -52,7 +49,6 @@ public class SubscribeDto {
                     subscribe.getSubId(),
                     subscribe.getTotalPrice(),
                     subscribe.getSubComment(),
-                    subscribe.getSubType(),
                     subscribe.getSubPeople(),
                     subscribe.getCreatedAt(),
                     subscribe.getUpdatedAt(),
@@ -81,10 +77,6 @@ public class SubscribeDto {
     @NoArgsConstructor
     public static class SubscribeRequestDto{
 
-        @ApiModelProperty(value = "구독권 유형", required = true)
-        @NotBlank(message = "구독권 유형은 필수 입력값입니다.")
-        private String subType; // 그룹, 소규모, 단체 ..
-
         @ApiModelProperty(value = "구독 인원", required = true)
         @NotNull(message = "구독 인원은 필수 입력값입니다.")
         private Integer subPeople;
@@ -95,7 +87,6 @@ public class SubscribeDto {
 
         public Subscribe toEntity(Cafe cafe, SubTicketType subTicketType, Payment payment, Member member){
             return Subscribe.builder()
-                    .subType(subType)
                     .subPeople(subPeople)
                     .subComment(subComment)
                     .cafe(cafe)

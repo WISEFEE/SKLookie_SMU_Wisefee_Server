@@ -28,9 +28,6 @@ public class Subscribe {
     @Column(name = "SUB_COMMENT")
     private String subComment;
 
-    @Column(name = "SUB_TYPE", nullable = false, length = 100)
-    private String subType;
-
     @Column(name = "SUB_PEOPLE", nullable = false)
     private Integer subPeople;
 
