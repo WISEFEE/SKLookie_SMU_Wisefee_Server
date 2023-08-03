@@ -5,9 +5,7 @@ import com.sklookiesmu.wisefee.domain.Product;
 import com.sklookiesmu.wisefee.domain.ProductOptChoice;
 import com.sklookiesmu.wisefee.domain.ProductOption;
 import com.sklookiesmu.wisefee.dto.seller.*;
-import com.sklookiesmu.wisefee.service.seller.CafeOrderService;
 import com.sklookiesmu.wisefee.service.seller.CafeProductService;
-import com.sklookiesmu.wisefee.service.seller.CafeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +22,11 @@ public class CafeProductController {
 
     private final CafeProductService cafeProductService;
 
-    @ApiOperation(value = "상품 추가")
+    @ApiOperation(
+            value = "상품 추가",
+            notes = "상품 추가 API입니다. <br>" +
+                    "상품 정보, 상품명, 상품 가격을 입력합니다."
+    )
     @PostMapping("/api/v1/seller/{cafeId}/product")
     @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
     @ResponseStatus(HttpStatus.CREATED)
@@ -36,7 +38,11 @@ public class CafeProductController {
     }
 
 
-    @ApiOperation(value = "상품 수정")
+    @ApiOperation(
+            value = "상품 수정",
+            notes = "상품 수정 API입니다. <br>" +
+                    "수정할 상품 정보, 상품명, 상품 가격을 입력합니다."
+    )
     @PutMapping("/api/v1/seller/{cafeId}/product/{productId}")
     @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
     public UpdateProductResponseDto updateProduct(@PathVariable("cafeId") Long cafeId,
@@ -49,7 +55,11 @@ public class CafeProductController {
     }
 
 
-    @ApiOperation(value = "상품 삭제")
+    @ApiOperation(
+            value = "상품 삭제",
+            notes = "상품 삭제 API입니다. <br>" +
+                    "소프트 삭제를 하여 상품의 deleted_at 속성을 삭제 시점으로 설정합니다."
+    )
     @DeleteMapping("/api/v1/seller/{cafeId}/product/{productId}")
     @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
     public void deleteProduct(@PathVariable("cafeId") Long cafeId,
@@ -58,7 +68,11 @@ public class CafeProductController {
     }
 
 
-    @ApiOperation(value = "상품 옵션 추가")
+    @ApiOperation(
+            value = "상품 옵션 추가",
+            notes = "상품 옵션 추가 API입니다. <br>" +
+                    "상품 옵션명을 입력합니다."
+    )
     @PostMapping("/api/v1/seller/{productId}/productOption")
     @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
     @ResponseStatus(HttpStatus.CREATED)
@@ -70,7 +84,11 @@ public class CafeProductController {
     }
 
 
-    @ApiOperation(value = "상품 옵션 수정")
+    @ApiOperation(
+            value = "상품 옵션 수정",
+            notes = "상품 옵션 수정 API입니다. <br>" +
+                    "수정할 상품 옵션명을 입력합니다."
+    )
     @PutMapping("/api/v1/seller/{productId}/productOption/{productOptionId}")
     @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
     public UpdateProductOptionResponseDto updateProductOption(@PathVariable("productId") Long productId,
@@ -84,7 +102,11 @@ public class CafeProductController {
     }
 
 
-    @ApiOperation(value = "상품 옵션 삭제")
+    @ApiOperation(
+            value = "상품 옵션 삭제",
+            notes = "상품 옵션 삭제 API입니다. <br>" +
+                    "소프트 삭제를 하여 상품 옵션의 deleted_at 속성을 삭제 시점으로 설정합니다."
+    )
     @DeleteMapping("/api/v1/seller/{productId}/productOption/{productOptionId}")
     @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
     public void deleteProductOption(@PathVariable("productId") Long productId,
@@ -94,7 +116,11 @@ public class CafeProductController {
     }
 
 
-    @ApiOperation(value = "상품 옵션 선택지 추가")
+    @ApiOperation(
+            value = "상품 옵션 선택지 추가",
+            notes = "상품 옵션 선택지 추가 API입니다. <br>" +
+                    "상품 옵션 선택지명과 추가 가격을 입력합니다."
+    )
     @PostMapping("/api/v1/seller/{productOptionId}/productOptionChoice")
     @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
     @ResponseStatus(HttpStatus.CREATED)
@@ -106,7 +132,11 @@ public class CafeProductController {
     }
 
 
-    @ApiOperation(value = "상품 옵션 선택지 수정")
+    @ApiOperation(
+            value = "상품 옵션 선택지 수정",
+            notes = "상품 옵션 선택지 수정 API입니다. <br>" +
+                    "수정할 상품 옵션 선택지명과 추가 가격을 입력합니다."
+    )
     @PutMapping("/api/v1/seller/{productId}/productOption/{productOptionId}/productOptionChoice/{productOptionChoiceId}")
     @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
     public UpdateProductOptionChoiceResponseDto updateProductOptionChoice(@PathVariable Long productId,
@@ -120,7 +150,11 @@ public class CafeProductController {
     }
 
 
-    @ApiOperation(value = "상품 옵션 선택지 삭제")
+    @ApiOperation(
+            value = "상품 옵션 선택지 삭제",
+            notes = "상품 옵션 선택지 삭제 API입니다. <br>" +
+                    "소프트 삭제를 하여 상품 옵션 선택지의 deleted_at 속성을 삭제 시점으로 설정합니다."
+    )
     @DeleteMapping("/api/v1/seller/{productId}/productOption/{productOptionId}/productOptionChoice/{productOptionChoiceId}")
     @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
     public void deleteProductOptionChoice(@PathVariable("productId") Long productId,

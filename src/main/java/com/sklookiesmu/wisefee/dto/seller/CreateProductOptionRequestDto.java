@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @NoArgsConstructor
@@ -15,6 +15,6 @@ import javax.validation.constraints.NotNull;
 public class CreateProductOptionRequestDto {
 
     @ApiModelProperty(value = "상품 옵션명", required = true)
-    @NotNull
+    @NotBlank(message = "상품 옵션명은 필수 입력 값입니다.")
     private String productOptionName;
 }
