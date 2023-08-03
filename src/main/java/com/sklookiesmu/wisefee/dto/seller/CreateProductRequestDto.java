@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 
@@ -16,11 +17,11 @@ import javax.validation.constraints.NotNull;
 public class CreateProductRequestDto {
 
     @ApiModelProperty(value = "상품명", required = true)
-    @NotNull
+    @NotBlank(message = "상품명은 필수 입력 값입니다.")
     private String productName;
 
     @ApiModelProperty(value = "상품 가격", required = true)
-    @NotNull
+    @NotBlank(message = "상품 가격은 필수 입력 값입니다.")
     private int productPrice;
 
     @ApiModelProperty(value = "상품 설명")
