@@ -56,18 +56,25 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Transactional
-    public Long updateMember(String email, Member updateMember) {
-        Optional<Member> member = memberRepository.findByEmail(email);
+    public Long updateMember(Long id, Member updateMember) {
+        Member member = memberRepository.find(id);
 
         /* 예외 처리 */
-        if(member.isEmpty()) {
-            throw new MemberNotFoundException("Member not found with email " + email);
+        if(member == null) {
+            throw new MemberNotFoundException("Member not found with email " + id);
         }
 
-        /* 비밀번호 해시 처리. */
-        updateMember.encodePassword(encoder.encode(updateMember.getPassword()));
-        return member.get().updateMember(updateMember);
+        return member.updateMember(updateMember);
 
+    }
+
+    @Transactional
+    public Long updatePasswordAsMember(Long id, Member updateMember) {
+        Member member = memberRepository.find(id);
+        /* 비밀번호 해시 처리. */
+        member.encodePassword(encoder.encode(updateMember.getPassword()));
+
+        return 1L;
     }
 
     @Transactional

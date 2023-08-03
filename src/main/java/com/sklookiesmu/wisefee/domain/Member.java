@@ -77,6 +77,33 @@ public class Member {
         this.updatedAt = LocalDateTime.now();
     }
 
+    @Override
+    public String toString() {
+        return "Member{" +
+                "memberId=" + memberId +
+                ", nickname='" + nickname + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", phoneOffice='" + phoneOffice + '\'' +
+                ", birth='" + birth + '\'' +
+                ", password='" + password + '\'' +
+                ", accountType='" + accountType + '\'' +
+                ", authType='" + authType + '\'' +
+                ", isAuthEmail='" + isAuthEmail + '\'' +
+                ", isAllowPushMsg='" + isAllowPushMsg + '\'' +
+                ", pushMsgToken='" + pushMsgToken + '\'' +
+                ", memberStatus='" + memberStatus + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", deletedAt=" + deletedAt +
+                ", cafes=" + cafes +
+                ", notifications=" + notifications +
+                ", files=" + files +
+                ", cart=" + cart +
+                ", address=" + address +
+                ", subscribes=" + subscribes +
+                '}';
+    }
 
     /**
      * 연관관계 매핑
@@ -104,9 +131,7 @@ public class Member {
         this.phone = member.phone;
         this.phoneOffice = member.phoneOffice;
         this.birth = member.birth;
-        this.password = member.password;
         this.accountType = member.accountType;
-        this.authType = member.authType;
         this.isAuthEmail = member.isAuthEmail;
         this.isAllowPushMsg = member.isAllowPushMsg;
         return 1L;
