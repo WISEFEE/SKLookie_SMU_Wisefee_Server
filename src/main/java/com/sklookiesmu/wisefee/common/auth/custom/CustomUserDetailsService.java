@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,6 @@ import java.util.Collections;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
 
 
     /**
@@ -48,7 +48,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 Collections.singleton(new SimpleGrantedAuthority("ROLE_" + member.getAccountType().toString()));
         return new CustomUserDetail(
                 member.getEmail(),
-                passwordEncoder.encode(member.getPassword()),
+                member.getPassword(),
                 authorities,
                 member.getNickname(),
                 member.getMemberId());

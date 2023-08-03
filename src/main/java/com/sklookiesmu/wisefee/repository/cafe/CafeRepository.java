@@ -1,4 +1,4 @@
-package com.sklookiesmu.wisefee.repository;
+package com.sklookiesmu.wisefee.repository.cafe;
 
 import com.sklookiesmu.wisefee.domain.Cafe;
 import com.sklookiesmu.wisefee.domain.Product;
@@ -13,9 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CafeRepository {
 
-
     private final EntityManager em;
-
 
     /**
      * [Cafe 추가]
@@ -49,7 +47,6 @@ public class CafeRepository {
                 .setParameter("title", title)
                 .getResultList();
     }
-
 
     /**
      * [Cafe 삭제]

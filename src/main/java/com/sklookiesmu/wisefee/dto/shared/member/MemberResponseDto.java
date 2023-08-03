@@ -36,10 +36,6 @@ public class MemberResponseDto {
     @NotNull
     private String birth;
 
-    @ApiModelProperty(value = "회원 비밀번호", required = true)
-    @NotNull
-    private String password;
-
     @ApiModelProperty(value = "회원 계정 타입", required = true)
     @NotNull
     private String accountType;

@@ -1,16 +1,11 @@
 package com.sklookiesmu.wisefee.service.shared;
 
 import com.sklookiesmu.wisefee.common.auth.JwtTokenProvider;
-import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
-import com.sklookiesmu.wisefee.common.auth.custom.CustomUserDetailsService;
 import com.sklookiesmu.wisefee.dto.shared.jwt.TokenInfoDto;
-import com.sklookiesmu.wisefee.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

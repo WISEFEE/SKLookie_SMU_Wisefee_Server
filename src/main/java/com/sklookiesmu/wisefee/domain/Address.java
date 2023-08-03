@@ -16,32 +16,35 @@ public class Address {
     @Column(name = "ADDR_ID")
     private Long addrId;
 
-    @Column(name = "LOCATION", nullable = false)
-    private String location;
-
     @Column(name = "ADDRESS_NAME", nullable = false)
     private String addressName;
+
+    @Column(name = "REGION_1_DEPTH_NAME", nullable = false)
+    private String region1DepthName;
+
+    @Column(name = "REGION_2_DEPTH_NAME", nullable = false)
+    private String region2DepthName;
+
+    @Column(name = "REGION_3_DEPTH_NAME", nullable = false)
+    private String region3DepthName;
 
     @Column(name = "ADDRESS_DETAIL", nullable = false)
     private String addressDetail;
 
-    @Column(name = "ZIP_CODE")
-    private String zipCode;
+    @Column(name = "X")
+    private Double x;
 
-    @Column(name = "LNG")
-    private Integer lng;
-
-    @Column(name = "LAT")
-    private Integer lat;
-
-    @Column(name = "PREFER_LOCATION")
-    private String preferLocation;
+    @Column(name = "Y")
+    private Double y;
 
     @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
 
     @Column(name = "UPDATED_AT")
     private LocalDateTime updatedAt;
+
+    @Column(name = "DELETED_AT")
+    private LocalDateTime deletedAt;
 
     /**
      * 생성일, 수정일 값 세팅

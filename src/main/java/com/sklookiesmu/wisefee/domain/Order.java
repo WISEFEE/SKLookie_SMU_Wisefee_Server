@@ -53,8 +53,6 @@ public class Order {
     /**
      * 연관관계 매핑
      */
-    @OneToMany(mappedBy = "order", orphanRemoval = true)
-    private List<OrderOption> orderOptions = new ArrayList<>();
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PAYMENT_ID", nullable = false)
     private Payment payment;
@@ -65,4 +63,7 @@ public class Order {
     private List<OrderProduct> orderProducts = new ArrayList<>();
 //    @OneToMany(mappedBy = "order_payment")
 //    private List<OrderProduct> orderProduct_payments = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "orders")
+    private List<OrderOption> orderOptions = new ArrayList<>();
 }

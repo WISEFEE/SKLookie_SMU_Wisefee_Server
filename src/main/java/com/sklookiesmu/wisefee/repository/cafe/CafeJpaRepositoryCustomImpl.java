@@ -12,11 +12,11 @@ import java.util.List;
 
 import static com.sklookiesmu.wisefee.domain.QCafe.cafe;
 
-public class CafeRepositoryCustomImpl implements CafeRepositoryCustom {
+public class CafeJpaRepositoryCustomImpl implements CafeJpaRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public CafeRepositoryCustomImpl(JPAQueryFactory jpaQueryFactory) {
+    public CafeJpaRepositoryCustomImpl(JPAQueryFactory jpaQueryFactory) {
         this.jpaQueryFactory = jpaQueryFactory;
     }
 

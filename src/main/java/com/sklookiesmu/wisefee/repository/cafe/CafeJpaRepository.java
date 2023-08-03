@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CafeRepositoryV2 extends JpaRepository<Cafe, Long>, CafeRepositoryCustom {
+public interface CafeJpaRepository extends JpaRepository<Cafe, Long>, CafeJpaRepositoryCustom {
 }

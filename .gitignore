@@ -39,3 +39,4 @@ out/
 
 ### Project ###
 local-mariadb
+volumes
