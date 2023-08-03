@@ -6,6 +6,8 @@ import com.sklookiesmu.wisefee.domain.Subscribe;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public class PaymentDto {
@@ -43,9 +45,11 @@ public class PaymentDto {
     public static class PaymentRequestDto{
 
         @ApiModelProperty(value = "결제 금액")
+        @NotNull(message = "결제 금액은 필수 입력값입니다.")
         private Integer paymentPrice;
 
         @ApiModelProperty(value = "결제 내역 정보")
+        @NotBlank(message = "결제 내역 정보는 필수 입력값입니다.")
         private String paymentInfo;
 
         public Payment toEntity(SubTicketType subTicketType){

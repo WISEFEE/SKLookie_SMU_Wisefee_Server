@@ -25,10 +25,13 @@ public class ConsumerCafeServiceImpl implements ConsumerCafeService{
     private final CafeJpaRepository cafeJpaRepository;
 
 
+    /**
+     * 매장 목록 조회
+     */
     @Override
     public CafeDto.CafeListResponseDto getCafeList(Pageable pageable){
-        Slice<Cafe> cafeList = cafeJpaRepository.findWithNameFilter(pageable);
-        return CafeDto.CafeListResponseDto.from(cafeList);
+        Slice<Cafe> slice = cafeJpaRepository.findWithNameFilter(pageable);
+        return CafeDto.CafeListResponseDto.from(slice);
     }
 
     /**

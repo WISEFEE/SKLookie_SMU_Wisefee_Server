@@ -4,6 +4,8 @@ import com.sklookiesmu.wisefee.domain.*;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -80,9 +82,11 @@ public class SubscribeDto {
     public static class SubscribeRequestDto{
 
         @ApiModelProperty(value = "구독권 유형", required = true)
-        private String subType;
+        @NotBlank(message = "구독권 유형은 필수 입력값입니다.")
+        private String subType; // 그룹, 소규모, 단체 ..
 
         @ApiModelProperty(value = "구독 인원", required = true)
+        @NotNull(message = "구독 인원은 필수 입력값입니다.")
         private Integer subPeople;
 
         @ApiModelProperty(value = "구독 요청사항", required = true)

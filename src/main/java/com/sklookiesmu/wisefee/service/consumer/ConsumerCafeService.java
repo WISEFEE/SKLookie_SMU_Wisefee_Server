@@ -1,8 +1,10 @@
 package com.sklookiesmu.wisefee.service.consumer;
 
+import com.sklookiesmu.wisefee.domain.Cafe;
 import com.sklookiesmu.wisefee.dto.consumer.CafeDto;
 import com.sklookiesmu.wisefee.dto.consumer.ProductDto;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 public interface ConsumerCafeService {
 
