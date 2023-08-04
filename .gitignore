@@ -40,3 +40,7 @@ out/
 ### Project ###
 local-mariadb
 volumes
+
+### Mac OS ###
+src/.DS_Store
+.DS_Store

@@ -42,7 +42,16 @@ public interface MemberService {
      * @param [Member Member 엔티티(수정사항 반영된 상태)]
      * @return [id (실행결과)]
      */
-    public abstract Long updateMember(String email, Member updateMember);
+    public abstract Long updateMember(Long id, Member updateMember);
+
+    /**
+     * [Member 엔티티 비밀번호 수정]
+     * 회원 Id를 통해 비밀번호를 수정한다.
+     * @param [Id 회원 PK]
+     * @param [Member Member 엔티티(수정사항 반영된 상태)]
+     * @return [id (실행결과)]
+     */
+    public abstract Long updatePasswordAsMember(Long id, Member updateMember);
 
     /**
      * [멤버 조회]
