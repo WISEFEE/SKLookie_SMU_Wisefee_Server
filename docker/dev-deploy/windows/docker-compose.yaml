@@ -5,7 +5,7 @@ networks:
 
 services:
   wisefee-database:
-    platform: linux/x86_64 #Mac M1칩 사용 제외하고는 주석처리
+#    platform: linux/x86_64 #Mac M1칩 사용 제외하고는 주석처리
     image: mariadb:10.11.2
     container_name: wisefee-database-dev-deploy
     environment:
@@ -14,7 +14,7 @@ services:
     ports:
       - 3309:3306
     volumes:
-      - .\volumes\mariadb:\var\lib\mysql
+      - .\volumes\mariadb:/var/lib/mysql
     networks: #사용할 네트워크 지정
       - wisefee-network-dev-deploy
 
