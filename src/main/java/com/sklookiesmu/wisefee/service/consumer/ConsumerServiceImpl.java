@@ -40,7 +40,7 @@ public class ConsumerServiceImpl implements ConsumerService {
 
         // 유저 검증 필요
         Member member = memberRepository.find(1L);
-        subscribeRepository.save(request.toEntity(cafe, subTicketType, payment,member));
+        subscribeRepository.save(request.toEntity(cafe, subTicketType, payment, member));
     }
 
     /**

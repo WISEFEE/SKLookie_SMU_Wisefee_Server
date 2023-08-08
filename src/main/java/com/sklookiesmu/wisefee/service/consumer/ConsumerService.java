@@ -29,4 +29,12 @@ public interface ConsumerService{
      */
     void createPayment(PaymentDto.PaymentRequestDto request, Long cafeId, Long subscribeId);
 
+
+    /**
+     * TODO [정기구독 해지]
+     */
+
+    /**
+     * TODO [정기 구독 결제 취소]
+     */
 }
