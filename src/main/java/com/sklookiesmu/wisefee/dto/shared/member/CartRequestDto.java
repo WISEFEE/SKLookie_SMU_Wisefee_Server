@@ -1,4 +1,4 @@
-package com.sklookiesmu.wisefee.dto.shared;
+package com.sklookiesmu.wisefee.dto.shared.member;
 
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(description = "장바구니 추가 DTO")
+@ApiModel(description = "Cart추가 Dto")
 public class CartRequestDto {
 
-
+    private Long memberId;
 
 }

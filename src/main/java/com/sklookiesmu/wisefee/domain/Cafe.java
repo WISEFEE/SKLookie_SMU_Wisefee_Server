@@ -65,8 +65,8 @@ public class Cafe {
     @JoinColumn(name = "ADDR_ID", nullable = false)
     private Address address;
     @OneToMany(mappedBy = "cafe")
-    private List<Cart> carts = new ArrayList<>();
-    @OneToMany(mappedBy = "cafe")
+//    private List<Cart> carts = new ArrayList<>();
+//    @OneToMany(mappedBy = "cafe")
     private List<Subscribe> subscribes = new ArrayList<>();
     @OneToMany(mappedBy = "cafe", cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();

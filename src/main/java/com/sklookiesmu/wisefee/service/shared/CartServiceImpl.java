@@ -19,9 +19,10 @@ public class CartServiceImpl implements CartService{
     private final CartRepository cartRepository;
 
     @Override
-    public Long addCart(Long memberId, Cart cart) {
+    public Long addCart(Long memberId) {
         Member member = memberRepository.find(memberId);
-        cart.getMember().setMemberId(memberId);
+        Cart cart = new Cart();
+        cart.addCart(memberId);
         cartRepository.createCart(cart);
         return cart.getCartId();
     }

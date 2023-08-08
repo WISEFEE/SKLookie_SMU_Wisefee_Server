@@ -9,10 +9,9 @@ public interface CartService {
     /**
      * [장바구니 추가 서비스]
      * @param [memberId Cart 주인]
-     * @param [cart 추가할 장바구니]
      * @return [추가한 장바구니 PK]
      */
-    Long addCart(Long memberId, Cart cart);
+    Long addCart(Long memberId);
 
     /**
      * [회원 장바구니 조회]
