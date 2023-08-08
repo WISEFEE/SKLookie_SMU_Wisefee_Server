@@ -1,0 +1,37 @@
+version: "3.7"
+networks:
+  wisefee-network-dev-deploy:
+    driver: bridge
+
+services:
+  wisefee-database:
+#    platform: linux/x86_64 #Mac M1칩 사용 제외하고는 주석처리
+    image: mariadb:10.11.2
+    container_name: wisefee-database-dev-deploy
+    environment:
+      MYSQL_DATABASE: "wisefee-database"
+      MYSQL_ROOT_PASSWORD: "1111"
+    ports:
+      - 3309:3306
+    volumes:
+      - .\volumes\mariadb:/var/lib/mysql
+    networks: #사용할 네트워크 지정
+      - wisefee-network-dev-deploy
+
+  wisefee-app:
+    image: sjh9708/devserver-wisefee-app:latest
+    restart: always        #컨테이너 재실행
+    depends_on: #database service가 실행된 이후에 실행
+      - wisefee-database
+    ports:
+      - 8082:8080
+    container_name: wisefee-app-dev-deploy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://wisefee-database:3306/wisefee-database?characterEncoding=UTF-8&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1111
+    networks:
+      - wisefee-network-dev-deploy
+
+
+

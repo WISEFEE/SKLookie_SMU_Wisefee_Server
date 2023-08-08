@@ -15,7 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = "인증 API")
+@Api(tags = "COMM-B :: 인증 API")
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -23,7 +23,7 @@ public class AuthApiController {
     private final AuthService authService;
 
     @ApiOperation(
-            value = "기본 로그인",
+            value = "COMM-B-01 :: 기본 로그인",
             notes = "기본 로그인입니다. 회원가입되어 있는 사용자의 ID와 비밀번호가 필요합니다. <br>" +
                     "반환되는 JWT 토큰은 다른 API들을 사용할 때 " +
                     "Request Header에 Authorization Bearer JWT를 추가하여 보내주셔야 인가가 승인되어 API를 사용할 수 있습니다. <br><br>" +
@@ -42,7 +42,7 @@ public class AuthApiController {
     }
 
     @ApiOperation(
-            value = "토큰 재발급",
+            value = "COMM-B-02 :: 토큰 재발급",
             notes = "토큰 재발급 API입니다. 프론트엔드 측에서는 토큰이 만료되는 시간이 되기 전에(payload의 exp를 체크) 해당 API를 호출해서" +
                     "토큰을 재발급받는 로직을 넣어야, 재로그인 필요 없이 API 사용이 가능합니다."
     )
@@ -54,17 +54,6 @@ public class AuthApiController {
         TokenInfoDto tokenInfo = authService.refresh(authentication);
 
         return ResponseEntity.status(HttpStatus.OK).body(tokenInfo);
-    }
-
-    @ApiOperation(value = "샘플 API - 현재 로그인한 Member의 PK와 이메일 가져오기")
-    @PreAuthorize(AuthConstant.AUTH_ROLE_COMMON_USER)
-    @GetMapping("/user")
-    public ResponseEntity<String> authSample(
-    ){
-        Long pk = SecurityUtil.getCurrentMemberPk();
-        String email = SecurityUtil.getCurrentMemberEmail();
-        String result = String.format("%d-%s", pk, email);
-        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
 

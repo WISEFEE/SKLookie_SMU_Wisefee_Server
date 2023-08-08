@@ -4,6 +4,8 @@ import com.sklookiesmu.wisefee.domain.OrderOption;
 import com.sklookiesmu.wisefee.dto.seller.CreateOrderOptionRequestDto;
 import com.sklookiesmu.wisefee.dto.seller.UpdateOrderOptionRequestDto;
 
+import java.util.List;
+
 public interface CafeOrderService {
 
     /**
@@ -45,5 +47,13 @@ public interface CafeOrderService {
      * @return 조회된 주문 옵션 엔티티, 존재하지 않을 경우 null 반환
      */
     OrderOption findOrderOption(Long orderOptionId);
+
+
+    /**
+     * [주문 옵션 리스트 조회]
+     * 매장 ID를 기반으로 해당 매장의 주문 옵션 리스트를 조회한다.
+     * @return 해당 매장의 주문 옵션 리스트
+     */
+    List<OrderOption> getOrderOptionsByCafeId(Long cafeId);
 
 }

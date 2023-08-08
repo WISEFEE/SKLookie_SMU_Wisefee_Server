@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@Api(tags = "매장 상품 API")
+@Api(tags = "SELL-C :: 매장 상품 편집 API")
 @RestController
 @RequiredArgsConstructor
 public class CafeProductController {
@@ -26,7 +26,7 @@ public class CafeProductController {
     private final CafeProductService cafeProductService;
 
     @ApiOperation(
-            value = "상품 추가",
+            value = "SELL-C-01 :: 상품 추가",
             notes = "상품 추가 API입니다. <br>" +
                     "상품 정보, 상품명, 상품 가격을 입력합니다."
     )
@@ -41,25 +41,25 @@ public class CafeProductController {
     }
 
 
+//    @ApiOperation(
+//            value = "상품 수정",
+//            notes = "상품 수정 API입니다. <br>" +
+//                    "수정할 상품 정보, 상품명, 상품 가격을 입력합니다."
+//    )
+//    @PutMapping("/api/v1/seller/{cafeId}/product/{productId}")
+//    @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
+//    public UpdateProductResponseDto updateProduct(@PathVariable("cafeId") Long cafeId,
+//                                                  @PathVariable("productId") Long productId,
+//                                                  @RequestBody @Valid UpdateProductRequestDto requestDto) {
+//        cafeProductService.updateProduct(cafeId, productId, requestDto);
+//        Product findProduct = cafeProductService.findProduct(productId);
+//
+//        return new UpdateProductResponseDto(findProduct.getProductId(), findProduct.getProductName(), findProduct.getProductPrice(), findProduct.getProductInfo());
+//    }
+
+
     @ApiOperation(
-            value = "상품 수정",
-            notes = "상품 수정 API입니다. <br>" +
-                    "수정할 상품 정보, 상품명, 상품 가격을 입력합니다."
-    )
-    @PutMapping("/api/v1/seller/{cafeId}/product/{productId}")
-    @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
-    public UpdateProductResponseDto updateProduct(@PathVariable("cafeId") Long cafeId,
-                                                  @PathVariable("productId") Long productId,
-                                                  @RequestBody @Valid UpdateProductRequestDto requestDto) {
-        cafeProductService.updateProduct(cafeId, productId, requestDto);
-        Product findProduct = cafeProductService.findProduct(productId);
-
-        return new UpdateProductResponseDto(findProduct.getProductId(), findProduct.getProductName(), findProduct.getProductPrice(), findProduct.getProductInfo());
-    }
-
-
-    @ApiOperation(
-            value = "상품 삭제",
+            value = "SELL-C-02 :: 상품 삭제",
             notes = "상품 삭제 API입니다. <br>" +
                     "소프트 삭제를 하여 상품의 deleted_at 속성을 삭제 시점으로 설정합니다."
     )
@@ -72,7 +72,7 @@ public class CafeProductController {
 
 
     @ApiOperation(
-            value = "상품 옵션 추가",
+            value = "SELL-C-03 :: 상품 옵션 추가",
             notes = "상품 옵션 추가 API입니다. <br>" +
                     "상품 옵션명을 입력합니다."
     )
@@ -87,26 +87,26 @@ public class CafeProductController {
     }
 
 
+//    @ApiOperation(
+//            value = "상품 옵션 수정",
+//            notes = "상품 옵션 수정 API입니다. <br>" +
+//                    "수정할 상품 옵션명을 입력합니다."
+//    )
+//    @PutMapping("/api/v1/seller/{productId}/productOption/{productOptionId}")
+//    @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
+//    public UpdateProductOptionResponseDto updateProductOption(@PathVariable("productId") Long productId,
+//                                                              @PathVariable("productOptionId") Long productOptionId,
+//                                                              @RequestBody @Valid UpdateProductOptionRequestDto requestDto
+//    ) {
+//        cafeProductService.updateProductOption(productId, productOptionId, requestDto);
+//        ProductOption findProductOption = cafeProductService.findProductOption(productOptionId);
+//
+//        return new UpdateProductOptionResponseDto(findProductOption.getProductOptionId(), findProductOption.getProductOptionName());
+//    }
+
+
     @ApiOperation(
-            value = "상품 옵션 수정",
-            notes = "상품 옵션 수정 API입니다. <br>" +
-                    "수정할 상품 옵션명을 입력합니다."
-    )
-    @PutMapping("/api/v1/seller/{productId}/productOption/{productOptionId}")
-    @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
-    public UpdateProductOptionResponseDto updateProductOption(@PathVariable("productId") Long productId,
-                                                              @PathVariable("productOptionId") Long productOptionId,
-                                                              @RequestBody @Valid UpdateProductOptionRequestDto requestDto
-    ) {
-        cafeProductService.updateProductOption(productId, productOptionId, requestDto);
-        ProductOption findProductOption = cafeProductService.findProductOption(productOptionId);
-
-        return new UpdateProductOptionResponseDto(findProductOption.getProductOptionId(), findProductOption.getProductOptionName());
-    }
-
-
-    @ApiOperation(
-            value = "상품 옵션 삭제",
+            value = "SELL-C-04 :: 상품 옵션 삭제",
             notes = "상품 옵션 삭제 API입니다. <br>" +
                     "소프트 삭제를 하여 상품 옵션의 deleted_at 속성을 삭제 시점으로 설정합니다."
     )
@@ -120,7 +120,7 @@ public class CafeProductController {
 
 
     @ApiOperation(
-            value = "상품 옵션 선택지 추가",
+            value = "SELL-C-05 :: 상품 옵션 선택지 추가",
             notes = "상품 옵션 선택지 추가 API입니다. <br>" +
                     "상품 옵션 선택지명과 추가 가격을 입력합니다."
     )
@@ -135,26 +135,26 @@ public class CafeProductController {
     }
 
 
+//    @ApiOperation(
+//            value = "상품 옵션 선택지 수정",
+//            notes = "상품 옵션 선택지 수정 API입니다. <br>" +
+//                    "수정할 상품 옵션 선택지명과 추가 가격을 입력합니다."
+//    )
+//    @PutMapping("/api/v1/seller/{productId}/productOption/{productOptionId}/productOptionChoice/{productOptionChoiceId}")
+//    @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
+//    public UpdateProductOptionChoiceResponseDto updateProductOptionChoice(@PathVariable Long productId,
+//                                                                          @PathVariable("productOptionId") Long productOptionId,
+//                                                                          @PathVariable("productOptionChoiceId") Long productOptionChoiceId,
+//                                                                          @RequestBody @Valid UpdateProductOptionChoiceRequestDto requestDto) {
+//        cafeProductService.updateProductOptionChoice(productId, productOptionId, productOptionChoiceId, requestDto);
+//        ProductOptChoice findProductOptionChoice = cafeProductService.findProductOptionChoice(productOptionChoiceId);
+//
+//        return new UpdateProductOptionChoiceResponseDto(findProductOptionChoice.getProductOptionChoiceId(), findProductOptionChoice.getProductOptionChoiceName(), findProductOptionChoice.getProductOptionChoicePrice());
+//    }
+
+
     @ApiOperation(
-            value = "상품 옵션 선택지 수정",
-            notes = "상품 옵션 선택지 수정 API입니다. <br>" +
-                    "수정할 상품 옵션 선택지명과 추가 가격을 입력합니다."
-    )
-    @PutMapping("/api/v1/seller/{productId}/productOption/{productOptionId}/productOptionChoice/{productOptionChoiceId}")
-    @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
-    public UpdateProductOptionChoiceResponseDto updateProductOptionChoice(@PathVariable Long productId,
-                                                                          @PathVariable("productOptionId") Long productOptionId,
-                                                                          @PathVariable("productOptionChoiceId") Long productOptionChoiceId,
-                                                                          @RequestBody @Valid UpdateProductOptionChoiceRequestDto requestDto) {
-        cafeProductService.updateProductOptionChoice(productId, productOptionId, productOptionChoiceId, requestDto);
-        ProductOptChoice findProductOptionChoice = cafeProductService.findProductOptionChoice(productOptionChoiceId);
-
-        return new UpdateProductOptionChoiceResponseDto(findProductOptionChoice.getProductOptionChoiceId(), findProductOptionChoice.getProductOptionChoiceName(), findProductOptionChoice.getProductOptionChoicePrice());
-    }
-
-
-    @ApiOperation(
-            value = "상품 옵션 선택지 삭제",
+            value = "SELL-C-06 :: 상품 옵션 선택지 삭제",
             notes = "상품 옵션 선택지 삭제 API입니다. <br>" +
                     "소프트 삭제를 하여 상품 옵션 선택지의 deleted_at 속성을 삭제 시점으로 설정합니다."
     )
