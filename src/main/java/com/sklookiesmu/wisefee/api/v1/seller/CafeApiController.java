@@ -84,7 +84,7 @@ public class CafeApiController {
 
 
     @ApiOperation(
-            value = "매장 조회",
+            value = "SELL-A-04 :: 매장 정보 조회",
             notes = "매장 정보, 상품 리스트, 주문 옵션 정보가 함께 조회되는 API입니다."
     )
     @GetMapping("/api/v1/seller/cafe/{cafeId}")
