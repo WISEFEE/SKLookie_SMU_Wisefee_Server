@@ -290,13 +290,27 @@ public class CafeProductServiceImpl implements CafeProductService {
         return productRepository.findById(productId);
     }
 
+
     @Override
     public ProductOption findProductOption(Long productOptionId) {
         return productOptionRepository.findById(productOptionId);
     }
 
+
     @Override
     public ProductOptChoice findProductOptionChoice(Long productOptionChoiceId) {
         return productOptChoiceRepository.findById(productOptionChoiceId);
+    }
+
+
+    @Override
+    public List<Product> getProductsByCafeId(Long cafeId) {
+        Cafe cafe = cafeRepository.findById(cafeId);
+
+        if (cafe == null) {
+            throw new IllegalArgumentException("존재하지 않는 매장입니다.");
+        }
+
+        return productRepository.findByCafe(cafe);
     }
 }

@@ -46,7 +46,6 @@ public interface CafeService {
     Cafe findCafe(Long cafeId);
 
 
-
     /**
      * [모든 소프트 삭제되지 않은 매장 조회]
      * 모든 소프트 삭제되지 않은 매장들을 조회한다.

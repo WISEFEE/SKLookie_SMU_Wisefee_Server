@@ -5,6 +5,8 @@ import com.sklookiesmu.wisefee.domain.ProductOptChoice;
 import com.sklookiesmu.wisefee.domain.ProductOption;
 import com.sklookiesmu.wisefee.dto.seller.*;
 
+import java.util.List;
+
 public interface CafeProductService {
 
     /**
@@ -132,5 +134,13 @@ public interface CafeProductService {
      * @return 조회된 상품 옵션 선택지 엔티티, 존재하지 않을 경우 null 반환
      */
     ProductOptChoice findProductOptionChoice(Long productOptionChoiceId);
+
+
+    /**
+     * [상품 리스트 조회]
+     * 매장 ID를 기반으로 해당 매장의 상품 리스트를 조회한다.
+     * @return 해당 매장의 상품 리스트
+     */
+    List<Product> getProductsByCafeId(Long cafeId);
 
 }

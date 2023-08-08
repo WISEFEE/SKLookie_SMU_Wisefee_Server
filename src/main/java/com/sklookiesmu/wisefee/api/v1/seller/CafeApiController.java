@@ -4,6 +4,8 @@ import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
 import com.sklookiesmu.wisefee.domain.*;
 import com.sklookiesmu.wisefee.dto.seller.*;
+import com.sklookiesmu.wisefee.service.seller.CafeOrderService;
+import com.sklookiesmu.wisefee.service.seller.CafeProductService;
 import com.sklookiesmu.wisefee.service.seller.CafeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Api(tags = "SELL-A :: 매장 편집 API")
 @RestController
@@ -20,6 +23,8 @@ import javax.validation.Valid;
 public class CafeApiController {
 
     private final CafeService cafeService;
+    private final CafeProductService cafeProductService;
+    private final CafeOrderService cafeOrderService;
 
     @ApiOperation(
             value = "SELL-A-01 :: 매장 등록",
@@ -76,5 +81,29 @@ public class CafeApiController {
     public void deleteCafe(@PathVariable("cafeId") Long cafeId) {
         cafeService.delete(cafeId);
     }
+
+
+    @ApiOperation(
+            value = "매장 조회",
+            notes = "매장 정보, 상품 리스트, 주문 옵션 정보가 함께 조회되는 API입니다."
+    )
+    @GetMapping("/api/v1/seller/cafe/{cafeId}")
+    @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
+    public CafeDetailsDto getCafeDetails(@PathVariable("cafeId") Long cafeId) {
+        Cafe findCafe = cafeService.findCafe(cafeId);
+        List<Product> productList = cafeProductService.getProductsByCafeId(cafeId);
+        List<OrderOption> orderOptionList = cafeOrderService.getOrderOptionsByCafeId(cafeId);
+
+        CafeDetailsDto cafeDetailsDto = new CafeDetailsDto();
+        cafeDetailsDto.setCafeId(findCafe.getCafeId());
+        cafeDetailsDto.setTitle(findCafe.getTitle());
+        cafeDetailsDto.setContent(findCafe.getContent());
+        cafeDetailsDto.setCafePhone(findCafe.getCafePhone());
+        cafeDetailsDto.setProducts(productList);
+        cafeDetailsDto.setOrderOptions(orderOptionList);
+
+        return cafeDetailsDto;
+    }
+
 
 }
