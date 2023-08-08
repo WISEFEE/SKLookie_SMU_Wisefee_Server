@@ -24,7 +24,9 @@ public class ConsumerController {
 
     private final ConsumerServiceImpl consumerService;
 
-    @ApiOperation(value = "CONS-B-01 :: 정기 구독하기")
+    @ApiOperation(value = "CONS-B-01 :: 정기 구독하기",
+            notes = "정기 구독을 요청합니다. cafeId에는 구독할 카페를, subTicketId에는, COMM-D의 구독권 유형 종류를 넣어주시면 됩니다." )
+
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @PostMapping("/subscribe/{cafeId}/subTicketType/{subTicketTypeId}")
     public ResponseEntity<?> createSubscribe(@PathVariable("cafeId") Long cafeId,
@@ -36,7 +38,8 @@ public class ConsumerController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @ApiOperation(value = "CONS-B-02 :: 정기구독 내역 조회하기")
+    @ApiOperation(value = "CONS-B-02 :: 정기구독 내역 조회하기",
+            notes = "정기 구독 내역을 조회합니다. memberId에는 조회할 사용자의 PK를 넣어서 요청합니다.")
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @GetMapping("/{memberId}/subscribe")
     public ResponseEntity<SubscribeDto.SubscribeListResponseDto> getSubscribe(@PathVariable("memberId") Long memberId) {

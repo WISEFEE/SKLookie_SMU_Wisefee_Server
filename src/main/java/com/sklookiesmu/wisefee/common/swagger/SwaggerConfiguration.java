@@ -33,7 +33,12 @@ public class SwaggerConfiguration {
     private ApiInfo apiInfo(){
         return new ApiInfoBuilder()
                 .title("Wisefee API Document")
-                .description("This is Wisefee API Document")
+                .description(
+                        "This is Wisefee API Document <br>" +
+                        "COMM : 공통 API - 고객/매장 계정 모두 사용 <br>" +
+                        "CONS : 고객 API - 고객 계정 인증 후 사용<br>" +
+                        "SELL : 매장 API - 매장 계정 인증 후 사용<br>"
+                )
                 .version("1.0")
                 .build();
     }

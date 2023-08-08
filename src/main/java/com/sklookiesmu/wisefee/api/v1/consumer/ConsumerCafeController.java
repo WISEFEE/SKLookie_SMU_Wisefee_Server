@@ -36,10 +36,10 @@ public class ConsumerCafeController {
             "unpaged = false <br>" +
             "sort.sorted = true <br>" +
             "sort.unsorted = false <br><br>" +
-            "하단의 파라미터를 설정하지 않고 조회하면 전체 목록이 출력됩니다. " +
-            "POSTMAN으로 실행 시 URL에 쿼리파라미터로 <br>" +
-            "localhost:8080/api/v1/consumer/cafe?size=2 이런 식으로 요청하면 2개의 카페만 볼 수 있도록 되는데,, " +
-            "스웨거에는 왜 적용이 안되는건지 잘 모르겠네요...ㅜㅜㅜ ")
+            "하단의 파라미터를 설정하지 않고 조회하면 전체 목록이 출력됩니다. " )
+//          "POSTMAN으로 실행 시 URL에 쿼리파라미터로 <br>" +
+//          "localhost:8080/api/v1/consumer/cafe?size=2 이런 식으로 요청하면 2개의 카페만 볼 수 있도록 되는데,, " +
+//          "스웨거에는 왜 적용이 안되는건지 잘 모르겠네요...ㅜㅜㅜ
     @PreAuthorize(AuthConstant.AUTH_ROLE_COMMON_USER)
     @GetMapping("/cafe")
     public ResponseEntity<CafeDto.CafeListResponseDto> getCafeList(@PageableDefault(sort = "title", direction = Sort.Direction.ASC) Pageable pageable){

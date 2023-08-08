@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@Api(tags = "SELL-A :: 매장 편집 API")
+@Api(tags = "SELL-A :: 매장 정보 API")
 @RestController
 @RequiredArgsConstructor
 public class CafeApiController {
@@ -29,7 +29,8 @@ public class CafeApiController {
     @ApiOperation(
             value = "SELL-A-01 :: 매장 등록",
             notes = "매장 등록 API입니다. <br>" +
-                    "매장 전화번호, 매장 설명, 매장명을 입력하여 보내면, 생성된 매장의 ID값을 반환합니다."
+                    "매장 전화번호, 매장 설명, 매장명을 입력하여 보내면, 생성된 매장의 ID값을 반환합니다.<br>" +
+                    "주소의 경우 매장을 등록하기 이전 COMM-A-01을 이용하여 주소를 먼저 등록한 이후 반환된 ID를 넣어주시면 됩니다."
     )
     @PostMapping("/api/v1/seller/cafe")
     @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
