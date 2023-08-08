@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api(tags = "고객 -> 매장 API")
+@Api(tags = "CONS-A :: 매장 정보 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/consumer")
@@ -27,7 +27,7 @@ public class ConsumerCafeController {
 
     private final ConsumerCafeServiceImpl consumerService;
 
-    @ApiOperation(value = "카페 리스트 조회",
+    @ApiOperation(value = "CONS-A-01 :: 카페 리스트 조회",
     notes = "카페 목록을 조회하는 API입니다. 카페 이름순으로 정렬되어있습니다. <br><br>" +
             "pageSize = 한 페이지에서 나타내는 카페 수 <br>" +
             "pageNumber = 페이지 번호 (0번부터 시작) <br>" +
@@ -46,7 +46,7 @@ public class ConsumerCafeController {
         return ResponseEntity.status(HttpStatus.OK).body(consumerService.getCafeList(pageable));
     }
 
-    @ApiOperation(value = "카페 음료 리스트 조회",
+    @ApiOperation(value = "CONS-A-02 :: 카페 음료 리스트 조회",
                     notes = "카페 ID(PK)로 카페를 선택한 후 해당하는 카페에 등록된 음료 목록들을 조회하는 API입니다. <br>" +
                             "제품 ID(PK), 제품명, 제품 가격, 제품 정보, 제품 옵션을 조회할 수 있습니다.")
     @PreAuthorize(AuthConstant.AUTH_ROLE_COMMON_USER)
@@ -56,7 +56,7 @@ public class ConsumerCafeController {
         return ResponseEntity.status(HttpStatus.OK).body(consumerService.getProductList(cafeId));
     }
 
-    @ApiOperation(value = "매장 정보 조회",
+    @ApiOperation(value = "CONS-A-03 :: 매장 정보 조회",
             notes = "카페 ID(PK)로 카페를 선택한 후 해당하는 카페정보를 조회 API입니다. <br>" +
                     "매장ID(PK), 매장명, 매장설명, 매장연락처를 조회할 수 있습니다.")
     @PreAuthorize(AuthConstant.AUTH_ROLE_COMMON_USER)

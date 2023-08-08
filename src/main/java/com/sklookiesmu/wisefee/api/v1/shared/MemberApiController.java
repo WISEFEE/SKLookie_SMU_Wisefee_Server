@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Api(tags = "회원 API")
+@Api(tags = "COMM-C :: 회원 API")
 @RestController
 @RequiredArgsConstructor
 public class MemberApiController {
@@ -34,7 +34,7 @@ public class MemberApiController {
 
     // 관리자 권한.
     @ApiOperation(
-            value = "회원 전체 조회(관리자)",
+            value = "COMM-C-X1 :: 회원 전체 조회(관리자)",
             notes = "본 Api는 관리자 전용으로서 현재까지 DB에 저장된 모든 회원 정보를 조회합니다.<br>" +
                     "회원 정보는 다음과 같이 json 형식으로 반환됩니다. <br><br>" +
                     "조회 데이터:\n" +
@@ -74,7 +74,7 @@ public class MemberApiController {
 
     // 관리자 권한.
     @ApiOperation(
-            value = "해당 ID의 회원 조회(관리자)",
+            value = "COMM-C-X2 :: 해당 ID의 회원 조회(관리자)",
             notes = "본 Api는 관리자 전용으로 회원 id를 통해 한 회원의 정보를 조회합니다.<br>" +
                     "회원 정보는 다음과 같이 json 형식으로 반환됩니다. <br><br>" +
                     "조회 데이터:\n" +
@@ -114,7 +114,7 @@ public class MemberApiController {
 
     @PreAuthorize(AuthConstant.AUTH_ROLE_COMMON_USER)
     @ApiOperation(
-            value = "해당 ID의 회원 조회(회원)",
+            value = "COMM-C-U1 :: 해당 ID의 회원 조회(회원)",
             notes = "본 Api는 회원 전용으로 id를 통해 자신의 정보를 전부 조회합니다.<br>" +
                     "회원 정보는 다음과 같이 json 형식으로 반환됩니다. <br><br>" +
                     "조회 데이터:\n" +
@@ -155,7 +155,7 @@ public class MemberApiController {
     }
 
     @ApiOperation(
-            value = "회원 신규 추가",
+            value = "COMM-C-U2 :: 회원 신규 추가(가입)",
             notes = "본 API는 새로운 회원을 데이터베이스에 추가하는 기능입니다.\n\n" +
                     "입력 데이터:\n" +
                     "```json\n" +
@@ -182,7 +182,7 @@ public class MemberApiController {
 
     @PreAuthorize(AuthConstant.AUTH_ROLE_COMMON_USER)
     @ApiOperation(
-            value = "해당 Email의 회원 조회(회원)",
+            value = "COMM-C-U3 :: 해당 Email의 회원 조회(회원)",
             notes = "본 Api는 회원 전용으로 Email을 통해 회원의 정보를 조회합니다.<br>" +
                     "회원 정보는 다음과 같이 json 형식으로 반환됩니다. <br><br>" +
                     "조회 데이터:\n" +
@@ -216,7 +216,7 @@ public class MemberApiController {
 
     @PreAuthorize(AuthConstant.AUTH_ROLE_COMMON_USER)
     @ApiOperation(
-            value = "회원 수정(회원)",
+            value = "COMM-C-U4 :: 회원 수정(회원)",
             notes = "본 Api는 회원 전용으로 회원 id를 통해 회원의 정보를 수정합니다.<br>" +
                     "id를 통해 회원 정보를 json파일에 맞춰 수정합니다. <br><br>" +
                     "입력 데이터:\n" +
@@ -248,7 +248,7 @@ public class MemberApiController {
 
     @PreAuthorize(AuthConstant.AUTH_ROLE_COMMON_USER)
     @ApiOperation(
-            value = "회원 비밀번호 수정(회원)",
+            value = "COMM-C-U5 :: 회원 비밀번호 수정(회원)",
             notes = "본 Api는 회원 전용으로 회원 id를 통해 회원의 비밀번호를 수정합니다.<br>" +
                     "id를 통해 변경할 비밀번호 정보를 json파일에 맞춰 수정합니다. <br><br>" +
                     "입력 데이터:\n" +

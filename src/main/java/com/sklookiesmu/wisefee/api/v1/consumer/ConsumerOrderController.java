@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api(tags = "고객 주문 API")
+@Api(tags = "CONS-C :: 매장 정보(주문관련) API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/consumer")
 public class ConsumerOrderController {
 
     private final ConsumerOrderServiceImpl consumerOrderService;
-    @ApiOperation(value = "주문 옵션 정보 조회")
+    @ApiOperation(value = "CONS-C-01 :: 주문 옵션 정보 조회")
     @PreAuthorize(AuthConstant.AUTH_ROLE_COMMON_USER)
     @GetMapping("/{cafeId}/orderOption")
     public ResponseEntity<OrderOptionDto.OrderOptionResponseDto> getOrderOption(@PathVariable("cafeId") Long cafeId){
