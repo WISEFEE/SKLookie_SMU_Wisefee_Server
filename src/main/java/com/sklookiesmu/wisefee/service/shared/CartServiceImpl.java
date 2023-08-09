@@ -42,11 +42,8 @@ public class CartServiceImpl implements CartService{
                 }
             }
         }
-
-
         return cart.getCartId();
     }
-
 
     @Override
     public Long addCartProduct(Long memberId, CartRequestDto.CartProductRequestDto cartRequestDto) {
@@ -162,21 +159,32 @@ public class CartServiceImpl implements CartService{
                     cartProducts.get(i).getCreatedAt(),
                     cartProducts.get(i).getUpdatedAt()
             ));
-
-            System.out.println("Service : " + cartProductResponseDtos.get(i).toString());
-
         }
-
-        System.out.println("\n\n\n\n\n\n");
-
-        for (CartResponseDto.CartProductResponseDto dto :cartProductResponseDtos
-             ) {
-            System.out.println(dto.toString());
-        }
-
-        System.out.println("\n\n\n\n\n\n");
-
         return cartProductResponseDtos;
+    }
+
+    @Override
+    public Long deleteCartProduct(Long cartProductId) {
+        CartProduct cartProduct = cartRepository.findCartProduct(cartProductId);
+        if(cartProduct.getDeletedAt() != null) {
+            throw new RuntimeException("Invalid Value : This cartProduct is already deleted. :" + cartProductId);
+        }
+        Long result = cartRepository.deleteCartProduct(cartProductId);
+        return result;
+    }
+
+    @Override
+    public Long updateCartProduct(Long cartProductId, CartRequestDto.CartProductUpdateRequestDTO cartProductUpdateRequestDto) {
+        CartProduct cartProduct = cartRepository.findCartProduct(cartProductId);
+        if(cartProduct == null) {
+            throw new RuntimeException("Invalid Value : This cartProduct is not exist. :" + cartProductId);
+        }
+        if(cartProduct.getCartProductQuantity() + cartProductUpdateRequestDto.getAddCartProductQuantity() < 0) {
+            return deleteCartProduct(cartProductId);
+//            throw new RuntimeException("Negative Quantity : This cartProductQuantity being negative value When update cartProduct.");
+        }
+
+        return cartProduct.updateQuantity(cartProductUpdateRequestDto.getAddCartProductQuantity());
     }
 
 }

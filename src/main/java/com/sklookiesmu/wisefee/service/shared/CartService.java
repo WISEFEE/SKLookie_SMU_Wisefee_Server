@@ -1,6 +1,5 @@
 package com.sklookiesmu.wisefee.service.shared;
 
-import com.sklookiesmu.wisefee.domain.Cart;
 import com.sklookiesmu.wisefee.domain.CartProduct;
 import com.sklookiesmu.wisefee.dto.shared.member.CartRequestDto;
 import com.sklookiesmu.wisefee.dto.shared.member.CartResponseDto;
@@ -19,7 +18,7 @@ public interface CartService {
     /**
      * [장바구니 상품 추가]
      * @param [cartId 추가할 cartId]
-     * @param [productId 추가할 상품 PK]
+     * @param [CartProductRequestDto 추가할 상품 DTO]
      * @return [추가된 cartProduct PK]
      */
      Long addCartProduct(Long memberId, CartRequestDto.CartProductRequestDto cartRequestDto);
@@ -34,8 +33,21 @@ public interface CartService {
     /**
      * [회원 장바구니 조회]
      * @param [memberId 회원 PK]
-     * @param [order 정렬 방법 => desc, asc]
      * @return [장바구니 List]
      */
     List<CartResponseDto.CartProductResponseDto> findAllCartProduct(Long memberId);
+
+    /**
+     * [장바구니 상품 업데이트]
+     * @param [cartProductId 수정할 장바구니상품 PK]
+     * @param [cartProductUpdateRequestDto 수정할 DTO]
+     * @return [수정한 CartProduct PK]
+     */
+    Long updateCartProduct(Long cartProductId,CartRequestDto.CartProductUpdateRequestDTO cartProductUpdateRequestDto);
+
+    /**
+     * [장바구니 상품 삭제]
+     * @param [cartProductId 삭제할 장바구니 PK]
+     */
+    Long deleteCartProduct(Long cartProductId);
 }

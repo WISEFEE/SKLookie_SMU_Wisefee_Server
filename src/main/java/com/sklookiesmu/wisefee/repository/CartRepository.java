@@ -1,5 +1,6 @@
 package com.sklookiesmu.wisefee.repository;
 
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,14 +77,28 @@ public class CartRepository {
 
 
     /**
+     * [장바구니 상품을 조회한다.]
+     * @param [cartProductId 조회할 장바구니 상품 아이디]
+     * @return [조회한 장바구니 상품 엔티티]
+     */
+    public CartProduct findCartProduct(Long cartProductId) {
+        CartProduct result = em.find(CartProduct.class, cartProductId);
+        return result;
+    }
+
+    /**
      * [cartId기준 cartProduct 조회]
      * @param [cartId 조회할 cartId]
      * @return [조회된 cartProduct 리스트]
      */
     public List<CartProduct> findCartProductByCartId(Long cartId){
         QCartProduct cartProduct = QCartProduct.cartProduct;
+
+        BooleanExpression cartValidate = cartProduct.cart.cartId.eq(cartId);
+        BooleanExpression isNotDelete = cartProduct.deletedAt.isNull();
+
         List<CartProduct> result = jpaQueryFactory.selectFrom(cartProduct)
-                .where(cartProduct.cart.cartId.eq(cartId))
+                .where(cartValidate.and(isNotDelete))
                 .fetch();
         return result;
     }
@@ -100,6 +116,13 @@ public class CartRepository {
         return result;
     }
 
-
+    public Long deleteCartProduct(Long cartProductId) {
+        QCartProduct cartProduct = QCartProduct.cartProduct;
+        long result = jpaQueryFactory.update(cartProduct)
+                .set(cartProduct.deletedAt, LocalDateTime.now())
+                .where(cartProduct.cartProductId.eq(cartProductId))
+                .execute();
+        return result;
+    }
 
 }

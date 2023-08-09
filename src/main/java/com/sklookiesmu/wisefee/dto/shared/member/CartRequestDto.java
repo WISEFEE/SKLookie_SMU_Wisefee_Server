@@ -47,5 +47,15 @@ public class CartRequestDto {
     }
 
 
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @ApiModel(description = "CartPorduct 옵션 업데이트 DTO")
+    public static class CartProductUpdateRequestDTO {
+        @ApiModelProperty(value = "추가할 상품 개수", example = "1")
+        @NotNull(message = "변경할 상품 개수는 필수 입력 값입니다.")
+        private Long addCartProductQuantity;
+    }
+
 }
 

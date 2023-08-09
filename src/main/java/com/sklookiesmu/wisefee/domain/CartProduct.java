@@ -72,5 +72,10 @@ public class CartProduct {
         this.productOptChoices = productOptChoices;
     }
 
+    public Long updateQuantity(Long updateQuantity) {
+        this.cartProductQuantity += updateQuantity;
+        return 1L;
+    }
+
 
 }

@@ -5,6 +5,7 @@ import com.sklookiesmu.wisefee.common.constant.AuthConstant;
 import com.sklookiesmu.wisefee.common.error.ValidateMemberException;
 import com.sklookiesmu.wisefee.dto.shared.member.CartRequestDto;
 import com.sklookiesmu.wisefee.dto.shared.member.CartResponseDto;
+import com.sklookiesmu.wisefee.service.shared.CartService;
 import com.sklookiesmu.wisefee.service.shared.CartServiceImpl;
 import com.sklookiesmu.wisefee.service.shared.MemberServiceImpl;
 import io.swagger.annotations.Api;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Api(tags= "Cart API")
@@ -76,6 +78,32 @@ public class CartApiController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @ApiOperation(
+            value = "상품옵션 수정",
+            notes = "수정할 장바구니 상품 아이디와 수정할 개수를 입력합니다." +
+                    "<br> 또한, 상품 개수가 0 이하가 될 시 자동으로 상품을 삭제합니다."
+    )
+    @PutMapping("/api/v1/cart/update/{cartProductId}")
+    public ResponseEntity<Long> updateCartProduct(
+            @ApiParam("장바구니 상품 아이디")
+            @PathVariable("cartProductId") Long cartProductId,
+            @Valid @RequestBody CartRequestDto.CartProductUpdateRequestDTO dto
+            ){
+        Long result = cartService.updateCartProduct(cartProductId, dto);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 
+    @ApiOperation(
+            value = "장바구니 상품 삭제",
+            notes = "장바구니 상품을 삭제합니다."
+    )
+    @DeleteMapping("/api/v1/cart/delete/{cartProductId}")
+    public ResponseEntity<Long> deleteCartProduct(
+            @ApiParam(value = "장바구니 상품 PK")
+            @PathVariable("cartProductId") Long cartProductId
+    ) {
+        Long result = cartService.deleteCartProduct(cartProductId);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 
 }
