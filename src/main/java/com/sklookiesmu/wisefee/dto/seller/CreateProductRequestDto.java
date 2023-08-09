@@ -21,7 +21,7 @@ public class CreateProductRequestDto {
     private String productName;
 
     @ApiModelProperty(value = "상품 가격", required = true)
-    @NotBlank(message = "상품 가격은 필수 입력 값입니다.")
+    @NotNull(message = "상품 가격은 필수 입력 값입니다.")
     private int productPrice;
 
     @ApiModelProperty(value = "상품 설명")
