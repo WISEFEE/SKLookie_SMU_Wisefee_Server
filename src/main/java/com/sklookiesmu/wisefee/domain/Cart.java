@@ -61,9 +61,8 @@ public class Cart {
     /**
      * 비즈니스 로직
      */
-    public void addCart(Long memberId){
+    public void addCart(Member member){
         this.cartStatus = "False";
-        this.member = new Member();
-        this.member.setMemberId(memberId);
+        this.member = member;
     }
 }

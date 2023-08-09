@@ -51,4 +51,22 @@ public class ProductOptChoice {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PRD_OPTION_ID", nullable = false)
     private ProductOption productOption;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CART_PRODUCT_ID")
+    private CartProduct cartProduct;
+
+    @Override
+    public String toString() {
+        return "ProductOptChoice{" +
+                "productOptionChoiceId=" + productOptionChoiceId +
+                ", productOptionChoiceName='" + productOptionChoiceName + '\'' +
+                ", productOptionChoicePrice=" + productOptionChoicePrice +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", deletedAt=" + deletedAt +
+                ", productOption=" + productOption +
+                ", cartProduct=" + cartProduct +
+                '}';
+    }
 }
