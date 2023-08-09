@@ -22,7 +22,7 @@ public class ConsumerOrderController {
 
     private final ConsumerOrderServiceImpl consumerOrderService;
     @ApiOperation(value = "CONS-C-01 :: 주문 옵션 정보 조회")
-    @PreAuthorize(AuthConstant.AUTH_ROLE_COMMON_USER)
+    @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @GetMapping("/{cafeId}/orderOption")
     public ResponseEntity<OrderOptionDto.OrderOptionResponseDto> getOrderOption(@PathVariable("cafeId") Long cafeId){
         return ResponseEntity.status(HttpStatus.OK).body(consumerOrderService.getOrderOptionInfo(cafeId));
