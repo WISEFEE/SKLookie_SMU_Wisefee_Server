@@ -30,7 +30,7 @@ public class ConsumerServiceImpl implements ConsumerService {
      * 정기구독 체결
      */
     @Override
-    public void createSubscribe(SubscribeDto.SubscribeRequestDto request, Long cafeId, Long subTicketTypeId) {
+    public void createSubscribe(SubscribeDto.SubscribeRequestDto request, Long cafeId, Long subTicketTypeId, Long userId) {
 
         Cafe cafe = cafeJpaRepository.findById(cafeId).orElseThrow();
         SubTicketType subTicketType = subTicketTypeRepository.findById(subTicketTypeId).orElseThrow();
@@ -38,8 +38,7 @@ public class ConsumerServiceImpl implements ConsumerService {
         payment.setPaymentPrice(subTicketType.getSubTicketPrice());
         paymentJpaRepository.save(payment);
 
-        // 유저 검증 필요
-        Member member = memberRepository.find(1L);
+        Member member = memberRepository.find(userId);
         subscribeRepository.save(request.toEntity(cafe, subTicketType, payment,member));
     }
 

@@ -1,4 +1,4 @@
-package com.sklookiesmu.wisefee.api.v1.shared;
+package com.sklookiesmu.wisefee.common.exception;
 
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
