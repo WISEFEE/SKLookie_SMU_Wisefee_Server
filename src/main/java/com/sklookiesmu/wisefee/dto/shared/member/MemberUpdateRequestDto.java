@@ -37,10 +37,10 @@ public class MemberUpdateRequestDto {
 //            message = "비밀번호는 영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8자 ~ 20자의 비밀번호여야 합니다.")
 //    private String password;
 
-    @ApiModelProperty(value = "회원 계정 타입", required = true, example = "SELLER")
-    @NotBlank(message = "계정 타입은 필수 입력 값입니다.")
-    @Pattern(regexp = "^(CONSUMER|SELLER)$", message = "계정 타입은 CONSUMER, SELLER 중 하나여야 합니다.")
-    private String accountType;
+//    @ApiModelProperty(value = "회원 계정 타입", required = true, example = "SELLER")
+//    @NotBlank(message = "계정 타입은 필수 입력 값입니다.")
+//    @Pattern(regexp = "^(CONSUMER|SELLER)$", message = "계정 타입은 CONSUMER, SELLER 중 하나여야 합니다.")
+//    private String accountType;
 
     @ApiModelProperty(value = "이메일 인증 여부", required = true, example = "FALSE")
     @NotBlank(message = "이메일 인증 여부는 필수 입력 값입니다.")
