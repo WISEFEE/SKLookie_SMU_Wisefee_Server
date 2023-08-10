@@ -6,11 +6,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 public class OrderDto {
-    @Getter
+ /*   @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class OrderRequestDto{
 
-    }
+    }*/
 }

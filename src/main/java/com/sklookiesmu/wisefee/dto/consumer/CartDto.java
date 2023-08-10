@@ -6,13 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 public class CartDto {
-    @Getter
+    /*@Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class CartRequestDto{
-
-
-
-    }
+    }*/
 }

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
@@ -19,6 +20,6 @@ public class CreateOrderOptionRequestDto {
     private String orderOptionName;
 
     @ApiModelProperty(value = "주문 옵션 추가 금액", required = true)
-    @NotBlank(message = "주문 옵션 추가 금액은 필수 입력 값입니다.")
+    @NotNull(message = "주문 옵션 추가 금액은 필수 입력 값입니다.")
     private int orderOptionPrice;
 }
