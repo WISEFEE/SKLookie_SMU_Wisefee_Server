@@ -1,6 +1,6 @@
 package com.sklookiesmu.wisefee.api.v1.seller;
 
-import com.sklookiesmu.wisefee.service.seller.OrderStatusComponent;
+import com.sklookiesmu.wisefee.service.seller.ProductStatusComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/seller/orders")
 @RequiredArgsConstructor
-public class OrderController {
+public class ProductStatusController {
 
-    private final OrderStatusComponent orderStatusComponent;
+    private final ProductStatusComponent orderStatusComponent;
 
     @PostMapping("/{orderId}/accept")
     public void acceptOrder(@PathVariable Long orderId) {

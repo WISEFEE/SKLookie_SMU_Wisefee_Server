@@ -18,14 +18,16 @@ public class Order {
     @Column(name = "ORDER_ID")
     private Long orderId;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "TUMBLR_STATUS")
-    private String tumblrStatus;
+    private TumblrStatus tumblrStatus;
 
     @Column(name = "PRODUCT_RECEIVE_TIME")
     private LocalDateTime productReceiveTime;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "PRODUCT_STATUS")
-    private String productStatus;
+    private ProductStatus productStatus;
 
     @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
