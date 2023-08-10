@@ -1,5 +1,6 @@
 package com.sklookiesmu.wisefee.service.consumer;
 
+import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
 import com.sklookiesmu.wisefee.domain.*;
 import com.sklookiesmu.wisefee.dto.consumer.PaymentDto;
 import com.sklookiesmu.wisefee.dto.consumer.SubscribeDto;
@@ -30,7 +31,7 @@ public class ConsumerServiceImpl implements ConsumerService {
      * 정기구독 체결
      */
     @Override
-    public void createSubscribe(SubscribeDto.SubscribeRequestDto request, Long cafeId, Long subTicketTypeId, Long userId) {
+    public void createSubscribe(SubscribeDto.SubscribeRequestDto request, Long cafeId, Long subTicketTypeId, Long memberId) {
 
         Cafe cafe = cafeJpaRepository.findById(cafeId).orElseThrow();
         SubTicketType subTicketType = subTicketTypeRepository.findById(subTicketTypeId).orElseThrow();
@@ -38,7 +39,7 @@ public class ConsumerServiceImpl implements ConsumerService {
         payment.setPaymentPrice(subTicketType.getSubTicketPrice());
         paymentJpaRepository.save(payment);
 
-        Member member = memberRepository.find(userId);
+        Member member = memberRepository.find(memberId);
         subscribeRepository.save(request.toEntity(cafe, subTicketType, payment,member));
     }
 
@@ -59,7 +60,7 @@ public class ConsumerServiceImpl implements ConsumerService {
     }
 
     /**
-     * 정기구독 결제
+     * 정기구독 결제 -> 필요없을지도..
      */
     @Override
     public void createPayment(PaymentDto.PaymentRequestDto request, Long cafeId, Long subTicketTypeId) {
@@ -68,5 +69,18 @@ public class ConsumerServiceImpl implements ConsumerService {
         SubTicketType subTicketType = subTicketTypeRepository.findById(subTicketTypeId).orElseThrow();
 
         paymentJpaRepository.save(request.toEntity(subTicketType));
+    }
+
+    /**
+     * 정기구독 해지
+     */
+    @Override
+    public void cancelSubscribe(Long memberId) {
+        //Long memberId = SecurityUtil.getCurrentMemberPk();
+        Member member = memberRepository.find(memberId);
+        Subscribe subscribe = subscribeRepository.findByMemberAndSubStatus(member, "Y")
+                .orElseThrow(() -> new IllegalArgumentException("구독권이 존재하지 않습니다."));
+
+        subscribeRepository.deleteById(subscribe.getSubId()); // TODO 환불 조건....
     }
 }

@@ -13,10 +13,11 @@ public interface ConsumerOrderService {
 
 
     /**
-     * TODO [주문하기]
+     * TODO [주문하기] ->
      * 장바구니 기능 설계된 후에 구현 필요
      * IA 정보 구조도 => 장바구니에 담겨진 제품들만 주문 가능
      */
+    //void createOrder();
 
 
     /**
