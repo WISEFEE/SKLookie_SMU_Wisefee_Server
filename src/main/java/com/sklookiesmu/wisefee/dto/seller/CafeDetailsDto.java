@@ -27,8 +27,8 @@ public class CafeDetailsDto {
     private String cafePhone;
 
     @ApiModelProperty(value = "매장 상품 리스트")
-    private List<Product> products;
+    private List<ProductsDto> products;
 
     @ApiModelProperty(value = "매장 주문 옵션 리스트")
-    private List<OrderOption> orderOptions;
+    private List<OrderOptionsDto> orderOptions;
 }

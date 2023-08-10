@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Api(tags = "SELL-A :: 매장 정보 API")
 @RestController
@@ -100,8 +101,16 @@ public class CafeApiController {
         cafeDetailsDto.setTitle(findCafe.getTitle());
         cafeDetailsDto.setContent(findCafe.getContent());
         cafeDetailsDto.setCafePhone(findCafe.getCafePhone());
-        cafeDetailsDto.setProducts(productList);
-        cafeDetailsDto.setOrderOptions(orderOptionList);
+
+        List<ProductsDto> productDtoList = productList.stream()
+                .map(product -> new ProductsDto(product.getProductId(), product.getProductName(), product.getProductPrice(), product.getProductInfo()))
+                .collect(Collectors.toList());
+        cafeDetailsDto.setProducts(productDtoList);
+
+        List<OrderOptionsDto> orderOptionDtoList = orderOptionList.stream()
+                .map(orderOption -> new OrderOptionsDto(orderOption.getOrderOptionId(), orderOption.getOrderOptionName(), orderOption.getOrderOptionPrice()))
+                .collect(Collectors.toList());
+        cafeDetailsDto.setOrderOptions(orderOptionDtoList);
 
         return cafeDetailsDto;
     }
