@@ -17,6 +17,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Api(tags = "SELL-C :: 매장 상품 편집 API")
 @RestController
@@ -72,7 +74,22 @@ public class CafeProductController {
 
 
     @ApiOperation(
-            value = "SELL-C-03 :: 상품 옵션 추가",
+            value = "SELL-C-03 :: 상품 목록 조회",
+            notes = "소프트 삭제되지 않은 상품 목록을 조회하는 API입니다."
+    )
+    @GetMapping("/api/v1/seller/{cafeId}/products")
+    @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
+    public List<ProductsDto> getProducts(@PathVariable("cafeId") Long cafeId) {
+        List<Product> Products = cafeProductService.getProductsByCafeId(cafeId);
+
+        return Products.stream()
+                .map(ProductsDto::fromProduct)
+                .collect(Collectors.toList());
+    }
+
+
+    @ApiOperation(
+            value = "SELL-C-04 :: 상품 옵션 추가",
             notes = "상품 옵션 추가 API입니다. <br>" +
                     "상품 옵션명을 입력합니다."
     )
@@ -106,7 +123,7 @@ public class CafeProductController {
 
 
     @ApiOperation(
-            value = "SELL-C-04 :: 상품 옵션 삭제",
+            value = "SELL-C-05 :: 상품 옵션 삭제",
             notes = "상품 옵션 삭제 API입니다. <br>" +
                     "소프트 삭제를 하여 상품 옵션의 deleted_at 속성을 삭제 시점으로 설정합니다."
     )
@@ -120,7 +137,7 @@ public class CafeProductController {
 
 
     @ApiOperation(
-            value = "SELL-C-05 :: 상품 옵션 선택지 추가",
+            value = "SELL-C-06 :: 상품 옵션 선택지 추가",
             notes = "상품 옵션 선택지 추가 API입니다. <br>" +
                     "상품 옵션 선택지명과 추가 가격을 입력합니다."
     )
@@ -154,7 +171,7 @@ public class CafeProductController {
 
 
     @ApiOperation(
-            value = "SELL-C-06 :: 상품 옵션 선택지 삭제",
+            value = "SELL-C-07 :: 상품 옵션 선택지 삭제",
             notes = "상품 옵션 선택지 삭제 API입니다. <br>" +
                     "소프트 삭제를 하여 상품 옵션 선택지의 deleted_at 속성을 삭제 시점으로 설정합니다."
     )
@@ -165,4 +182,5 @@ public class CafeProductController {
                                           @PathVariable("productOptionChoiceId") Long productOptionChoiceId) {
         cafeProductService.deleteProductOptionChoice(productId, productOptionId, productOptionChoiceId);
     }
+
 }
