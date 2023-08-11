@@ -30,7 +30,7 @@ public class CartRequestDto {
         @ApiModelProperty(value = "상품 개수", example = "1")
         @Min(value = 1, message = "상품 개수는 1 이상이어야 합니다.")
         @NotNull(message = "상품 개수는 필수 입력 값입니다.")
-        private Long cartProductQuantity;
+        private Long productQuantity;
         @ApiModelProperty(value = "선택상품 옵션 리스트", example = "[1,2,3]")
         private List<ProductOptionChoiceAsCartRequestDto> productOptChoices;
 
@@ -54,7 +54,7 @@ public class CartRequestDto {
     public static class CartProductUpdateRequestDTO {
         @ApiModelProperty(value = "추가할 상품 개수", example = "1")
         @NotNull(message = "변경할 상품 개수는 필수 입력 값입니다.")
-        private Long addCartProductQuantity;
+        private Long addProductQuantity;
     }
 
 }

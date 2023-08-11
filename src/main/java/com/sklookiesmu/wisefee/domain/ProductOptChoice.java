@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -52,9 +53,8 @@ public class ProductOptChoice {
     @JoinColumn(name = "PRD_OPTION_ID", nullable = false)
     private ProductOption productOption;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CART_PRODUCT_ID")
-    private CartProduct cartProduct;
+    @OneToMany(mappedBy = "productOptChoice")
+    private List<CartProductChoiceOption> cartProductChoiceOptions;
 
     @Override
     public String toString() {
@@ -66,7 +66,7 @@ public class ProductOptChoice {
                 ", updatedAt=" + updatedAt +
                 ", deletedAt=" + deletedAt +
                 ", productOption=" + productOption +
-                ", cartProduct=" + cartProduct +
+                ", cartProductChoiceOptions=" + cartProductChoiceOptions +
                 '}';
     }
 }

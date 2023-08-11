@@ -1,6 +1,5 @@
 package com.sklookiesmu.wisefee.dto.shared.member;
 
-import com.sklookiesmu.wisefee.domain.ProductOptChoice;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -26,12 +25,12 @@ public class CartResponseDto {
         private Long productId;
         @ApiModelProperty(value = "상품 이름")
         private String productName;
-        @ApiModelProperty(value = "상품 이름")
+        @ApiModelProperty(value = "상품 정보")
         private String productInfo;
         @ApiModelProperty(value = "상품 가격")
         private Integer productPrice;
         @ApiModelProperty(value = "상품 개수")
-        private Long cartProductQuantity;
+        private Long productQuantity;
         @ApiModelProperty(value = "선택 옵션 리스트")
         private List<ProductOptChoiceResponseDTO> productOptChoices;
         @ApiModelProperty(value = "결제 여부")
@@ -44,17 +43,18 @@ public class CartResponseDto {
         @Override
         public String toString() {
             return "CartProductResponseDto{" +
-                   "cafeId=" + cafeId +
-                   ", cafeName='" + cafeName + '\'' +
-                   ", productId=" + productId +
-                   ", productName='" + productName + '\'' +
-                   ", productInfo='" + productInfo + '\'' +
-                   ", productPrice=" + productPrice +
-                   ", productOptChoices=" + productOptChoices +
-                   ", cartStatus='" + cartStatus + '\'' +
-                   ", createdAt=" + createdAt +
-                   ", updatedAt=" + updatedAt +
-                   '}';
+                    "cafeId=" + cafeId +
+                    ", cafeName='" + cafeName + '\'' +
+                    ", productId=" + productId +
+                    ", productName='" + productName + '\'' +
+                    ", productInfo='" + productInfo + '\'' +
+                    ", productPrice=" + productPrice +
+                    ", productQuantity=" + productQuantity +
+                    ", productOptChoices=" + productOptChoices +
+                    ", cartStatus='" + cartStatus + '\'' +
+                    ", createdAt=" + createdAt +
+                    ", updatedAt=" + updatedAt +
+                    '}';
         }
     }
     @Data
@@ -62,6 +62,8 @@ public class CartResponseDto {
     @AllArgsConstructor
     @ApiModel("장바구니 선택옵션 조회 API")
     public static class ProductOptChoiceResponseDTO {
+        @ApiModelProperty(value = "상품 옵션 이름")
+        private String productOptName;
         @ApiModelProperty(value = "선택 옵션 아이디")
         private Long productOptChoiceId;
         @ApiModelProperty(value = "선택 옵션 이름")
@@ -72,7 +74,8 @@ public class CartResponseDto {
         @Override
         public String toString() {
             return "ProductOptChoiceResponseDTO{" +
-                    "productOptChoiceId=" + productOptChoiceId +
+                    "productOptName='" + productOptName + '\'' +
+                    ", productOptChoiceId=" + productOptChoiceId +
                     ", productOptChoiceName='" + productOptChoiceName + '\'' +
                     ", productOptChoicePrice=" + productOptChoicePrice +
                     '}';

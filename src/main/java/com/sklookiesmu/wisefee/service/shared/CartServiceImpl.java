@@ -12,6 +12,7 @@ import com.sklookiesmu.wisefee.repository.cafe.CafeRepository;
 import com.sklookiesmu.wisefee.repository.product.ProductOptChoiceRepository;
 import com.sklookiesmu.wisefee.repository.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,16 +29,17 @@ public class CartServiceImpl implements CartService{
     private final ProductOptChoiceRepository productOptChoiceRepository;
     private final CafeRepository cafeRepository;
     @Override
-    public Long addCart(Long memberId) {
+    public Long addCart(Long memberId, boolean deleteFlag) {
         Member member = memberRepository.find(memberId);
         Cart cart = new Cart();
         cart.addCart(member);
-        if(member.getCart() == null) {
+
+        if(member.getCart() == null || deleteFlag) {
             cartRepository.createCart(cart);
         } else {
-            Optional<Cart> carts = cartRepository.findCartByCartId(member.getCart().getCartId());
-            if(carts.isPresent()){
-                if(carts.get().getMember().getMemberId().equals(memberId)) {
+            Cart carts = cartRepository.findCartByCartId(member.getCart().getCartId());
+            if(carts != null){
+                if(carts.getMember().getMemberId().equals(memberId)) {
                     throw new AlreadyhadCartException("Invalid Value : This Member is Already had with cartId : "+member.getCart().getCartId());
                 }
             }
@@ -46,38 +48,76 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
-    public Long addCartProduct(Long memberId, CartRequestDto.CartProductRequestDto cartRequestDto) {
+    public Long[] addCartProduct(Long memberId, CartRequestDto.CartProductRequestDto cartRequestDto) {
         Cafe cafe = cafeRepository.findById(cartRequestDto.getCafeId());
         if(cafe == null) {
             throw new CafeNotFoundException("Invalid Value : Not found cafe with " + cartRequestDto.getCafeId());
         }
-        Cart cart = cartRepository.findCartByCartId(cartRequestDto.getCartId()).orElse(null);
-        if (cart == null) {
-            Long newCartId = addCart(memberId);
-            Optional<Cart> cartOptional = cartRepository.findCartByCartId(newCartId);
-            cart = cartOptional.orElseThrow(() -> new RuntimeException("Failed to create a new cart."));
-        }
-        if(!cart.getMember().getMemberId().equals(memberId)) {
-            throw new RuntimeException("Invalid Value : This cartId is not match with member :" + cart.getCartId());
-        }
-        if(!Objects.equals(cart.getCartId(), cartRequestDto.getCartId())) {
-            throw new RuntimeException("Invalid Value : This cartId is not math your cartId. : " + cartRequestDto.getCartId());
-        }
-
-
         Product product = productRepository.findById(cartRequestDto.getProductId());
 
         if(product == null) {
             throw new RuntimeException("Invalid Value : This product is not exist. :" + cartRequestDto.getProductId());
         }
 
+        if(!Objects.equals(cafe.getCafeId(), product.getCafe().getCafeId())) {
+            throw new RuntimeException("Invalid Value : This product is not match with cafe.");
+        }
+
+        Cart cart = cartRepository.findCartByCartId(cartRequestDto.getCartId());
+        if(cartRequestDto.getCartId() == 0 || cart == null) {
+            Long newCartId = addCart(memberId, false);
+            cart = cartRepository.findCartByCartId(newCartId);
+        } else if (!Objects.equals(cart.getCartId(), cartRequestDto.getCartId())) {
+            throw new RuntimeException("Invalid Value: This cartId does not match your cartId: " + cartRequestDto.getCartId());
+        }
+        List<CartProduct> cps = cartRepository.findCartProductByCartId(cartRequestDto.getCartId());
+        if(cps.size() != 0) {
+            if (!Objects.equals(cps.get(0).getProduct().getCafe().getCafeId(), product.getCafe().getCafeId())) {
+
+                Cart oldCart = cart;
+                Long newCartId = addCart(memberId, true);
+                System.out.println("Service : newCartId : " + newCartId);
+
+                cart = cartRepository.findCartByCartId(newCartId);
+                cartRepository.deleteCart(oldCart);
+            }
+        }
+
+        if (!cart.getMember().getMemberId().equals(memberId)) {
+            throw new RuntimeException("Invalid Value: This cartId does not match with the member: " + cart.getCartId());
+        }
+
+        List<CartProduct> cartProducts = cartRepository.findCartProductByCartId(cart.getCartId());
+        List<Long> cartProductDtoList = new ArrayList<>();
+        for(int i = 0; i < cartRequestDto.getProductOptChoices().size(); i++) {
+            cartProductDtoList.add(cartRequestDto.getProductOptChoices().get(i).getOptionChoiceId());
+        }
+        for (CartProduct cartProduct : cartProducts) {
+            List<Long> cartProductList = new ArrayList<>();
+            for(int i = 0; i < cartProduct.getCartProductChoiceOptions().size(); i++) {
+                cartProductList.add(cartProduct.getCartProductChoiceOptions().get(i).getProductOptChoice().getProductOptionChoiceId());
+            }
+            if(cartProductDtoList.equals(cartProductList)) {
+                throw new RuntimeException("Invalid Value : Already exist CartProduct.");
+            }
+        }
+
         CartProduct cartProduct = new CartProduct();
 
-        List<ProductOptChoice> productOptChoices = new ArrayList<>();
+        cartProduct.addCartProduct(cartRequestDto.getProductQuantity(), cart, product);
+
+        cartRepository.createCartProduct(cartProduct);
+
+        addCartProductOptionChoice(cartRequestDto, product, cartProduct);
+
+        return new Long[]{cart.getCartId(), cartProduct.getCartProductId()};
+    }
+
+    public void addCartProductOptionChoice(CartRequestDto.CartProductRequestDto cartRequestDto, Product product, CartProduct cartProduct) {
+        List<CartProductChoiceOption> cartProductChoiceOptions = new ArrayList<>();
         for (CartRequestDto.ProductOptionChoiceAsCartRequestDto pdoc: cartRequestDto.getProductOptChoices()
         ) {
             ProductOptChoice productOptChoice = productOptChoiceRepository.findById(pdoc.getOptionChoiceId());
-
             if(productOptChoice == null) {
                 throw new RuntimeException("Invalid Value : This productOptChoice is not exist. : " + pdoc.getOptionChoiceId());
             }
@@ -86,43 +126,21 @@ public class CartServiceImpl implements CartService{
                 throw new RuntimeException("Invalid Value : This productOptChoice is not match with productOption of productId. :"
                         + productOptChoice.getProductOptionChoiceId());
             }
+            CartProductChoiceOption cartProductChoiceOption = new CartProductChoiceOption(cartProduct, productOptChoice);
+            cartRepository.createCartProductChoicesOption(cartProductChoiceOption);
 
-            List<CartProduct> cartProducts = cartRepository.findCartProductByCartId(cart.getCartId());
-            for (CartProduct cartPdt :cartProducts
-                 ) {
-                for (ProductOptChoice optChoice : cartPdt.getProductOptChoices()
-                     ) {
-                    if(optChoice.getProductOptionChoiceId().equals(productOptChoice.getProductOptionChoiceId())) {
-                        throw new RuntimeException("Invalid Value : This productOptChoice is Already Exist in your cartProduct. : "
-                                + productOptChoice.getProductOptionChoiceId());
-                    }
-                }
-
-            }
-            productOptChoices.add(productOptChoice);
+            cartProductChoiceOptions.add(cartProductChoiceOption);
         }
-        cartProduct.addCartProduct(cartRequestDto.getCartProductQuantity(), cart, product, productOptChoices);
-        cartRepository.createCartProduct(cartProduct);
-        for (ProductOptChoice productOptChoice: productOptChoices
-        ) {
-            productOptChoice.setCartProduct(cartProduct);
-        }
-        return cartProduct.getCartProductId();
-    }
+        cartProduct.setCartProductChoiceOptions(cartProductChoiceOptions);
 
-    @Override
-    public List<CartProduct> findCartProductByCart(Long cartId) {
-        return null;
     }
-
     @Override
     public List<CartResponseDto.CartProductResponseDto> findAllCartProduct(Long memberId) {
         Member member = memberRepository.find(memberId);
         if (member.getCart() == null) {
             throw new CartNotFoundException("CartService Error : Not Exist Cart with " + memberId );
         }
-        Optional<Cart> optionalCart = cartRepository.findCartByCartId(member.getCart().getCartId());
-        Cart cart = optionalCart.orElse(null);
+        Cart cart = cartRepository.findCartByCartId(member.getCart().getCartId());
         if(cart == null) {
             throw new CartNotFoundException("CartService Error : Not Found Cart with " + memberId );
         }
@@ -137,12 +155,13 @@ public class CartServiceImpl implements CartService{
 
             List<CartResponseDto.ProductOptChoiceResponseDTO> productOptChoiceResponseDTOS  = new ArrayList<>();
 
-            for (ProductOptChoice productOptChoice: cartProducts.get(i).getProductOptChoices()
+            for (CartProductChoiceOption productOptChoice: cartProducts.get(i).getCartProductChoiceOptions()
             ) {
                 productOptChoiceResponseDTOS.add(new CartResponseDto.ProductOptChoiceResponseDTO(
-                        productOptChoice.getProductOptionChoiceId(),
-                        productOptChoice.getProductOptionChoiceName(),
-                        productOptChoice.getProductOptionChoicePrice()
+                        productOptChoice.getProductOptChoice().getProductOption().getProductOptionName(),
+                        productOptChoice.getProductOptChoice().getProductOptionChoiceId(),
+                        productOptChoice.getProductOptChoice().getProductOptionChoiceName(),
+                        productOptChoice.getProductOptChoice().getProductOptionChoicePrice()
                 ));
             }
 
@@ -153,7 +172,7 @@ public class CartServiceImpl implements CartService{
                     products.get(i).getProductName(),
                     products.get(i).getProductInfo(),
                     products.get(i).getProductPrice(),
-                    cartProducts.get(i).getCartProductQuantity(),
+                    cartProducts.get(i).getProductQuantity(),
                     productOptChoiceResponseDTOS,
                     cart.getCartStatus(),
                     cartProducts.get(i).getCreatedAt(),
@@ -169,8 +188,8 @@ public class CartServiceImpl implements CartService{
         if(cartProduct.getDeletedAt() != null) {
             throw new RuntimeException("Invalid Value : This cartProduct is already deleted. :" + cartProductId);
         }
-        Long result = cartRepository.deleteCartProduct(cartProductId);
-        return result;
+        cartRepository.deleteCartProduct(cartProduct);
+        return 1L;
     }
 
     @Override
@@ -179,12 +198,30 @@ public class CartServiceImpl implements CartService{
         if(cartProduct == null) {
             throw new RuntimeException("Invalid Value : This cartProduct is not exist. :" + cartProductId);
         }
-        if(cartProduct.getCartProductQuantity() + cartProductUpdateRequestDto.getAddCartProductQuantity() < 0) {
+        if(cartProduct.getProductQuantity() + cartProductUpdateRequestDto.getAddProductQuantity() <= 0) {
             return deleteCartProduct(cartProductId);
-//            throw new RuntimeException("Negative Quantity : This cartProductQuantity being negative value When update cartProduct.");
+//            throw new RuntimeException("Negative Quantity : This ProductQuantity being negative value When update cartProduct.");
         }
 
-        return cartProduct.updateQuantity(cartProductUpdateRequestDto.getAddCartProductQuantity());
+        return cartProduct.updateQuantity(cartProductUpdateRequestDto.getAddProductQuantity());
     }
 
+
+    @Override
+    public Long calculateCart(Long cartId) {
+        List<CartProduct> cartProducts = cartRepository.findCartProductByCartId(cartId);
+        if(cartProducts.size() == 0) {
+            throw new RuntimeException("Invalid Value : This cart is null");
+        }
+        long result = 0L;
+        for (CartProduct cartProduct : cartProducts) {
+            Product product = productRepository.findById(cartProduct.getProduct().getProductId());
+            result += product.getProductPrice() * cartProduct.getProductQuantity();
+            for (CartProductChoiceOption productOptChoice:
+            cartProduct.getCartProductChoiceOptions()) {
+                result += productOptChoice.getProductOptChoice().getProductOptionChoicePrice() * cartProduct.getProductQuantity();
+            }
+        }
+        return result;
+    }
 }

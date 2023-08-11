@@ -6,7 +6,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Getter
 @Setter
@@ -19,7 +18,7 @@ public class CartProduct {
     private Long cartProductId;
 
     @Column(name = "CART_PRODUCT_QUANTITY")
-    private Long cartProductQuantity;
+    private Long productQuantity;
 
     @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
@@ -60,20 +59,19 @@ public class CartProduct {
     private Product product;
 
     @OneToMany(mappedBy = "cartProduct")
-    private List<ProductOptChoice> productOptChoices;
+    private List<CartProductChoiceOption> cartProductChoiceOptions;
 
-    /**
+    /**w
      * 비즈니스 로직
      */
-    public void addCartProduct(Long cartProductQuantity, Cart cart, Product product, List<ProductOptChoice> productOptChoices){
-        this.cartProductQuantity = cartProductQuantity;
+    public void addCartProduct(Long productQuantity, Cart cart, Product product){
+        this.productQuantity = productQuantity;
         this.cart = cart;
         this.product = product;
-        this.productOptChoices = productOptChoices;
     }
 
     public Long updateQuantity(Long updateQuantity) {
-        this.cartProductQuantity += updateQuantity;
+        this.productQuantity += updateQuantity;
         return 1L;
     }
 

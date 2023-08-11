@@ -29,17 +29,19 @@ public class CartApiController {
     private final ModelMapper modelMapper;
     private final CartServiceImpl cartService;
 
-//    @ApiOperation(
-//            value = "장바구니 추가",
-//            notes = "장바구니 추가 API입니다. <br>" +
-//                    "회원번호 입력 시 회원용 장바구니가 생성됩니다."
-//    )
-//    @PostMapping("/api/v1/cart/{memberId}/")
-//    public ResponseEntity<Long> addCart(@PathVariable("memberId") Long memberId) {
-//
-//        Long result = cartService.addCart(memberId);
-//        return ResponseEntity.status(HttpStatus.OK).body(result);
-//    }
+    @ApiOperation(
+            value = "장바구니 금액조회",
+            notes = "장바구니 총 금액 조회 API입니다. <br>" +
+                    "장바구니 아이디 입력 시 현재 장바구니에 담긴 상품들의 총 가격을 조회합니다."
+    )
+    @GetMapping("/api/v1/cart/price{cartId}/")
+    public ResponseEntity<Long> findCartTotalPrice(
+            @ApiParam(value = "장바구니 ID")
+            @PathVariable("cartId") Long cartId
+    ) {
+        Long result = cartService.calculateCart(cartId);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @ApiOperation(
@@ -66,7 +68,7 @@ public class CartApiController {
                     "productOptChoices \"[]\" 에서 \"를 제거하고 [1,2,3] 과 같이 입력해야 한다."
     )
     @PostMapping("/api/v1/cart/{memberId}")
-    public ResponseEntity<Long> addCartProduct(
+    public ResponseEntity<String> addCartProduct(
             @ApiParam(value = "회원 PK")
             @PathVariable("memberId") Long memberId,
             @RequestBody CartRequestDto.CartProductRequestDto cartProductRequestDto
@@ -74,7 +76,10 @@ public class CartApiController {
         if(!(memberId.equals(SecurityUtil.getCurrentMemberPk())))
             throw new ValidateMemberException("invalid ID : The provided ID does not match your current logged-in ID"+memberId);
 
-        Long result = cartService.addCartProduct(memberId, cartProductRequestDto);
+        Long[] addC = cartService.addCartProduct(memberId, cartProductRequestDto);
+        String result = "CartId : " + addC[0].toString() + "CartProductId : " + addC[1].toString();
+
+
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

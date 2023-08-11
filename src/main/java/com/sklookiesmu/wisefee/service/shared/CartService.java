@@ -13,7 +13,7 @@ public interface CartService {
      * @param [memberId Cart 주인]
      * @return [추가한 장바구니 PK]
      */
-    Long addCart(Long memberId);
+    Long addCart(Long memberId, boolean flagDelete);
 
     /**
      * [장바구니 상품 추가]
@@ -21,14 +21,7 @@ public interface CartService {
      * @param [CartProductRequestDto 추가할 상품 DTO]
      * @return [추가된 cartProduct PK]
      */
-     Long addCartProduct(Long memberId, CartRequestDto.CartProductRequestDto cartRequestDto);
-
-    /**
-     * [cartId로 장바구니 상품 조회]
-     * @param [cartId 조회할 장바구니 PK]
-     * @return [조회한 장바구니 상품 리스트]
-     */
-    List<CartProduct> findCartProductByCart(Long cartId);
+     Long[] addCartProduct(Long memberId, CartRequestDto.CartProductRequestDto cartRequestDto);
 
     /**
      * [회원 장바구니 조회]
@@ -50,4 +43,11 @@ public interface CartService {
      * @param [cartProductId 삭제할 장바구니 PK]
      */
     Long deleteCartProduct(Long cartProductId);
+
+    /**
+     * [장바구니 총 금액 계산]
+     * @param [cartId 계산할 장바구니 아이디]
+     * @return [계산금액, 계산 로직 -> productPrice * productQuantity + productOptChoicePrice * productQuantity ]
+     */
+    Long calculateCart(Long cartId);
 }

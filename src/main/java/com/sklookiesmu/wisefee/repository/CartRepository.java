@@ -1,18 +1,13 @@
 package com.sklookiesmu.wisefee.repository;
 
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sklookiesmu.wisefee.domain.Cart;
-import com.sklookiesmu.wisefee.domain.CartProduct;
-import com.sklookiesmu.wisefee.domain.QCart;
-import com.sklookiesmu.wisefee.domain.QCartProduct;
+import com.sklookiesmu.wisefee.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,8 +55,8 @@ public class CartRepository {
      * @param [cartId 조회할 장바구니 PK]
      * @return [조회한 장바구니]
      */
-    public Optional<Cart> findCartByCartId(Long cartId) {
-        Optional<Cart> result = Optional.ofNullable(em.find(Cart.class, cartId));
+    public Cart findCartByCartId(Long cartId) {
+        Cart result = em.find(Cart.class, cartId);
 
         return result;
     }
@@ -75,6 +70,8 @@ public class CartRepository {
         em.persist(cartProduct);
     }
 
+    public void createCartProductChoicesOption(CartProductChoiceOption cartProductChoiceOption) {em.persist(cartProductChoiceOption);}
+
 
     /**
      * [장바구니 상품을 조회한다.]
@@ -85,6 +82,23 @@ public class CartRepository {
         CartProduct result = em.find(CartProduct.class, cartProductId);
         return result;
     }
+
+
+    public void deleteCart(Cart cart) {
+        List<CartProduct> cartProducts = findCartProductByCartId(cart.getCartId());
+        for (CartProduct cartProduct : cartProducts
+        ) {
+            deleteCartProduct(cartProduct);
+        }
+        QCart qCart = QCart.cart;
+
+        BooleanExpression valid = qCart.member.memberId.eq(cart.getMember().getMemberId());
+        BooleanExpression valid1 = qCart.cartId.eq(cart.getCartId());
+        jpaQueryFactory.delete(qCart)
+                .where(valid.and(valid1))
+                .execute();
+    }
+
 
     /**
      * [cartId기준 cartProduct 조회]
@@ -103,6 +117,7 @@ public class CartRepository {
         return result;
     }
 
+
     /**
      * [productId기준 cartProduct 조회]
      * @param [productId 조회할 productId]
@@ -116,13 +131,38 @@ public class CartRepository {
         return result;
     }
 
-    public Long deleteCartProduct(Long cartProductId) {
-        QCartProduct cartProduct = QCartProduct.cartProduct;
-        long result = jpaQueryFactory.update(cartProduct)
-                .set(cartProduct.deletedAt, LocalDateTime.now())
-                .where(cartProduct.cartProductId.eq(cartProductId))
+    public CartProductChoiceOption findCartProductChoiceOption(Long cartProductChoiceOptionId) { return em.find(CartProductChoiceOption.class, cartProductChoiceOptionId);}
+
+
+//    /**
+//     * [cartProduct 삭제 - SoftDelete]
+//     * @param [cartProductId 삭제할 cartProduct ID]
+//     * @return [Soft Delete한 cartProduct ID]
+//     */
+//    public Long deleteCartProduct(Long cartProductId) {
+//        QCartProduct cartProduct = QCartProduct.cartProduct;
+//        long result = jpaQueryFactory.
+//                update(cartProduct)
+//                .set(cartProduct.deletedAt, LocalDateTime.now())
+//                .where(cartProduct.cartProductId.eq(cartProductId))
+//                .execute();
+//        return result;
+//    }
+    /**
+     * [cartProduct 삭제]
+     *
+     * @param [cartProductId 삭제할 cartProduct ID]
+     * @return
+     */
+    public void deleteCartProduct(CartProduct cartProduct) {
+        QCartProduct qCartProduct = QCartProduct.cartProduct;
+        QCartProductChoiceOption qCartProductChoiceOption = QCartProductChoiceOption.cartProductChoiceOption;
+        jpaQueryFactory.delete(qCartProductChoiceOption)
+                        .where(qCartProductChoiceOption.cartProduct.cartProductId.eq(qCartProduct.cartProductId))
+                        .execute();
+        jpaQueryFactory.delete(qCartProduct)
+                .where(qCartProduct.cartProductId.eq(cartProduct.getCartProductId()))
                 .execute();
-        return result;
     }
 
 }
