@@ -55,7 +55,7 @@ public class ProductRepository {
      * @return 주어진 Cafe에 해당하는 모든 Product 엔티티 리스트, 없을 경우 빈 리스트를 반환한다.
      */
     public List<Product> findByCafe(Cafe cafe) {
-        return em.createQuery("select p from Product p join fetch p.cafe where p.cafe = :cafe", Product.class)
+        return em.createQuery("select p from Product p join fetch p.cafe where p.cafe = :cafe and p.deletedAt is null", Product.class)
                 .setParameter("cafe", cafe)
                 .getResultList();
     }

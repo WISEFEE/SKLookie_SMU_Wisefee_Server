@@ -54,7 +54,7 @@ public class OrderOptionRepository {
      * @return 주어진 Cafe에 해당하는 모든 OrderOption 엔티티 리스트, 없을 경우 빈 리스트를 반환한다.
      */
     public List<OrderOption> findByCafe(Cafe cafe) {
-        return em.createQuery("select o from OrderOption o join fetch o.cafe where o.cafe = :cafe", OrderOption.class)
+        return em.createQuery("select o from OrderOption o join fetch o.cafe where o.cafe = :cafe and o.deletedAt is null", OrderOption.class)
                 .setParameter("cafe", cafe)
                 .getResultList();
     }

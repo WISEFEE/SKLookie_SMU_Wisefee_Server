@@ -95,16 +95,7 @@ public class CafeApiController {
         List<Product> productList = cafeProductService.getProductsByCafeId(cafeId);
         List<OrderOption> orderOptionList = cafeOrderService.getOrderOptionsByCafeId(cafeId);
 
-        CafeDetailsDto cafeDetailsDto = new CafeDetailsDto();
-        cafeDetailsDto.setCafeId(findCafe.getCafeId());
-        cafeDetailsDto.setTitle(findCafe.getTitle());
-        cafeDetailsDto.setContent(findCafe.getContent());
-        cafeDetailsDto.setCafePhone(findCafe.getCafePhone());
-        cafeDetailsDto.setProducts(productList);
-        cafeDetailsDto.setOrderOptions(orderOptionList);
-
-        return cafeDetailsDto;
+        return CafeDetailsDto.fromCafeAndLists(findCafe, productList, orderOptionList);
     }
-
 
 }

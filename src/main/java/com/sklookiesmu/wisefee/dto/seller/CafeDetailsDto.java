@@ -1,5 +1,7 @@
 package com.sklookiesmu.wisefee.dto.seller;
 
+import com.sklookiesmu.wisefee.common.constant.AuthConstant;
+import com.sklookiesmu.wisefee.domain.Cafe;
 import com.sklookiesmu.wisefee.domain.OrderOption;
 import com.sklookiesmu.wisefee.domain.Product;
 import io.swagger.annotations.ApiModel;
@@ -7,6 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -27,8 +30,28 @@ public class CafeDetailsDto {
     private String cafePhone;
 
     @ApiModelProperty(value = "매장 상품 리스트")
-    private List<Product> products;
+    private List<ProductsDto> products;
 
     @ApiModelProperty(value = "매장 주문 옵션 리스트")
-    private List<OrderOption> orderOptions;
+    private List<OrderOptionsDto> orderOptions;
+
+    public static CafeDetailsDto fromCafeAndLists(Cafe cafe, List<Product> products, List<OrderOption> orderOptions) {
+        List<ProductsDto> productDtoList = products.stream()
+                .map(product -> ProductsDto.fromProduct(product))
+                .collect(Collectors.toList());
+
+        List<OrderOptionsDto> orderOptionDtoList = orderOptions.stream()
+                .map(orderOption -> OrderOptionsDto.fromOrderOption(orderOption))
+                .collect(Collectors.toList());
+
+        return new CafeDetailsDto(
+                cafe.getCafeId(),
+                cafe.getTitle(),
+                cafe.getContent(),
+                cafe.getCafePhone(),
+                productDtoList,
+                orderOptionDtoList
+        );
+    }
+
 }

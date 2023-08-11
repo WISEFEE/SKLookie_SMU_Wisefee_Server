@@ -43,7 +43,7 @@ public class CafeRepository {
      * @return 주어진 제목과 일치하는 Cafe 엔티티 리스트, 일치하는 Cafe가 없을 경우 빈 리스트를 반환한다.
      */
     public List<Cafe> findByTitle(String title) {
-        return em.createQuery("select c from Cafe c where c.title = :title", Cafe.class)
+        return em.createQuery("select c from Cafe c where c.title = :title and c.deletedAt is null", Cafe.class)
                 .setParameter("title", title)
                 .getResultList();
     }
