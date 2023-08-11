@@ -8,6 +8,7 @@ import com.sklookiesmu.wisefee.repository.order.OrderOptionRepository;
 import com.sklookiesmu.wisefee.repository.product.ProductOptChoiceRepository;
 import com.sklookiesmu.wisefee.repository.product.ProductOptionRepository;
 import com.sklookiesmu.wisefee.repository.product.ProductRepository;
+import com.sklookiesmu.wisefee.repository.subscribe.SubscribeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ public class CafeServiceImpl implements CafeService{
     private final CafeRepository cafeRepository;
     private final OrderOptionRepository orderOptionRepository;
     private final ProductRepository productRepository;
+    private final SubscribeRepository subscribeRepository;
 
     @Override
     @Transactional
@@ -125,4 +127,9 @@ public class CafeServiceImpl implements CafeService{
         return cafeRepository.findAllNotDeleted();
     }
 
+
+    @Override
+    public List<Subscribe> getSubscribersByCafeId(Long cafeId) {
+        return subscribeRepository.findAllByCafeId(cafeId);
+    }
 }

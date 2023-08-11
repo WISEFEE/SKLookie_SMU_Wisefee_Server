@@ -98,4 +98,5 @@ public class CafeApiController {
 
         return CafeDetailsDto.fromCafeAndLists(findCafe, productList, orderOptionList);
     }
+
 }

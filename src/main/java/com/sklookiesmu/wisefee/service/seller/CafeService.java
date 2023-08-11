@@ -53,4 +53,13 @@ public interface CafeService {
      */
     List<Cafe> getAllNotDeletedCafes();
 
+
+    /**
+     * [매장 구독자 조회]
+     * 매장 ID를 기반으로 해당 매장의 구독자들을 조회한다.
+     * @param cafeId 매장 ID
+     * @return 해당 매장의 구독자 엔티티 리스트
+     */
+    List<Subscribe> getSubscribersByCafeId(Long cafeId);
+
 }
