@@ -1,5 +1,6 @@
 package com.sklookiesmu.wisefee.domain;
 
+import com.sklookiesmu.wisefee.common.constant.ProductStatus;
 import lombok.Getter;
 import lombok.Setter;
 

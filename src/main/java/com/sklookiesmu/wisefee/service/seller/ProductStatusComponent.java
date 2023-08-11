@@ -1,6 +1,6 @@
 package com.sklookiesmu.wisefee.service.seller;
 
-import com.sklookiesmu.wisefee.domain.ProductStatus;
+import com.sklookiesmu.wisefee.common.constant.ProductStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

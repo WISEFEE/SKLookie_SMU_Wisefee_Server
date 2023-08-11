@@ -1,11 +1,13 @@
 package com.sklookiesmu.wisefee.service.seller;
 
 import com.sklookiesmu.wisefee.domain.Order;
-import com.sklookiesmu.wisefee.domain.ProductStatus;
+import com.sklookiesmu.wisefee.common.constant.ProductStatus;
 import com.sklookiesmu.wisefee.repository.order.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -23,5 +25,9 @@ public class OrderServiceImpl implements OrderService {
 
         order.setProductStatus(newStatus);
         orderRepository.save(order);
+    }
+
+    public List<Order> getOrdersByCafeId(Long cafeId) {
+        return orderRepository.findAllBySubscribeCafeCafeId(cafeId);
     }
 }

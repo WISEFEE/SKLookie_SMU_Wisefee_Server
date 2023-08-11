@@ -45,9 +45,9 @@ public class SubMemberDetailsDto {
                 member.getPhone(),
                 subTicketType.getSubTicketName(),
                 subscribe.getCreatedAt(),
-                subscribe.getExpiredAt,
+                subscribe.getExpiredAt(),
                 subscribe.getSubCnt(),
-                order.getProductStatus(),
+                order.getProductStatus().toString(),
                 cafe.getTitle()
         );
     }
