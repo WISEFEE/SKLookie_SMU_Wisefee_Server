@@ -17,5 +17,7 @@ public interface OrderService {
      */
     void updateOrderStatus(Long orderId, ProductStatus newStatus);
 
+    public Order getOrderById(Long orderId);
+
     public List<Order> getOrdersByCafeId(Long cafeId);
 }

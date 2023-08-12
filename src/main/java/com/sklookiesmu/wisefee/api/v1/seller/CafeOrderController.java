@@ -1,13 +1,12 @@
 package com.sklookiesmu.wisefee.api.v1.seller;
 
+import com.sklookiesmu.wisefee.domain.Order;
+import com.sklookiesmu.wisefee.dto.seller.*;
+import com.sklookiesmu.wisefee.service.seller.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
 import com.sklookiesmu.wisefee.domain.OrderOption;
-import com.sklookiesmu.wisefee.dto.seller.CreateOrderOptionRequestDto;
-import com.sklookiesmu.wisefee.dto.seller.CreateOrderOptionResponseDto;
-import com.sklookiesmu.wisefee.dto.seller.UpdateOrderOptionRequestDto;
-import com.sklookiesmu.wisefee.dto.seller.UpdateOrderOptionResponseDto;
 import com.sklookiesmu.wisefee.service.seller.CafeOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,6 +15,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Api(tags = "SELL-B :: 매장 주문 옵션 편집 API")
@@ -24,6 +25,7 @@ import javax.validation.Valid;
 public class CafeOrderController {
 
     private final CafeOrderService cafeOrderService;
+    private final OrderService orderService;
 
     @ApiOperation(
             value = "SELL-B-01 :: 주문 옵션 추가",
@@ -68,5 +70,18 @@ public class CafeOrderController {
     public void deleteOrderOption(@PathVariable("cafeId") Long cafeId,
                                   @PathVariable("orderOptionId") Long orderOptionId) {
         cafeOrderService.deleteOrderOption(cafeId, orderOptionId);
+    }
+
+
+    @ApiOperation(
+            value = "SELL-B-03 :: 주문 상세 정보",
+            notes = "주문 상세 정보 API입니다. <br>" +
+                    "들어온 주문의 상세 정보를 볼 수 있습니다."
+    )
+    @GetMapping("/api/v1/seller/orders/{orderId}/details")
+    @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
+    public OrderDetailsDto getOrderDetails(@PathVariable Long orderId) {
+        Order order = orderService.getOrderById(orderId);
+        return OrderDetailsDto.fromOrder(order);
     }
 }
