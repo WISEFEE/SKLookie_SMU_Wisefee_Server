@@ -1,6 +1,7 @@
 package com.sklookiesmu.wisefee.repository;
 import com.sklookiesmu.wisefee.domain.Address;
 import com.sklookiesmu.wisefee.domain.File;
+import com.sklookiesmu.wisefee.dto.shared.file.FileInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +19,24 @@ public class FileRepository {
      */
     public void insertFile(File file){
         em.persist(file);
+    }
+
+
+    /**
+     * [ID로 File 엔티티의 Info 얻어오기 ]
+     * 주소 추가
+     * @param [Long id : PK]
+     */
+    public FileInfoDto getFilePathById(Long id){
+        File result = em.createQuery("select f from File f where f.id = :id", File.class)
+                .setParameter("id", id)
+                .getSingleResult();
+
+        return new FileInfoDto(
+                result.getFileType(),
+                result.getName(),
+                result.getFilePath(),
+                result.getFileCapacity());
     }
 
 

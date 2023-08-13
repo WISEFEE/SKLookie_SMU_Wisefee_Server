@@ -5,6 +5,7 @@ import com.sklookiesmu.wisefee.dto.shared.file.FileInfoDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 public interface FileService {
 
@@ -24,6 +25,24 @@ public interface FileService {
      * @return [Long 파일 PK]
      */
     public abstract Long insertFileInfo(FileInfoDto fileinfo);
+
+
+    /**
+     * [해당 ID의 이미지 Info 얻어오기]
+     * 업로드된 파일의 ID를 통해 경로 얻어오기
+     * @param [Long 파일 PK]
+     * @return [FileInfoDto 이미지 Info]
+     */
+    public abstract FileInfoDto getImageInfoById(Long id);
+
+
+    /**
+     * [경로를 기반으로 이미지 바이트 스트림 반환]
+     * 해당 경로의 이미지의 바이트 스트림 형태를 얻음
+     * @param [String 파일 경로]
+     * @return [byte[] 이미지 바이트 배열]
+     */
+    public abstract byte[] getImageFile(Path path);
 
 
 

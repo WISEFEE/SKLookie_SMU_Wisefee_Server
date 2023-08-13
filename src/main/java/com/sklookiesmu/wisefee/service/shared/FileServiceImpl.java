@@ -1,12 +1,15 @@
 package com.sklookiesmu.wisefee.service.shared;
 
 import com.sklookiesmu.wisefee.common.constant.FileConstant;
+import com.sklookiesmu.wisefee.common.error.FileDownloadException;
 import com.sklookiesmu.wisefee.common.error.FileUploadException;
 import com.sklookiesmu.wisefee.common.file.FileUtil;
 import com.sklookiesmu.wisefee.dto.shared.file.FileInfoDto;
 import com.sklookiesmu.wisefee.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -87,6 +90,36 @@ public class FileServiceImpl implements FileService {
         this.fileRepository.insertFile(file);
         return file.getFileId();
     }
+
+    /**
+     * [해당 ID의 이미지 Info 얻어오기]
+     * 업로드된 파일의 ID를 통해 경로 얻어오기
+     * @param [Long 파일 PK]
+     * @return [FileInfoDto 이미지 Info]
+     */
+    @Transactional
+    public FileInfoDto getImageInfoById(Long id){
+        FileInfoDto info = this.fileRepository.getFilePathById(id);
+        return info;
+    }
+
+    /**
+     * [경로를 기반으로 이미지 바이트 스트림 반환]
+     * 해당 경로의 이미지의 바이트 스트림 형태를 얻음
+     * @param [Path 파일 경로]
+     * @return [byte[] 이미지 바이트 배열]
+     */
+    @Transactional
+    public byte[] getImageFile(Path path){
+        try {
+            byte[] imageBytes = Files.readAllBytes(path);
+            return imageBytes;
+        } catch (IOException e) {
+            throw new FileDownloadException("File download fail." + e.getMessage());
+        }
+    }
+
+
 
 
     /**
