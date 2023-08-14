@@ -14,7 +14,7 @@ public class FileRepository {
 
     /**
      * [File 엔티티 추가]
-     * 주소 추가
+     * 파일 추가
      * @param [File File 엔티티(pk=null)]
      */
     public void insertFile(File file){
@@ -24,7 +24,7 @@ public class FileRepository {
 
     /**
      * [ID로 File 엔티티의 Info 얻어오기 ]
-     * 주소 추가
+     * 파일 경로 검색
      * @param [Long id : PK]
      */
     public FileInfoDto getFilePathById(Long id){
@@ -37,6 +37,19 @@ public class FileRepository {
                 result.getName(),
                 result.getFilePath(),
                 result.getFileCapacity());
+    }
+
+
+    /**
+     * [ID로 File 엔티티 얻어오기 ]
+     * 파일 검색
+     * @param [Long id : PK]
+     */
+    public File findById(Long id){
+        File result = em.createQuery("select f from File f where f.id = :id", File.class)
+                .setParameter("id", id)
+                .getSingleResult();
+        return result;
     }
 
 

@@ -2,6 +2,7 @@ package com.sklookiesmu.wisefee.repository.cafe;
 
 import com.sklookiesmu.wisefee.domain.Cafe;
 import com.sklookiesmu.wisefee.domain.Product;
+import com.sklookiesmu.wisefee.dto.seller.CafeAndImageCountDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -77,5 +78,19 @@ public class CafeRepository {
     public void softDelete(Cafe cafe) {
         cafe.setDeletedAt(LocalDateTime.now());
         em.persist(cafe);
+    }
+
+
+
+    /**
+     * [Cafe ID로 조회]
+     * 주어진 ID를 기반으로 Cafe 엔티티를 조회한다.
+     * @param id 조회할 Cafe의 ID
+     * @return 주어진 ID에 해당하는 Cafe 엔티티, 없을 경우 null을 반환한다.
+     */
+    public CafeAndImageCountDto findCafeAndImageCountById(Long id) {
+        Cafe cafe = em.find(Cafe.class, id);
+        int length = cafe.getFiles().size();
+        return new CafeAndImageCountDto(cafe, length);
     }
 }

@@ -24,7 +24,7 @@ public interface FileService {
      * @param [FileInfoDto 파일정보]
      * @return [Long 파일 PK]
      */
-    public abstract Long insertFileInfo(FileInfoDto fileinfo);
+    public abstract Long insertFileInfo(FileInfoDto fileinfo, Long memberPK);
 
 
     /**
