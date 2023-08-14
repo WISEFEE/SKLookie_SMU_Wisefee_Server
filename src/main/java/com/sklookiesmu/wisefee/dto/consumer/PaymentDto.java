@@ -49,13 +49,18 @@ public class PaymentDto {
         private Integer paymentPrice;
 
         @ApiModelProperty(value = "결제 내역 정보")
-        @NotBlank(message = "결제 내역 정보는 필수 입력값입니다.")
+        @NotNull(message = "결제 내역 정보는 필수 입력값입니다.")
         private String paymentInfo;
+
+        @ApiModelProperty(value = "결제 수단")
+        @NotNull(message = "결제 수단은 필수 입력값입니다.")
+        private String paymentMethod;
 
         public Payment toEntity(SubTicketType subTicketType){
             return Payment.builder()
                     .paymentInfo(paymentInfo)
                     .paymentPrice(subTicketType.getSubTicketPrice())
+                    .paymentMethod(paymentMethod)
                     .build();
         }
     }

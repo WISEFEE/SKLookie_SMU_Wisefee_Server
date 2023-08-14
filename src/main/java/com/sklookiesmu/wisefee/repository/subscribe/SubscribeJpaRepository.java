@@ -1,5 +1,6 @@
 package com.sklookiesmu.wisefee.repository.subscribe;
 
+import com.sklookiesmu.wisefee.domain.Cafe;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.domain.Subscribe;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,4 +18,8 @@ public interface SubscribeJpaRepository extends JpaRepository<Subscribe, Long> {
     List<Subscribe> findAllByMemberId(@Param(value = "memberId") Long memberId);
 
     Optional<Subscribe> findByMemberAndSubStatus(Member member, String subStatus);
+
+    Optional<Subscribe> findByMemberAndCafe(Member member, Cafe cafe);
+
+
 }

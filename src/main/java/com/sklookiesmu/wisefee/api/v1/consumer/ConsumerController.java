@@ -49,8 +49,6 @@ public class ConsumerController {
         return ResponseEntity.status(HttpStatus.OK).body(consumerService.getSubscribe(memberId));
     }
 
-
-    // TODO : 정기구독 해지
     @ApiOperation(value = "CONS-B-03 :: 정기구독 해지하기",
             notes = "정기 구독을 해지합니다. memberId에는 해지할 사용자의 PK를 넣어서 요청합니다.")
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
