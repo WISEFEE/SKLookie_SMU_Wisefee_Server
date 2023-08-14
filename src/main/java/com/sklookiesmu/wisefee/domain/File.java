@@ -62,8 +62,11 @@ public class File {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
-    @OneToMany(mappedBy = "file")
-    private List<Cafe> cafes = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CAFE_ID")
+    private Cafe cafe;
+
     @OneToOne(mappedBy = "file", fetch = FetchType.LAZY)
     private ProductImage productImage;
 }
