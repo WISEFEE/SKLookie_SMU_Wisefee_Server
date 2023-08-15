@@ -37,7 +37,8 @@ public class ConsumerOrderController {
         return ResponseEntity.status(HttpStatus.OK).body(consumerOrderService.createOrder(cafeId, orderRequest));
     }
 
-    @ApiOperation(value = "CONS-C-03 :: 주문내역 조회하기")
+    @ApiOperation(value = "CONS-C-03 :: 주문내역 조회하기",
+                    notes = "카페 PK와 주문 PK를 입력 시 고객이 주문한 내역을 조회할 수 있습니다.")
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @GetMapping("/{cafeId}/order/{orderId}")
     public ResponseEntity<OrderDto.OrderResponseDto> getOrderHistory(@PathVariable("cafeId") Long cafeId,

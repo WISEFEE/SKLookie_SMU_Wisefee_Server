@@ -18,10 +18,6 @@ public class OrderDto {
     @Builder
     public static class OrderRequestDto{
 
-        @ApiModelProperty(value = "현재 정기구독권 PK", required = true)
-        @NotNull(message = "현재 정기구독권 아이는 필수 입력값입니다.")
-        private Long subscribeId;
-
         @ApiModelProperty(value = "주문 상품", required = true)
         @NotNull(message = "주문 상품은 필수 입력값입니다.")
         private List<OrderProductRequestDto> orderProduct;
@@ -59,18 +55,34 @@ public class OrderDto {
         public static OrderResponseDto orderToDto(Order order){
             return OrderResponseDto.builder()
                     .tumblrStatus(order.getTumblrStatus())
-                    .productStatus(ProductStatus.REQUESTED)
+                    .productStatus(order.getProductStatus())
                     .createdAt(order.getCreatedAt())
                     .subscribeId(order.getSubscribe().getSubId())
+
                     .orderProduct(order.getOrderProducts().stream()
                             .map(orderProd -> OrderProductRequestDto.builder()
                                     .productId(orderProd.getOrderProductId())
-                                    .build()).collect(Collectors.toList()))
+
+                                    .productOption(orderProd.getProduct().getProductOptions().stream()
+                                            .map(prodOpt -> ProductDto.ProductOptionRequestDto.builder()
+                                                    .productOptionId(prodOpt.getProductOptionId())
+
+                                                    .productOptionChoice(prodOpt.getProductOptChoices().stream()
+                                                            .map(prodOptChoice -> ProductDto.ProductOptionChoiceRequestDto.builder()
+                                                                    .optionChoiceId(prodOptChoice.getProductOptionChoiceId())
+                                                                    .build())
+                                                            .collect(Collectors.toList()))
+                                                    .build())
+                                            .collect(Collectors.toList()))
+
+                                    .build())
+                            .collect(Collectors.toList()))
+
                     .orderOption(order.getOrderOptions().stream()
                             .map(orderOpt-> OrderOptionDto.OrderOptionRequestDto.builder()
                                     .orderOptionId(orderOpt.getOrderOptionId())
-                                    .build()).collect(Collectors.toList()))
-                    .build();
+                                    .build())
+                            .collect(Collectors.toList())).build();
         }
     }
     @Getter @Setter
@@ -85,18 +97,5 @@ public class OrderDto {
 
         @ApiModelProperty(value = "제품 옵션", required = true)
         private List<ProductDto.ProductOptionRequestDto> productOption;
-
-       /* public static OrderProductRequestDto orderProdToDto(OrderProduct orderProduct) {
-            return OrderProductRequestDto.builder()
-                    .productId(orderProduct.getProduct().getProductId())
-                    .productOption(ProductDto.ProductOptionRequestDto.builder()
-                            .productOptionId(orderProduct.getProduct().getProductOptions().stream()
-                                    .map(prodOpt->{
-                                        return ProductDto.ProductOptionRequestDto.builder()
-                                                .productOptionId(prodOpt.getProductOptionId());
-                                    }))
-                            .productOptionChoice().
-                    .build();
-        }*/
     }
 }

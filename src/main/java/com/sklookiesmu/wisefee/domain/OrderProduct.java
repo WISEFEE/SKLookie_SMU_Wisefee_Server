@@ -30,4 +30,14 @@ public class OrderProduct {
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;
 
+    /**
+     * 비즈니스 로직
+     */
+    public static OrderProduct createOrderProduct(Product product){
+        OrderProduct orderProduct = new OrderProduct();
+        orderProduct.setProduct(product);
+
+        return orderProduct;
+    }
+
 }
