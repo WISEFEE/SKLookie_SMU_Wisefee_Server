@@ -83,8 +83,8 @@ public class CafeRepository {
 
 
     /**
-     * [Cafe ID로 조회]
-     * 주어진 ID를 기반으로 Cafe 엔티티를 조회한다.
+     * [Cafe ID로 조회 및 등록된 사진의 개수 조회]
+     * 주어진 ID를 기반으로 Cafe 엔티티와 등록된 사진의 개수를 조회한다.
      * @param id 조회할 Cafe의 ID
      * @return 주어진 ID에 해당하는 Cafe 엔티티, 없을 경우 null을 반환한다.
      */
@@ -93,4 +93,6 @@ public class CafeRepository {
         int length = cafe.getFiles().size();
         return new CafeAndImageCountDto(cafe, length);
     }
+
+
 }

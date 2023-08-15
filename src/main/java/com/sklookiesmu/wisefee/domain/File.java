@@ -67,6 +67,8 @@ public class File {
     @JoinColumn(name = "CAFE_ID")
     private Cafe cafe;
 
-    @OneToOne(mappedBy = "file", fetch = FetchType.LAZY)
-    private ProductImage productImage;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PRODUCT_ID")
+    private Product product;
+
 }

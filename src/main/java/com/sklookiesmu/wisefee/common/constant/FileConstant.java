@@ -51,6 +51,10 @@ public class FileConstant {
      */
     public static final int MAX_CAFE_IMAGE_CNT = 10;
 
+    /**
+     * 상품 이미지 등록 최대 개수
+     */
+    public static final int MAX_PRODUCT_IMAGE_CNT = 5;
 
 
 }

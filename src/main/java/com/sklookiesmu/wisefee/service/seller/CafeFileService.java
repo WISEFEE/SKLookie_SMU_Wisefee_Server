@@ -29,7 +29,24 @@ public interface CafeFileService {
     public abstract Long removeCafeImage(Long cafeId, Long fileId);
 
 
+    /**
+     * [상품 사진 추가]
+     * 상품사진을 신규추가한다.
+     * @param productId 상품 ID
+     * @param fileId 파일 ID
+     * @throws IllegalArgumentException 존재하지 않는 상품이거나 이미지일 경우 예외처리
+     */
+    public abstract Long addProductImage(Long productId, Long fileId);
 
+
+    /**
+     * [상품 사진 삭제]
+     * 상품의 기존 사진을 삭제한다
+     * @param productId 상품 ID
+     * @param fileId 파일 ID
+     * @throws IllegalArgumentException 존재하지 않는 매장이나 이미지일 경우 예외처리
+     */
+    public abstract Long removeProductImage(Long productId, Long fileId);
 
 
 }

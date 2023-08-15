@@ -13,7 +13,7 @@ import javax.validation.constraints.Pattern;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(description = "매장 사진 편집 Dto")
+@ApiModel(description = "매장/매장상품 사진 편집 Dto")
 public class EditCafeImageFileRequestDto {
 
     @ApiModelProperty(value = "파일 ID", required = true)
