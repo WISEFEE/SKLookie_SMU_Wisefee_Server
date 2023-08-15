@@ -74,14 +74,29 @@ public class CafeOrderController {
 
 
     @ApiOperation(
-            value = "SELL-B-03 :: 주문 상세 정보",
+            value = "SELL-B-03 :: 매장에 들어온 주문 리스트",
+            notes = "매장에 들어온 주문들의 리스트를 조회하는 API입니다."
+    )
+    @GetMapping("/api/v1/seller/{cafeId}/orderList")
+    @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
+    public List<OrderListDto> getOrdersList(@PathVariable("cafeId") Long cafeId) {
+        List<Order> orders = orderService.getOrdersByCafeId(cafeId);
+        return orders.stream()
+                .map(order -> OrderListDto.fromOrder(order))
+                .collect(Collectors.toList());
+    }
+
+
+    @ApiOperation(
+            value = "SELL-B-04 :: 주문 상세 정보",
             notes = "주문 상세 정보 API입니다. <br>" +
                     "들어온 주문의 상세 정보를 볼 수 있습니다."
     )
     @GetMapping("/api/v1/seller/orders/{orderId}/details")
     @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
-    public OrderDetailsDto getOrderDetails(@PathVariable Long orderId) {
+    public OrderDetailsDto getOrderDetails(@PathVariable("orderId") Long orderId) {
         Order order = orderService.getOrderById(orderId);
         return OrderDetailsDto.fromOrder(order);
     }
+
 }
