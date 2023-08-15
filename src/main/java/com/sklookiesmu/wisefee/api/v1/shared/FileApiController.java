@@ -1,5 +1,6 @@
 package com.sklookiesmu.wisefee.api.v1.shared;
 
+import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
 import com.sklookiesmu.wisefee.dto.shared.file.FileInfoDto;
 import com.sklookiesmu.wisefee.service.shared.FileService;
@@ -40,8 +41,9 @@ public class FileApiController {
             @ApiParam(value = "multipart/form-data 형식의 이미지")
             @RequestPart("multipartFile")
             MultipartFile file) {
+        Long memberPK = SecurityUtil.getCurrentMemberPk();
         FileInfoDto fileinfo = fileService.uploadFile(file);
-        Long success = fileService.insertFileInfo(fileinfo);
+        Long success = fileService.insertFileInfo(fileinfo, memberPK);
 
         return ResponseEntity.status(HttpStatus.OK).body(success);
     }

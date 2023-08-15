@@ -4,6 +4,7 @@ import com.sklookiesmu.wisefee.common.constant.FileConstant;
 import com.sklookiesmu.wisefee.common.error.FileDownloadException;
 import com.sklookiesmu.wisefee.common.error.FileUploadException;
 import com.sklookiesmu.wisefee.common.file.FileUtil;
+import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.dto.shared.file.FileInfoDto;
 import com.sklookiesmu.wisefee.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 
 @Service
 @Transactional(readOnly = true)
@@ -38,23 +40,25 @@ public class FileServiceImpl implements FileService {
      * @param [MultipartFile 파일]
      * @return [FileinfoDto 파일 정보]
      */
+    @Transactional()
     public FileInfoDto uploadFile(MultipartFile file){
 
         String originalFileName = file.getOriginalFilename();
-        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));   //확장자
+        String mimeType = file.getContentType();
 
         //최대용량 체크
         if (file.getSize() > FileConstant.MAX_FILE_SIZE) {
             throw new FileUploadException("10MB 이하 파일만 업로드 할 수 있습니다.");
         }
 
+
         //MIMETYPE 체크
-        if (!FileUtil.isImageFile(fileExtension)) {
+        if (!FileUtil.isImageFile(mimeType)) {
             throw new FileUploadException("이미지 파일만 업로드할 수 있습니다.");
         }
 
         //저장 파일명을 중복방지 고유명으로 변경
-        String newFileName = generateUniqueFileName(fileExtension);
+        String newFileName = generateUniqueFileName(originalFileName);
         Path filePath = Paths.get(uploadDirectory + File.separator + newFileName);
 
 
@@ -62,7 +66,7 @@ public class FileServiceImpl implements FileService {
         try {
             Files.copy(file.getInputStream(), filePath);
         } catch (IOException e) {
-            throw new FileUploadException("File upload exception." + e.getMessage());
+            throw new FileUploadException("File upload exception. " + e.getStackTrace());
         }
 
         return new FileInfoDto(file.getContentType(),
@@ -79,14 +83,19 @@ public class FileServiceImpl implements FileService {
      * @return [Long 파일 PK]
      */
     @Transactional
-    public Long insertFileInfo(FileInfoDto fileinfo){
+    public Long insertFileInfo(FileInfoDto fileinfo, Long memberPK){
         com.sklookiesmu.wisefee.domain.File file = new com.sklookiesmu.wisefee.domain.File();
         file.setFileType(fileinfo.getFileType()); //MIMETYPE(~확장자)
         file.setFileCapacity(fileinfo.getFileCapacity()); //용량
         file.setName(fileinfo.getName()); //이름
         file.setFilePath(fileinfo.getFilePath()); //경로
-        file.setFileInfo(""); //설명
+        file.setFileInfo(FileConstant.FILE_INFO_NO_USE); //정보
         file.setDeleted(false);
+
+        Member member = new Member();
+        member.setMemberId(memberPK);
+        file.setMember(member);
+
         this.fileRepository.insertFile(file);
         return file.getFileId();
     }
@@ -127,10 +136,14 @@ public class FileServiceImpl implements FileService {
      * @param fileExtension 확장자
      * @return String 파일 고유이름
      */
-    private String generateUniqueFileName(String fileExtension) {
+    private String generateUniqueFileName(String originalFileName) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        // Random 객체 생성
+        Random random = new Random();
+        // 0 이상 100 미만의 랜덤한 정수 반환
+        String randomNumber = Integer.toString(random.nextInt(Integer.MAX_VALUE));
         String timeStamp = dateFormat.format(new Date());
-        return timeStamp + fileExtension;
+        return timeStamp + randomNumber + originalFileName;
     }
 
 }
