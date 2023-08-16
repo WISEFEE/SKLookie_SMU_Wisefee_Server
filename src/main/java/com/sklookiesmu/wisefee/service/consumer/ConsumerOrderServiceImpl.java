@@ -51,6 +51,7 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
      * 주문하기
      * @return orderId
      */
+    // TODO : 코드 리팩토링 필요 !
     @Override
     @Transactional
     public Long createOrder(Long cafeId, OrderDto.OrderRequestDto orderRequestDto) {

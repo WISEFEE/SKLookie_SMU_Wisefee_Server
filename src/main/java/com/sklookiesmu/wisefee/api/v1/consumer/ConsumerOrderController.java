@@ -29,7 +29,14 @@ public class ConsumerOrderController {
     }
 
 
-    @ApiOperation(value = "CONS-C-02 :: 주문하기")
+    @ApiOperation(value = "CONS-C-02 :: 주문하기",
+                notes = "- 아이스 아메리카노(PRODUCT : ID=13)\n" +
+                        "    - 사이즈 선택(PRODUCT_OPTION : ID=1)\n" +
+                        "        - 벤티(+1000)  (PRODUCT_OPT_CHOICE : ID=101)\n" +
+                        "        - 그란데(+2000)  (PRODUCT_OPT_CHOICE : ID=102)\n" +
+                        "    - 휘핑크림 추가 (PRODUCT_OPTION : ID=2)\n" +
+                        "        - 추가 (+500)  (PRODUCT_OPT_CHOICE : ID=103)\n\n" +
+                        "- orderOption는 주문 옵션 - 빨대 추가 여부, 고무컵홀더 사용여부 등등..")
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @PostMapping("/{cafeId}/order")
     public ResponseEntity<Long> createOrder(@PathVariable("cafeId") Long cafeId,
