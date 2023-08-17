@@ -61,7 +61,7 @@ public class Product {
     private List<OrderProduct> orderProducts = new ArrayList<>();
 
     @OneToMany(mappedBy = "product")
-    private List<ProductImage> productImages = new ArrayList<>();
+    private List<File> files = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductOption> productOptions = new ArrayList<>();
