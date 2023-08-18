@@ -22,7 +22,8 @@ public class OrderRepository {
         if (order.getOrderId() == null) {
             em.persist(order);
         } else {
-            em.merge(order);
+            Order newOrder = em.find(Order.class, order.getOrderId());
+            newOrder.setProductStatus(order.getProductStatus());
         }
         return order;
     }
