@@ -29,12 +29,31 @@ public class CartApiController {
     private final ModelMapper modelMapper;
     private final CartServiceImpl cartService;
 
+
+    @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
+    @ApiOperation(
+            value = "장바구니 id 조회",
+            notes = "회원 id를 입력해 회원의 장바구니 id를 조회합니다."
+    )
+    @GetMapping("api/v1/cart/find/{memberId}")
+    public ResponseEntity<Long> findCartId(
+            @ApiParam("회원 아이디")
+            @PathVariable("memberId") Long memberId
+    ) {
+        if(!(memberId.equals(SecurityUtil.getCurrentMemberPk())))
+            throw new ValidateMemberException("invalid ID : The provided ID does not match your current logged-in ID"+memberId);
+
+        Long result = cartService.findCartId(memberId);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @ApiOperation(
             value = "장바구니 금액조회",
             notes = "장바구니 총 금액 조회 API입니다. <br>" +
                     "장바구니 아이디 입력 시 현재 장바구니에 담긴 상품들의 총 가격을 조회합니다."
     )
-    @GetMapping("/api/v1/cart/price{cartId}/")
+    @GetMapping("/api/v1/cart/price/{cartId}")
     public ResponseEntity<Long> findCartTotalPrice(
             @ApiParam(value = "장바구니 ID")
             @PathVariable("cartId") Long cartId
@@ -42,6 +61,24 @@ public class CartApiController {
         Long result = cartService.calculateCart(cartId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
+
+    @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
+    @ApiOperation(
+            value = "장바구니 금액조회 (구독권 금액 포함)",
+            notes = "구독권 금액비율 반영한 장바구니 총 금액 조회 API입니다. <br>" +
+                    "장바구니 아이디 입력 시 현재 장바구니에 담긴 상품들의 총 가격을 조회합니다."
+    )
+    @GetMapping("/api/v1/cart/price/sub-ticket/{cartId}")
+    public ResponseEntity<Long> findCartTotalPriceWithSubTicket(
+            @ApiParam(value = "장바구니 ID")
+            @PathVariable("cartId") Long cartId,
+            @ApiParam(value = "적용할 구독권 아이디")
+            @RequestParam("subTicketId") Long subTicketId
+    ) {
+        Long result = cartService.calculateCartWithSubTicket(cartId, subTicketId);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
 
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @ApiOperation(
@@ -107,6 +144,7 @@ public class CartApiController {
             @ApiParam(value = "장바구니 상품 PK")
             @PathVariable("cartProductId") Long cartProductId
     ) {
+
         Long result = cartService.deleteCartProduct(cartProductId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
