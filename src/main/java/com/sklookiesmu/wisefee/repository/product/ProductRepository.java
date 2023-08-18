@@ -3,6 +3,8 @@ package com.sklookiesmu.wisefee.repository.product;
 import com.sklookiesmu.wisefee.domain.Cafe;
 import com.sklookiesmu.wisefee.domain.OrderOption;
 import com.sklookiesmu.wisefee.domain.Product;
+import com.sklookiesmu.wisefee.dto.seller.CafeAndImageCountDto;
+import com.sklookiesmu.wisefee.dto.seller.ProductAndImageCountDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -55,7 +57,7 @@ public class ProductRepository {
      * @return 주어진 Cafe에 해당하는 모든 Product 엔티티 리스트, 없을 경우 빈 리스트를 반환한다.
      */
     public List<Product> findByCafe(Cafe cafe) {
-        return em.createQuery("select p from Product p join fetch p.cafe where p.cafe = :cafe", Product.class)
+        return em.createQuery("select p from Product p join fetch p.cafe where p.cafe = :cafe and p.deletedAt is null", Product.class)
                 .setParameter("cafe", cafe)
                 .getResultList();
     }
@@ -69,5 +71,18 @@ public class ProductRepository {
     public void softDelete(Product product) {
         product.setDeletedAt(LocalDateTime.now());
         em.persist(product);
+    }
+
+
+    /**
+     * [Product ID로 조회 및 등록된 사진의 개수 조회]
+     * 주어진 ID를 기반으로 Product 엔티티와 등록된 사진의 개수를 조회한다.
+     * @param id 조회할 Product ID
+     * @return 주어진 ID에 해당하는 Product 엔티티, 없을 경우 null을 반환한다.
+     */
+    public ProductAndImageCountDto findProductAndImageCountById(Long id) {
+        Product product = em.find(Product.class, id);
+        int length = product.getFiles().size();
+        return new ProductAndImageCountDto(product, length);
     }
 }

@@ -45,7 +45,18 @@ public class ConsumerController {
     public ResponseEntity<SubscribeDto.SubscribeListResponseDto> getSubscribe(@PathVariable("memberId") Long memberId) {
 
         // 유저 검증 필요
+        //Long memberId = SecurityUtil.getCurrentMemberPk();
         return ResponseEntity.status(HttpStatus.OK).body(consumerService.getSubscribe(memberId));
+    }
+
+    @ApiOperation(value = "CONS-B-03 :: 정기구독 해지하기",
+            notes = "정기 구독을 해지합니다. memberId에는 해지할 사용자의 PK를 넣어서 요청합니다.")
+    @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
+    @DeleteMapping("/{memberId}/subscribe")
+    public ResponseEntity<?> cancelSubscribe(@PathVariable("memberId") Long memberId){
+
+        consumerService.cancelSubscribe(memberId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // TODO : 정기구독 결제

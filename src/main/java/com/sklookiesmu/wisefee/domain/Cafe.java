@@ -56,9 +56,8 @@ public class Cafe {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID", nullable = false)
     private Member member;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FILE_ID")
-    private File file;
+    @OneToMany(mappedBy = "cafe")
+    private List<File> files = new ArrayList<>();
     @OneToMany(mappedBy = "cafe", cascade = CascadeType.ALL)
     private List<Notification> notifications = new ArrayList<>();
     @OneToOne(fetch = FetchType.LAZY)

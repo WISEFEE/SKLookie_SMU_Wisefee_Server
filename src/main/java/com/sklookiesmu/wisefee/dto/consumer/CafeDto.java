@@ -21,7 +21,7 @@ public class CafeDto {
     @Getter @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class CafeRequest{
+    public static class CafeRequestDto{
 
         @ApiModelProperty(value = "매장명", required = true, example = "Lookie Cafe")
         @NotBlank(message = "매장명은 필수 입력 값입니다.")

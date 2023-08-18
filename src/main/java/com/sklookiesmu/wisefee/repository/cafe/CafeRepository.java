@@ -2,6 +2,7 @@ package com.sklookiesmu.wisefee.repository.cafe;
 
 import com.sklookiesmu.wisefee.domain.Cafe;
 import com.sklookiesmu.wisefee.domain.Product;
+import com.sklookiesmu.wisefee.dto.seller.CafeAndImageCountDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -43,7 +44,7 @@ public class CafeRepository {
      * @return 주어진 제목과 일치하는 Cafe 엔티티 리스트, 일치하는 Cafe가 없을 경우 빈 리스트를 반환한다.
      */
     public List<Cafe> findByTitle(String title) {
-        return em.createQuery("select c from Cafe c where c.title = :title", Cafe.class)
+        return em.createQuery("select c from Cafe c where c.title = :title and c.deletedAt is null", Cafe.class)
                 .setParameter("title", title)
                 .getResultList();
     }
@@ -78,4 +79,20 @@ public class CafeRepository {
         cafe.setDeletedAt(LocalDateTime.now());
         em.persist(cafe);
     }
+
+
+
+    /**
+     * [Cafe ID로 조회 및 등록된 사진의 개수 조회]
+     * 주어진 ID를 기반으로 Cafe 엔티티와 등록된 사진의 개수를 조회한다.
+     * @param id 조회할 Cafe의 ID
+     * @return 주어진 ID에 해당하는 Cafe 엔티티, 없을 경우 null을 반환한다.
+     */
+    public CafeAndImageCountDto findCafeAndImageCountById(Long id) {
+        Cafe cafe = em.find(Cafe.class, id);
+        int length = cafe.getFiles().size();
+        return new CafeAndImageCountDto(cafe, length);
+    }
+
+
 }

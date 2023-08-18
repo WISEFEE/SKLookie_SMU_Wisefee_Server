@@ -17,10 +17,10 @@ public interface ConsumerService{
     /**
      * [구독 조회]
      * 고객이 구독한 내역과 결제 내역을 조회한다.
-     * @param userId
+     * @param memberId
      * @return SubScribeResponseDto
      */
-    SubscribeDto.SubscribeListResponseDto getSubscribe(Long userId);
+    SubscribeDto.SubscribeListResponseDto getSubscribe(Long memberId);
 
     /**
      * [구독 결제]
@@ -29,4 +29,10 @@ public interface ConsumerService{
      */
     void createPayment(PaymentDto.PaymentRequestDto request, Long cafeId, Long subscribeId);
 
+
+    /**
+     * [정기구독 해지]
+     * 구독하고 있는 정기 구독권을 해지한다.
+     */
+    void cancelSubscribe(Long memberId);
 }

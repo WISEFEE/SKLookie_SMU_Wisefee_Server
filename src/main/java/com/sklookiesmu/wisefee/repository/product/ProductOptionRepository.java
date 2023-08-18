@@ -55,7 +55,7 @@ public class ProductOptionRepository {
      * @return 주어진 Product에 해당하는 모든 ProductOption 엔티티 리스트, 없을 경우 빈 리스트를 반환한다.
      */
     public List<ProductOption> findByProduct(Product product) {
-        return em.createQuery("select po from ProductOption po join fetch po.product where po.product = :product", ProductOption.class)
+        return em.createQuery("select po from ProductOption po join fetch po.product where po.product = :product and po.deletedAt is null", ProductOption.class)
                 .setParameter("product", product)
                 .getResultList();
     }
