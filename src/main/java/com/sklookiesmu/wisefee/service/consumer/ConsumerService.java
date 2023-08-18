@@ -31,11 +31,8 @@ public interface ConsumerService{
 
 
     /**
-     * TODO [정기구독 해지]
+     * [정기구독 해지]
+     * 구독하고 있는 정기 구독권을 해지한다.
      */
     void cancelSubscribe(Long memberId);
-
-    /**
-     * TODO [정기 구독 결제 취소]
-     */
 }

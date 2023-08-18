@@ -56,10 +56,13 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CAFE_ID")
     private Cafe cafe;
+
     @OneToMany(mappedBy = "product")
     private List<OrderProduct> orderProducts = new ArrayList<>();
+
     @OneToMany(mappedBy = "product")
-    private List<ProductImage> productImages = new ArrayList<>();
+    private List<File> files = new ArrayList<>();
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductOption> productOptions = new ArrayList<>();
 }

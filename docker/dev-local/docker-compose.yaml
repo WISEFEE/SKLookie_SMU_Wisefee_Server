@@ -32,6 +32,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mariadb://wisefee-database:3306/wisefee-database?characterEncoding=UTF-8&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 1111
+    volumes:
+      - ./volumes/storage/upload:/app/wisefee/storage/upload
     networks:
       - wisefee-network
 

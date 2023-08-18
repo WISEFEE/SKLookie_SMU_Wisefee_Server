@@ -1,6 +1,8 @@
 package com.sklookiesmu.wisefee.service.consumer;
 
+import com.sklookiesmu.wisefee.dto.consumer.OrderDto;
 import com.sklookiesmu.wisefee.dto.consumer.OrderOptionDto;
+import com.sklookiesmu.wisefee.dto.consumer.ProductDto;
 
 public interface ConsumerOrderService {
     /**
@@ -13,19 +15,24 @@ public interface ConsumerOrderService {
 
 
     /**
-     * TODO [주문하기] ->
-     * 장바구니 기능 설계된 후에 구현 필요
-     * IA 정보 구조도 => 장바구니에 담겨진 제품들만 주문 가능
+     * TODO [주문하기]
      */
-    //void createOrder();
+    Long createOrder(Long cafeId, OrderDto.OrderRequestDto orderRequestDto);
 
 
     /**
      * TODO [주문 내역 조회]
      */
+    OrderDto.OrderResponseDto getOrderHistory(Long cafeId, Long orderId);
 
 
     /**
-     * TODO [주문 현황 확인] -> 실시간 통신 필요 (카페 측 음료 준비 현황)
+     * TODO [주문 현황 확인] -> 동기 비동기?(카페 측 음료 준비 현황)
      */
+
+
+    /**
+     * TODO [주문 취소하기] -> 매장 측에서 접수완료하기 전에만 가능
+     */
+
 }

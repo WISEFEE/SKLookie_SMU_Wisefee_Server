@@ -24,6 +24,9 @@ public class Payment {
     @Column(name = "PAYMENT_INFO")
     private String paymentInfo;
 
+    @Column(name = "PAYMENT_METHOD")
+    private String paymentMethod;
+
     @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
 
