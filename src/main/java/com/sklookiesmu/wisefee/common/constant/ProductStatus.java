@@ -1,4 +1,4 @@
-package com.sklookiesmu.wisefee.domain;
+package com.sklookiesmu.wisefee.common.constant;
 
 public enum ProductStatus {
     REQUESTED,  // 주문 요청

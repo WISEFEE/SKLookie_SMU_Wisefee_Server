@@ -1,6 +1,9 @@
 package com.sklookiesmu.wisefee.service.seller;
 
-import com.sklookiesmu.wisefee.domain.ProductStatus;
+import com.sklookiesmu.wisefee.common.constant.ProductStatus;
+import com.sklookiesmu.wisefee.domain.Order;
+
+import java.util.List;
 
 public interface OrderService {
 
@@ -13,4 +16,8 @@ public interface OrderService {
      * @throws IllegalArgumentException 존재하지 않는 주문일 경우 예외를 던집니다.
      */
     void updateOrderStatus(Long orderId, ProductStatus newStatus);
+
+    public Order getOrderById(Long orderId);
+
+    public List<Order> getOrdersByCafeId(Long cafeId);
 }

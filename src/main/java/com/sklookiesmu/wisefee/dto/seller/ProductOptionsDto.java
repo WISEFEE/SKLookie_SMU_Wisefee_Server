@@ -27,6 +27,7 @@ public class ProductOptionsDto {
 
     public static ProductOptionsDto fromProductOption(ProductOption productOption) {
         List<ProductOptionChoicesDto> productOptionChoicesDtoList = productOption.getProductOptChoices().stream()
+                .filter(productOptionChoice -> productOptionChoice.getDeletedAt() == null)
                 .map(productOptionChoice -> ProductOptionChoicesDto.fromProductOptionChoices(productOptionChoice))
                 .collect(Collectors.toList());
 

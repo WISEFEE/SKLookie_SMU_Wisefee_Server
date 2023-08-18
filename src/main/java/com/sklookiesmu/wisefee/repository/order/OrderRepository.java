@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
 
 @Repository
@@ -21,8 +22,17 @@ public class OrderRepository {
         if (order.getOrderId() == null) {
             em.persist(order);
         } else {
-            em.merge(order);
+            Order newOrder = em.find(Order.class, order.getOrderId());
+            newOrder.setProductStatus(order.getProductStatus());
         }
         return order;
+    }
+
+    public List<Order> findAllBySubscribeCafeCafeId(Long cafeId) {
+        return em.createQuery(
+                "SELECT o FROM Order o JOIN o.subscribe s JOIN s.cafe c WHERE c.cafeId = :cafeId", Order.class
+                )
+                .setParameter("cafeId", cafeId)
+                .getResultList();
     }
 }
