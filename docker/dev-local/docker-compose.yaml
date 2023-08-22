@@ -37,5 +37,13 @@ services:
     networks:
       - wisefee-network
 
+  wisefee-redis:
+    image: redis:6.2.5  # 사용할 Redis 이미지
+    container_name: wisefee-redis
+    ports:
+      - 6389:6379  # 호스트 포트와 컨테이너 포트 매핑
+    networks:
+      - wisefee-network
+
 
 
