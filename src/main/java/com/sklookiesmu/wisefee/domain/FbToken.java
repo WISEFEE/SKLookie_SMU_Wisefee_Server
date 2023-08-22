@@ -15,10 +15,10 @@ public class FbToken {
     private String jwtToken;
     private String memberPK;
     private String fireBaseToken;
-    private LocalDate expire_date;
+    private LocalDateTime expire_date;
 
     @Builder
-    public FbToken(String memberPK, String jwtToken, String fireBaseToken, LocalDate expire_date) {
+    public FbToken(String memberPK, String jwtToken, String fireBaseToken, LocalDateTime expire_date) {
         this.jwtToken = jwtToken;
         this.memberPK = memberPK;
         this.fireBaseToken = fireBaseToken;

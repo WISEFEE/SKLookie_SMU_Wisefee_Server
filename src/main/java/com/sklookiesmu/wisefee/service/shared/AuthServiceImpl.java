@@ -41,24 +41,19 @@ public class AuthServiceImpl implements AuthService {
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         TokenInfoDto tokenInfo = jwtTokenProvider.generateToken(authentication);
 
-        if (firebaseToken != null && authentication.getPrincipal() instanceof Claims) {
-            Claims claims = (Claims) authentication.getPrincipal();
-            // exp 값을 가져오기
-            Long exp = (Long) claims.getExpiration().getTime(); // 반환값은 밀리초 단위의 타임스탬프
+        Claims claims = jwtTokenProvider.parseClaims(tokenInfo.getAccessToken());                // exp 값을 가져오기
+        Long exp = (Long) claims.getExpiration().getTime(); // 반환값은 밀리초 단위의 타임스탬프
 
-            // TODO : R0822_Insert Redis
-            Date date = new java.util.Date(exp * 1000L);
-            LocalDate expLocalDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            FbToken fbToken = FbToken.builder()
-                    .jwtToken(tokenInfo.getAccessToken())
-                    .fireBaseToken(firebaseToken)
-                    .expire_date(expLocalDate)
-                    .build();
+        // TODO : R0822_Insert Redis
+        Date date = new java.util.Date(exp);
+        LocalDateTime expLocalDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        FbToken fbToken = FbToken.builder()
+                .jwtToken(tokenInfo.getAccessToken())
+                .fireBaseToken(firebaseToken)
+                .expire_date(expLocalDateTime)
+                .build();
 
-            FbToken save = authRepositoryWithRedis.save(fbToken);
-        } else {
-            throw new RuntimeException("AuthServiceImpleError");
-        }
+        FbToken save = authRepositoryWithRedis.save(fbToken);
 
 
         return tokenInfo;
