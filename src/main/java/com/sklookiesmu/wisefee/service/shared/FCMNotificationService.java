@@ -16,25 +16,22 @@ public class FCMNotificationService {
     private final FirebaseMessaging firebaseMessaging;
 
     public String sendNotificationByToken(FCMNotificationRequestDto requestDto) {
-        if (requestDto.getTargetUserToken() != null) {
-            Notification notification = Notification.builder()
-                    .setTitle(requestDto.getTitle())
-                    .setBody(requestDto.getBody())
-                    // .setImage(requestDto.getImage())
-                    .build();
-
+        if (requestDto.getTo() != null) {
             Message message = Message.builder()
-                    .setToken(requestDto.getTargetUserToken())
-                    .setNotification(notification)
-                    // .putAllData(requestDto.getData())
+                    .setToken(requestDto.getTo())
+                    .setNotification(Notification.builder()
+                            .setTitle(requestDto.getData().get("title"))
+                            .setBody(requestDto.getData().get("body"))
+                            .build())
+                    .putAllData(requestDto.getData())
                     .build();
 
             try {
                 firebaseMessaging.send(message);
-                return "알림을 성공적으로 전송했습니다. targetUserToken=" + requestDto.getTargetUserToken();
+                return "알림을 성공적으로 전송했습니다. targetUserToken=" + requestDto.getTo();
             } catch (FirebaseMessagingException e) {
                 e.printStackTrace();
-                return "알림 보내기를 실패하였습니다. targetUserToken=" + requestDto.getTargetUserToken();
+                return "알림 보내기를 실패하였습니다. targetUserToken=" + requestDto.getTo();
             }
         } else {
             return "FCM 토큰 값이 존재하지 않습니다.";
