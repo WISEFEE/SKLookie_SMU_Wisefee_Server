@@ -16,6 +16,9 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  redis:
+    host: localhost
+    port: 6379
 
 logging:
   level:
@@ -28,3 +31,5 @@ jwt:
 
 upload:
   directory: storage/upload
+
+
