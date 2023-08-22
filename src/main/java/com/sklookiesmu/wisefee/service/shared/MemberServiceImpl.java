@@ -1,7 +1,9 @@
 package com.sklookiesmu.wisefee.service.shared;
 
+import com.sklookiesmu.wisefee.common.auth.redis.GetFbToken;
 import com.sklookiesmu.wisefee.common.error.MemberNotFoundException;
 import com.sklookiesmu.wisefee.common.error.ValidateMemberException;
+import com.sklookiesmu.wisefee.domain.FbToken;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +46,7 @@ public class MemberServiceImpl implements MemberService {
     }
     @Transactional
     public Member getMember(Long id) {
+
         Member member = memberRepository.find(id);
 
 //        /* 강제 예외처리 예시 */

@@ -12,4 +12,6 @@ public interface AuthRepositoryWithRedis extends CrudRepository<FbToken, String>
     Optional<List<FbToken>> findAllByfireBaseToken(String fireBaseToken);
 
     void deleteAllByfireBaseToken(String fireBaseToken);
+
+    Optional<List<FbToken>> findAllBymemberPK(Long memberPK);
 }
