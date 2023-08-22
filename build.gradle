@@ -44,6 +44,9 @@ dependencies {
 	implementation "com.querydsl:querydsl-jpa:5.0.0"
 	implementation "com.querydsl:querydsl-apt:5.0.0"
 
+	// FireBase 추가
+	implementation 'com.google.firebase:firebase-admin:8.0.0'
+
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:2.7.4'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
