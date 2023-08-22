@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Optional;
 
 import static org.apache.catalina.util.ConcurrentDateFormat.GMT;
 
@@ -49,6 +50,7 @@ public class AuthServiceImpl implements AuthService {
         LocalDateTime expLocalDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         FbToken fbToken = FbToken.builder()
                 .jwtToken(tokenInfo.getAccessToken())
+                .memberPK(claims.get("userId", Long.class))
                 .fireBaseToken(firebaseToken)
                 .expire_date(expLocalDateTime)
                 .build();
@@ -65,6 +67,20 @@ public class AuthServiceImpl implements AuthService {
         TokenInfoDto tokenInfo = jwtTokenProvider.generateToken(auth);
 
         // TODO : R0822_Update Redis, 기존 Redis의 jwt 토큰을 검색하여, 새로운 jwt로 대체
+        Optional<FbToken> authInfo = authRepositoryWithRedis.findById(jwt);
+        if (authInfo.isPresent()) {
+            FbToken updateFbToken = FbToken.builder()
+                    .jwtToken(tokenInfo.getAccessToken())
+                    .memberPK(authInfo.get().getMemberPK())
+                    .fireBaseToken(authInfo.get().getFireBaseToken())
+                    .expire_date(authInfo.get().getExpire_date())
+                    .build();
+
+            FbToken save = authRepositoryWithRedis.save(updateFbToken);
+            authRepositoryWithRedis.deleteById(jwt);
+        } else {
+            throw new RuntimeException("토큰이 존재하지 않습니다. 토큰을 새로 발급받으시기 바랍니다.");
+        }
 
 
         return tokenInfo;
