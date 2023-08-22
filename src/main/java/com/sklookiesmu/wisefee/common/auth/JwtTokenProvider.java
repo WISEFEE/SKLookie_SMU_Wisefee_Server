@@ -74,6 +74,9 @@ public class JwtTokenProvider {
 //                .signWith(key, SignatureAlgorithm.HS256)
 //                .compact();
 
+
+
+
         return TokenInfoDto.builder()
                 .grantType("Bearer")
                 .accessToken(accessToken)
@@ -95,6 +98,8 @@ public class JwtTokenProvider {
         if (claims.get("auth") == null) {
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
         }
+
+        // TODO : R0822_Get Redis, Redis에 유저정보가 없으면 Error 반환
 
         // 클레임에서 권한 정보 가져오기
         Collection<? extends GrantedAuthority> authorities =

@@ -11,8 +11,8 @@ public interface AuthService {
      * @param [id 회원 엔티티 PK]
      * @return [TokenInfo]
      */
-    public abstract TokenInfoDto login(String email, String password);
+    public abstract TokenInfoDto login(String email, String password, String firebaseToken);
 
-    public abstract TokenInfoDto refresh(Authentication auth);
+    public abstract TokenInfoDto refresh(Authentication auth, String jwt);
 
 }

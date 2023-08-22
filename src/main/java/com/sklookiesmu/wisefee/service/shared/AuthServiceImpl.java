@@ -19,7 +19,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
-    public TokenInfoDto login(String email, String password) {
+    public TokenInfoDto login(String email, String password, String firebaseToken) {
         // 1. Login Email/PW 를 기반으로 Authentication 객체 생성
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
 
@@ -30,13 +30,21 @@ public class AuthServiceImpl implements AuthService {
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         TokenInfoDto tokenInfo = jwtTokenProvider.generateToken(authentication);
 
+        // TODO : R0822_Insert Redis
+
+
+
         return tokenInfo;
 
     }
 
     @Transactional
-    public TokenInfoDto refresh(Authentication auth) {
+    public TokenInfoDto refresh(Authentication auth, String jwt) {
         TokenInfoDto tokenInfo = jwtTokenProvider.generateToken(auth);
+
+        // TODO : R0822_Update Redis, 기존 Redis의 jwt 토큰을 검색하여, 새로운 jwt로 대체
+
+
         return tokenInfo;
     }
 

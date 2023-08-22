@@ -1,5 +1,6 @@
 package com.sklookiesmu.wisefee.api.v1.shared;
 
+import com.sklookiesmu.wisefee.common.auth.JwtTokenProvider;
 import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
 import com.sklookiesmu.wisefee.dto.shared.jwt.TokenInfoDto;
@@ -15,12 +16,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Api(tags = "COMM-B :: 인증 API")
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthApiController {
     private final AuthService authService;
+
+    private final JwtTokenProvider jwtTokenProvider;
 
     @ApiOperation(
             value = "COMM-B-01 :: 기본 로그인",
@@ -37,7 +42,7 @@ public class AuthApiController {
     public ResponseEntity<TokenInfoDto> login(@RequestBody LoginRequestDto memberLoginRequestDto) {
         String memberId = memberLoginRequestDto.getEmail();
         String password = memberLoginRequestDto.getPassword();
-        TokenInfoDto tokenInfo = authService.login(memberId, password);
+        TokenInfoDto tokenInfo = authService.login(memberId, password, memberLoginRequestDto.getFcmToken());
         return ResponseEntity.status(HttpStatus.OK).body(tokenInfo);
     }
 
@@ -48,10 +53,12 @@ public class AuthApiController {
     )
     @PreAuthorize(AuthConstant.AUTH_ROLE_COMMON_USER)
     @PostMapping("/refresh")
-    public ResponseEntity<TokenInfoDto> refreshToken() {
+    public ResponseEntity<TokenInfoDto> refreshToken(HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        TokenInfoDto tokenInfo = authService.refresh(authentication);
+        String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
+
+        TokenInfoDto tokenInfo = authService.refresh(authentication, token);
 
         return ResponseEntity.status(HttpStatus.OK).body(tokenInfo);
     }
