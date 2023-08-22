@@ -1,5 +1,6 @@
 package com.sklookiesmu.wisefee.dto.consumer;
 
+import com.sklookiesmu.wisefee.common.constant.ProductStatus;
 import com.sklookiesmu.wisefee.domain.*;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
