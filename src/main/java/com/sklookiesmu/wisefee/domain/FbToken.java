@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
+import org.springframework.data.redis.core.index.Indexed;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -15,7 +16,9 @@ import java.time.LocalDateTime;
 public class FbToken {
     @Id
     private String jwtToken;
-    private String memberPK;
+    @Indexed
+    private Long memberPK;
+    @Indexed
     private String fireBaseToken;
     private LocalDateTime expire_date;
 
@@ -24,7 +27,7 @@ public class FbToken {
     private Long ttl;
 
     @Builder
-    public FbToken(String memberPK, String jwtToken, String fireBaseToken, LocalDateTime expire_date) {
+    public FbToken(String jwtToken, Long memberPK, String fireBaseToken, LocalDateTime expire_date) {
         this.jwtToken = jwtToken;
         this.memberPK = memberPK;
         this.fireBaseToken = fireBaseToken;

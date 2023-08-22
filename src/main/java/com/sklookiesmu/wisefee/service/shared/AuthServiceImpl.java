@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static org.apache.catalina.util.ConcurrentDateFormat.GMT;
@@ -42,10 +43,14 @@ public class AuthServiceImpl implements AuthService {
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         TokenInfoDto tokenInfo = jwtTokenProvider.generateToken(authentication);
 
-        Claims claims = jwtTokenProvider.parseClaims(tokenInfo.getAccessToken());                // exp 값을 가져오기
-        Long exp = (Long) claims.getExpiration().getTime(); // 반환값은 밀리초 단위의 타임스탬프
+        Optional<List<FbToken>> fbTokens = authRepositoryWithRedis.findAllByfireBaseToken(firebaseToken);
+        fbTokens.ifPresent(authRepositoryWithRedis::deleteAll);
+
 
         // TODO : R0822_Insert Redis
+
+        Claims claims = jwtTokenProvider.parseClaims(tokenInfo.getAccessToken());                // exp 값을 가져오기
+        Long exp = (Long) claims.getExpiration().getTime(); // 반환값은 밀리초 단위의 타임스탬프
         Date date = new java.util.Date(exp);
         LocalDateTime expLocalDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         FbToken fbToken = FbToken.builder()
@@ -68,12 +73,16 @@ public class AuthServiceImpl implements AuthService {
 
         // TODO : R0822_Update Redis, 기존 Redis의 jwt 토큰을 검색하여, 새로운 jwt로 대체
         Optional<FbToken> authInfo = authRepositoryWithRedis.findById(jwt);
+        Claims claims = jwtTokenProvider.parseClaims(tokenInfo.getAccessToken());                // exp 값을 가져오기
+        Long exp = (Long) claims.getExpiration().getTime(); // 반환값은 밀리초 단위의 타임스탬프
+        Date date = new java.util.Date(exp);
+        LocalDateTime expLocalDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         if (authInfo.isPresent()) {
             FbToken updateFbToken = FbToken.builder()
                     .jwtToken(tokenInfo.getAccessToken())
                     .memberPK(authInfo.get().getMemberPK())
                     .fireBaseToken(authInfo.get().getFireBaseToken())
-                    .expire_date(authInfo.get().getExpire_date())
+                    .expire_date(expLocalDateTime)
                     .build();
 
             FbToken save = authRepositoryWithRedis.save(updateFbToken);

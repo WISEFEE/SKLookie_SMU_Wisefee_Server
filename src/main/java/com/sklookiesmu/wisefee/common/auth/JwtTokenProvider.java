@@ -101,7 +101,7 @@ public class JwtTokenProvider {
         if (claims.get("auth") == null) {
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
         }
-
+        System.out.println(accessToken);
         // TODO : R0822_Get Redis, Redis에 유저정보가 없으면 Error 반환
         Optional<FbToken> authInfo = authRepositoryWithRedis.findById(accessToken);
         if (authInfo.isEmpty()) {
