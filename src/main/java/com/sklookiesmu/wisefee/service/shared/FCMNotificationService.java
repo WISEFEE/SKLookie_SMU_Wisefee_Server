@@ -9,6 +9,7 @@ import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import com.sklookiesmu.wisefee.dto.shared.firebase.FCMNotificationRequestDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.util.List;
 
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class FCMNotificationService {
@@ -50,12 +52,16 @@ public class FCMNotificationService {
 
             try {
                 firebaseMessaging.send(message);
+                log.info("알림을 성공적으로 전송했습니다");
                 return "알림을 성공적으로 전송했습니다. targetUserToken=" + requestDto.getTo();
             } catch (FirebaseMessagingException e) {
                 e.printStackTrace();
+                log.info("알림 보내기를 실패하였습니다");
                 return "알림 보내기를 실패하였습니다. targetUserToken=" + requestDto.getTo();
             }
         } else {
+            log.info("FCM 토큰 값이 존재하지 않습니다");
+
             return "FCM 토큰 값이 존재하지 않습니다.";
         }
     }

@@ -18,6 +18,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
 
     @Override
+    @Transactional
     public void updateOrderStatus(Long orderId, ProductStatus newStatus) {
         Order order = orderRepository.findById(orderId);
         if (order == null) {

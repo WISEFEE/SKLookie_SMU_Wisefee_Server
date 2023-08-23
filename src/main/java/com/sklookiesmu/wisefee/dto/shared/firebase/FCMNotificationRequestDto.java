@@ -3,10 +3,12 @@ package com.sklookiesmu.wisefee.dto.shared.firebase;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Map;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class FCMNotificationRequestDto {
     private String to;
