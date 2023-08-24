@@ -2,7 +2,7 @@ package com.sklookiesmu.wisefee.common.auth;
 
 import com.sklookiesmu.wisefee.common.auth.custom.CustomUserDetail;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
-import com.sklookiesmu.wisefee.domain.FbToken;
+import com.sklookiesmu.wisefee.dto.shared.firebase.FCMToken;
 import com.sklookiesmu.wisefee.dto.shared.jwt.TokenInfoDto;
 import com.sklookiesmu.wisefee.repository.redis.AuthRepositoryWithRedis;
 import io.jsonwebtoken.*;
@@ -103,9 +103,9 @@ public class JwtTokenProvider {
         }
         System.out.println(accessToken);
         // TODO : R0822_Get Redis, Redis에 유저정보가 없으면 Error 반환
-        Optional<FbToken> authInfo = authRepositoryWithRedis.findById(accessToken);
+        Optional<FCMToken> authInfo = authRepositoryWithRedis.findById(accessToken);
         if (authInfo.isEmpty()) {
-            throw new RuntimeException("서버에 토큰 정보가 존재하지 않습니다. 토큰을 재발급 받으시기 바랍니다.");
+            throw new RuntimeException("서버에 인증 정보가 존재하지 않습니다.");
         }
 
 

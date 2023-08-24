@@ -1,9 +1,7 @@
 package com.sklookiesmu.wisefee.service.shared;
 
-import com.sklookiesmu.wisefee.common.auth.redis.GetFbToken;
 import com.sklookiesmu.wisefee.common.error.MemberNotFoundException;
 import com.sklookiesmu.wisefee.common.error.ValidateMemberException;
-import com.sklookiesmu.wisefee.domain.FbToken;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;

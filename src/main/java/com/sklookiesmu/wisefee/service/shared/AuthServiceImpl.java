@@ -1,7 +1,7 @@
 package com.sklookiesmu.wisefee.service.shared;
 
 import com.sklookiesmu.wisefee.common.auth.JwtTokenProvider;
-import com.sklookiesmu.wisefee.domain.FbToken;
+import com.sklookiesmu.wisefee.dto.shared.firebase.FCMToken;
 import com.sklookiesmu.wisefee.dto.shared.jwt.TokenInfoDto;
 import com.sklookiesmu.wisefee.repository.redis.AuthRepositoryWithRedis;
 import io.jsonwebtoken.Claims;
@@ -12,16 +12,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import static org.apache.catalina.util.ConcurrentDateFormat.GMT;
 
 @Service
 @Transactional(readOnly = true)
@@ -43,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         TokenInfoDto tokenInfo = jwtTokenProvider.generateToken(authentication);
 
-        Optional<List<FbToken>> fbTokens = authRepositoryWithRedis.findAllByfireBaseToken(firebaseToken);
+        Optional<List<FCMToken>> fbTokens = authRepositoryWithRedis.findAllByfireBaseToken(firebaseToken);
         fbTokens.ifPresent(authRepositoryWithRedis::deleteAll);
 
 
@@ -53,14 +49,14 @@ public class AuthServiceImpl implements AuthService {
         Long exp = (Long) claims.getExpiration().getTime(); // 반환값은 밀리초 단위의 타임스탬프
         Date date = new java.util.Date(exp);
         LocalDateTime expLocalDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        FbToken fbToken = FbToken.builder()
+        FCMToken token = FCMToken.builder()
                 .jwtToken(tokenInfo.getAccessToken())
                 .memberPK(claims.get("userId", Long.class))
                 .fireBaseToken(firebaseToken)
-                .expire_date(expLocalDateTime)
+                .ttl(Duration.between(LocalDateTime.now(), expLocalDateTime).getSeconds())
                 .build();
 
-        FbToken save = authRepositoryWithRedis.save(fbToken);
+        FCMToken save = authRepositoryWithRedis.save(token);
 
 
         return tokenInfo;
@@ -72,20 +68,20 @@ public class AuthServiceImpl implements AuthService {
         TokenInfoDto tokenInfo = jwtTokenProvider.generateToken(auth);
 
         // TODO : R0822_Update Redis, 기존 Redis의 jwt 토큰을 검색하여, 새로운 jwt로 대체
-        Optional<FbToken> authInfo = authRepositoryWithRedis.findById(jwt);
+        Optional<FCMToken> authInfo = authRepositoryWithRedis.findById(jwt);
         Claims claims = jwtTokenProvider.parseClaims(tokenInfo.getAccessToken());                // exp 값을 가져오기
         Long exp = (Long) claims.getExpiration().getTime(); // 반환값은 밀리초 단위의 타임스탬프
         Date date = new java.util.Date(exp);
         LocalDateTime expLocalDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         if (authInfo.isPresent()) {
-            FbToken updateFbToken = FbToken.builder()
+            FCMToken updateFCMToken = FCMToken.builder()
                     .jwtToken(tokenInfo.getAccessToken())
                     .memberPK(authInfo.get().getMemberPK())
                     .fireBaseToken(authInfo.get().getFireBaseToken())
-                    .expire_date(expLocalDateTime)
+                    .ttl(Duration.between(LocalDateTime.now(), expLocalDateTime).getSeconds())
                     .build();
 
-            FbToken save = authRepositoryWithRedis.save(updateFbToken);
+            FCMToken save = authRepositoryWithRedis.save(updateFCMToken);
             authRepositoryWithRedis.deleteById(jwt);
         } else {
             throw new RuntimeException("토큰이 존재하지 않습니다. 토큰을 새로 발급받으시기 바랍니다.");
