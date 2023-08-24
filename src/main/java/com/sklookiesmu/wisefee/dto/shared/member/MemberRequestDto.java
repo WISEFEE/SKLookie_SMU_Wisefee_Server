@@ -52,7 +52,7 @@ public class MemberRequestDto {
 
     @ApiModelProperty(value = "회원 인증 타입", required = true, example = "Google")
     @NotBlank(message = "회원 인증 타입은 필수 입력 값입니다.")
-    @Pattern(regexp = "^(Kakao|Google|Naver|Common)", message = "회원 인증 타입은 Kakao, Google, Naver 중 하나여야 합니다.")
+    @Pattern(regexp = "^(Kakao|Google|Naver|Common)", message = "회원 인증 타입은 Kakao, Google, Naver, Common 중 하나여야 합니다.")
     private String authType;
 
     @ApiModelProperty(value = "이메일 인증 여부", required = true, example = "TRUE")

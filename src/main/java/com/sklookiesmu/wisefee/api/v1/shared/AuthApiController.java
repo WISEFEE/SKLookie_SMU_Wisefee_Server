@@ -36,7 +36,8 @@ public class AuthApiController {
                     "consumer API는 고객, seller API는 매장 로그인 과정에서 나온 토큰을 사용해야 인가가 이루어집니다. <br><br>" +
                     "Token의 Payload에는 {sub(이메일), userId(Member PK), nickname(닉네임), " +
                     "auth(ROLE_CONSUMER/ROLE_SELLER), exp(만료시간)}이 포함되어 있고, 프론트엔드 측에서도 JWT 라이브러리 등을 통해 " +
-                    "복호화하여 내용을 볼 수 있으니, 필요 시 사용하시면 됩니다."
+                    "복호화하여 내용을 볼 수 있으니, 필요 시 사용하시면 됩니다.<br><br>" +
+                    "0825 : 푸시 알림을 위한 FCMToken을 선택적 Input으로 받습니다. 기기에서 푸시알림 허용이 되어있다면 해당 값을 넣어서 보내주시면 됩니다."
     )
     @PostMapping("/login")
     public ResponseEntity<TokenInfoDto> login(@RequestBody LoginRequestDto memberLoginRequestDto) {

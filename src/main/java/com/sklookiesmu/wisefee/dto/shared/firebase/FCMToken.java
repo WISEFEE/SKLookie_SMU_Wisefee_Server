@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
 import org.springframework.data.redis.core.index.Indexed;
+import org.springframework.lang.Nullable;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ public class FCMToken {
     @Indexed
     private Long memberPK;
     @Indexed
+    @Nullable
     private String fireBaseToken;
     @TimeToLive
     private Long ttl;
