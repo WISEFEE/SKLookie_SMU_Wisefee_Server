@@ -23,6 +23,7 @@ services:
     restart: always        #컨테이너 재실행
     depends_on: #database service가 실행된 이후에 실행
       - wisefee-database
+      - wisefee-redis
     ports:
       - 8082:8080
     container_name: wisefee-app-dev-deploy
@@ -30,8 +31,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mariadb://wisefee-database:3306/wisefee-database?characterEncoding=UTF-8&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 1111
-      REDIS_HOST: "wisefee-redis"  # Redis 호스트 이름 (컨테이너 이름)
-      REDIS_PORT: 6391  # Redis 기본 포트
+      SPRING_REDIS_HOST: wisefee-redis  # Redis 호스트 이름 (컨테이너 이름)
+      SPRING_REDIS_PORT: 6391  # Redis 기본 포트
     volumes:
       - ./volumes/storage/upload:/app/wisefee/storage/upload
     networks:
@@ -41,6 +42,7 @@ services:
     image: redis:6.2.6-alpine
     ports: # 바인딩할 포트:내부 포트
       - 6391:6379
+    container_name: wisefee-redis-dev-deploy
     command: redis-server /usr/local/etc/redis/redis.conf
     volumes: # 마운트할 볼륨 설정
       - ./volumes/redis/data:/data

@@ -21,13 +21,21 @@ public class FCMTokenServiceTest {
 
     @Test
     public void firstMemberFCM() {
-        List<FCMToken> tokens = fcmTokenService.getFbTokenByMember(10L);
+        List<String> tokens = fcmTokenService.getFbTokenByMember(1L);
 
         //when
         if(tokens != null){
-            System.out.println("jwtToken : " + tokens.get(0).getJwtToken());
-            System.out.println("fireBaseToken : " + tokens.get(0).getFireBaseToken());
-            System.out.println("expire_date : " + tokens.get(0).getTtl());
+            System.out.println("token : " + tokens.get(0));
+        }
+        else{
+            System.out.println("not found : ");
+        }
+
+        tokens = fcmTokenService.getFbTokenByMember(2L);
+
+        //when
+        if(tokens != null){
+            System.out.println("token : " + tokens.get(0));
         }
         else{
             System.out.println("not found : ");

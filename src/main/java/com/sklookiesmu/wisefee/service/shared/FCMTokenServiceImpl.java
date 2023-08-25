@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,16 +23,27 @@ public class FCMTokenServiceImpl implements FCMTokenService {
      * @param [memberPK 회원 PK]
      * @return [FCM 토큰 리스트 || Null]
      */
-    public List<FCMToken> getFbTokenByMember(Long memberPK) {
+    public List<String> getFbTokenByMember(Long memberPK) {
         Optional<List<FCMToken>> fbTokens = authRepositoryWithRedis.findAllBymemberPK(memberPK);
-
         // fbTokens의 요소가 적어도 1개 이상 있는지 검사
         if (fbTokens.isPresent() && !fbTokens.get().isEmpty()) {
             // fbTokens가 존재하고 비어있지 않으면 해당 요소들을 반환
-            return fbTokens.get();
+            List<String> fireBaseTokens = new ArrayList<>();
+
+            for (FCMToken token : fbTokens.get()) {
+                String fireBaseToken = token.getFireBaseToken();
+                if (fireBaseToken != null && !fireBaseToken.isEmpty()) {
+                    fireBaseTokens.add(fireBaseToken);
+                }
+            }
+
+            if (!fireBaseTokens.isEmpty()) {
+                return fireBaseTokens;
+            } else {
+                return null;
+            }
         } else {
             // throw new RuntimeException("현재 서버에서 memberPK : " + memberPK + "의 토큰을 찾을 수 없습니다.");
-
             // 없으면 없는대로 알림 보내지 않고 처리하기
             return null;
         }
