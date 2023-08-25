@@ -18,9 +18,6 @@ public class CartRequestDto {
     @NoArgsConstructor
     @ApiModel(description = "CartProduct 추가 DTO")
     public static class CartProductRequestDto {
-        @ApiModelProperty(value = "장바구니 아이디", example = "1")
-        @NotNull(message = "장바구니 아이디는 필수 입력 값입니다.")
-        private Long cartId;
         @ApiModelProperty(value = "카페 아이디", example = "1")
         @NotNull(message = "카페 아이디는 필수 입력 값입니다.")
         private Long cafeId;
@@ -40,7 +37,7 @@ public class CartRequestDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @ApiModel(description = "CartProduct 옵션 추가 DTO")
-    public static class ProductOptionChoiceAsCartRequestDto{
+    public static class ProductOptionChoiceAsCartRequestDto {
         @ApiModelProperty(value = "선택 상품옵션 아이디", example = "1")
         @NotNull(message = "선택 상품옵션 아이디는 필수 입력 값입니다.")
         private Long optionChoiceId;

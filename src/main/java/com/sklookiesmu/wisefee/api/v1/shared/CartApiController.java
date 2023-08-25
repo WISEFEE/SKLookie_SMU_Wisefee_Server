@@ -51,14 +51,14 @@ public class CartApiController {
     @ApiOperation(
             value = "장바구니 금액조회",
             notes = "장바구니 총 금액 조회 API입니다. <br>" +
-                    "장바구니 아이디 입력 시 현재 장바구니에 담긴 상품들의 총 가격을 조회합니다."
+                    "회원 아이디 입력 시 현재 회원의 장바구니에 담긴 상품들의 총 가격을 조회합니다."
     )
-    @GetMapping("/api/v1/cart/price/{cartId}")
+    @GetMapping("/api/v1/cart/price/{memberId}")
     public ResponseEntity<Long> findCartTotalPrice(
-            @ApiParam(value = "장바구니 ID")
-            @PathVariable("cartId") Long cartId
+            @ApiParam(value = "회원 ID")
+            @PathVariable("memberId") Long memberId
     ) {
-        Long result = cartService.calculateCart(cartId);
+        Long result = cartService.calculateCart(memberId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -66,16 +66,16 @@ public class CartApiController {
     @ApiOperation(
             value = "장바구니 금액조회 (구독권 금액 포함)",
             notes = "구독권 금액비율 반영한 장바구니 총 금액 조회 API입니다. <br>" +
-                    "장바구니 아이디 입력 시 현재 장바구니에 담긴 상품들의 총 가격을 조회합니다."
+                    "회원 아이디 입력 시 현재 회원의 장바구니에 담긴 상품들의 총 가격을 조회합니다."
     )
-    @GetMapping("/api/v1/cart/price/sub-ticket/{cartId}")
+    @GetMapping("/api/v1/cart/price/sub-ticket/{memberId}")
     public ResponseEntity<Long> findCartTotalPriceWithSubTicket(
-            @ApiParam(value = "장바구니 ID")
-            @PathVariable("cartId") Long cartId,
+            @ApiParam(value = "회원 PK")
+            @PathVariable("memberId") Long memberId,
             @ApiParam(value = "적용할 구독권 아이디")
             @RequestParam("subTicketId") Long subTicketId
     ) {
-        Long result = cartService.calculateCartWithSubTicket(cartId, subTicketId);
+        Long result = cartService.calculateCartWithSubTicket(memberId, subTicketId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -105,7 +105,7 @@ public class CartApiController {
                     "productOptChoices \"[]\" 에서 \"를 제거하고 [1,2,3] 과 같이 입력해야 한다."
     )
     @PostMapping("/api/v1/cart/{memberId}")
-    public ResponseEntity<String> addCartProduct(
+    public ResponseEntity<Long> addCartProduct(
             @ApiParam(value = "회원 PK")
             @PathVariable("memberId") Long memberId,
             @RequestBody CartRequestDto.CartProductRequestDto cartProductRequestDto
@@ -113,8 +113,7 @@ public class CartApiController {
         if(!(memberId.equals(SecurityUtil.getCurrentMemberPk())))
             throw new ValidateMemberException("invalid ID : The provided ID does not match your current logged-in ID"+memberId);
 
-        Long[] addC = cartService.addCartProduct(memberId, cartProductRequestDto);
-        String result = "CartId : " + addC[0].toString() + "CartProductId : " + addC[1].toString();
+        Long result = cartService.addCartProduct(memberId, cartProductRequestDto);
 
 
         return ResponseEntity.status(HttpStatus.OK).body(result);

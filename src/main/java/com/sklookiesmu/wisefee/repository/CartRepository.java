@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -31,7 +30,7 @@ public class CartRepository {
      * @param [memberId 장바구니를 조회할 회원]
      * @return [회원의 장바구니 조회]
      */
-    public Cart findCartByMember(Long memberId) {
+    public Cart findCartByMemberId(Long memberId) {
         QCart cart = QCart.cart;
 
         BooleanExpression condition = cart.member.memberId.eq(memberId);

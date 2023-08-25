@@ -64,10 +64,11 @@ public class CartProduct {
     /**w
      * 비즈니스 로직
      */
-    public void addCartProduct(Long productQuantity, Cart cart, Product product){
+    public CartProduct addCartProduct(Long productQuantity, Cart cart, Product product){
         this.productQuantity = productQuantity;
         this.cart = cart;
         this.product = product;
+        return this;
     }
 
     public Long updateQuantity(Long updateQuantity) {

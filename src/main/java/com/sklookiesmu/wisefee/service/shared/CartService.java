@@ -20,7 +20,7 @@ public interface CartService {
      * @param [memberId Cart 주인]
      * @return [추가한 장바구니 PK]
      */
-    Long addCart(Long memberId, boolean flagDelete);
+    Long addCart(Long memberId);
 
     /**
      * [장바구니 상품 추가]
@@ -28,7 +28,7 @@ public interface CartService {
      * @param [CartProductRequestDto 추가할 상품 DTO]
      * @return [추가된 cartProduct PK]
      */
-     Long[] addCartProduct(Long memberId, CartRequestDto.CartProductRequestDto cartRequestDto);
+     Long addCartProduct(Long memberId, CartRequestDto.CartProductRequestDto cartRequestDto);
 
     /**
      * [회원 장바구니 조회]
@@ -53,16 +53,16 @@ public interface CartService {
 
     /**
      * [장바구니 총 금액 계산]
-     * @param [cartId 계산할 장바구니 아이디]
+     * @param [memberId 계산할 회원 아이디]
      * @return [계산금액, 계산 로직 -> productPrice * productQuantity + productOptChoicePrice * productQuantity ]
      */
-    Long calculateCart(Long cartId);
+    Long calculateCart(Long memberId);
 
     /**
      * [장바구니 총 금액 계산]
-     * @param [cartId 계산할 장바구니 아이디]
+     * @param [memberId 계산할 회원 아이디]
      * @param [subTIcketId 적용할 구독권 아이디]
      * @return [계산금액, 계산 로직 -> productPrice * productQuantity + productOptChoicePrice * productQuantity ]
      */
-    Long calculateCartWithSubTicket(Long cartId, Long subTicketId);
+    Long calculateCartWithSubTicket(Long memberId, Long subTicketId);
 }

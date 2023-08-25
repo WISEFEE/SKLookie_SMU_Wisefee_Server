@@ -61,8 +61,9 @@ public class Cart {
     /**
      * 비즈니스 로직
      */
-    public void addCart(Member member){
+    public Cart addCart(Member member){
         this.cartStatus = "False";
         this.member = member;
+        return this;
     }
 }
