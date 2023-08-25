@@ -2,7 +2,9 @@ package com.sklookiesmu.wisefee.common.auth;
 
 import com.sklookiesmu.wisefee.common.auth.custom.CustomUserDetail;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
+import com.sklookiesmu.wisefee.dto.shared.firebase.FCMToken;
 import com.sklookiesmu.wisefee.dto.shared.jwt.TokenInfoDto;
+import com.sklookiesmu.wisefee.repository.redis.AuthRepositoryWithRedis;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -12,8 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -22,6 +22,7 @@ import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -32,8 +33,10 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
 
     private final Key key;
+    private final AuthRepositoryWithRedis authRepositoryWithRedis;
 
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
+    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, AuthRepositoryWithRedis authRepositoryWithRedis) {
+        this.authRepositoryWithRedis = authRepositoryWithRedis;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
@@ -74,6 +77,9 @@ public class JwtTokenProvider {
 //                .signWith(key, SignatureAlgorithm.HS256)
 //                .compact();
 
+
+
+
         return TokenInfoDto.builder()
                 .grantType("Bearer")
                 .accessToken(accessToken)
@@ -95,6 +101,13 @@ public class JwtTokenProvider {
         if (claims.get("auth") == null) {
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
         }
+        System.out.println(accessToken);
+        // TODO : R0822_Get Redis, Redis에 유저정보가 없으면 Error 반환
+        Optional<FCMToken> authInfo = authRepositoryWithRedis.findById(accessToken);
+        if (authInfo.isEmpty()) {
+            throw new RuntimeException("서버에 인증 정보가 존재하지 않습니다.");
+        }
+
 
         // 클레임에서 권한 정보 가져오기
         Collection<? extends GrantedAuthority> authorities =
@@ -141,7 +154,7 @@ public class JwtTokenProvider {
      * @param [String accessToken]
      * @return [Claims]
      */
-    private Claims parseClaims(String accessToken) {
+    public Claims parseClaims(String accessToken) {
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
         } catch (ExpiredJwtException e) {

@@ -29,22 +29,17 @@ public class CartRepository {
     /**
      * 특정 회원의 장바구니를 조회한다.
      * @param [memberId 장바구니를 조회할 회원]
-     * @param  [order 정렬 순서]
      * @return [회원의 장바구니 조회]
      */
-    public Cart findCartByMember(Long memberId, String order) {
+    public Cart findCartByMember(Long memberId) {
         QCart cart = QCart.cart;
 
-        System.out.println("Repository : " + cart.member.toString());
         BooleanExpression condition = cart.member.memberId.eq(memberId);
-        BooleanExpression notNullDeletedAt = cart.deletedAt.isNotNull();
+        BooleanExpression notNullDeletedAt = cart.deletedAt.isNull();
         BooleanExpression combineCondition = condition.and(notNullDeletedAt);
 
-        JPAQuery<Cart> query = jpaQueryFactory.select(cart).where(combineCondition);
+        JPAQuery<Cart> query = jpaQueryFactory.selectFrom(cart).where(combineCondition);
 
-        if(order.equals("desc")) {
-            query.orderBy(cart.cartId.desc()).fetch();
-        }
 
         return query.fetchOne();
     }

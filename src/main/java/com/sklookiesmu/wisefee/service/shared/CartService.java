@@ -9,6 +9,13 @@ import java.util.List;
 public interface CartService {
 
     /**
+     *  [회원 아이디를 통해 장바구니 아이디를 조회한다.]
+     * @param [memberId 회원 PK]
+     * @return [장바구니 PK]
+     */
+    Long findCartId(Long memberId);
+
+    /**
      * [장바구니 추가 서비스]
      * @param [memberId Cart 주인]
      * @return [추가한 장바구니 PK]
@@ -50,4 +57,12 @@ public interface CartService {
      * @return [계산금액, 계산 로직 -> productPrice * productQuantity + productOptChoicePrice * productQuantity ]
      */
     Long calculateCart(Long cartId);
+
+    /**
+     * [장바구니 총 금액 계산]
+     * @param [cartId 계산할 장바구니 아이디]
+     * @param [subTIcketId 적용할 구독권 아이디]
+     * @return [계산금액, 계산 로직 -> productPrice * productQuantity + productOptChoicePrice * productQuantity ]
+     */
+    Long calculateCartWithSubTicket(Long cartId, Long subTicketId);
 }

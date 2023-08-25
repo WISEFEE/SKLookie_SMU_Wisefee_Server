@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;
 
@@ -20,5 +21,9 @@ public class LoginRequestDto {
     @ApiModelProperty(value = "회원 비밀번호", required = true)
     @NotNull
     private String password;
+
+
+    @ApiModelProperty(value = "파이어베이스 FCM Token(선택)", required = false)
+    private String fcmToken;
 
 }

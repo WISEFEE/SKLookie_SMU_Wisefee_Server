@@ -8,6 +8,7 @@ import com.sklookiesmu.wisefee.dto.shared.member.CartRequestDto;
 import com.sklookiesmu.wisefee.dto.shared.member.CartResponseDto;
 import com.sklookiesmu.wisefee.repository.CartRepository;
 import com.sklookiesmu.wisefee.repository.MemberRepository;
+import com.sklookiesmu.wisefee.repository.SubTicketTypeRepository;
 import com.sklookiesmu.wisefee.repository.cafe.CafeRepository;
 import com.sklookiesmu.wisefee.repository.product.ProductOptChoiceRepository;
 import com.sklookiesmu.wisefee.repository.product.ProductRepository;
@@ -28,6 +29,13 @@ public class CartServiceImpl implements CartService{
     private final ProductRepository productRepository;
     private final ProductOptChoiceRepository productOptChoiceRepository;
     private final CafeRepository cafeRepository;
+    private final SubTicketTypeRepository subTicketTypeRepository;
+
+    @Override
+    public Long findCartId(Long memberId) {
+        return cartRepository.findCartByMember(memberId).getCartId();
+    }
+
     @Override
     public Long addCart(Long memberId, boolean deleteFlag) {
         Member member = memberRepository.find(memberId);
@@ -221,6 +229,42 @@ public class CartServiceImpl implements CartService{
             cartProduct.getCartProductChoiceOptions()) {
                 result += productOptChoice.getProductOptChoice().getProductOptionChoicePrice() * cartProduct.getProductQuantity();
             }
+        }
+        return result;
+    }
+
+    @Override
+    public Long calculateCartWithSubTicket(Long cartId, Long subTicketId) {
+        // get discount rate value
+        SubTicketType subTicketType = subTicketTypeRepository.find(subTicketId);
+        double subPeople = subTicketType.getSubscribe().getSubPeople();
+        double subTicketAdditionalDiscountRate = subTicketType.getSubTicketAdditionalDiscountRate() * subPeople; // 인원당 추가 할인율
+        double subTicketDeposit = subTicketType.getSubTicketDeposit() * subPeople; //  텀블러 보증금
+        double subTicketBaseDiscountRate = subTicketType.getSubTicketBaseDiscountRate(); // 기본 할인율
+        double subTicketMaxDiscountRate = subTicketType.getSubTicketMaxDiscountRate(); // 최대 할인율
+        double totalDiscountRate = (subTicketBaseDiscountRate / 100) + (subTicketAdditionalDiscountRate / 100);
+        double currentDiscountRate = Math.min(totalDiscountRate, subTicketMaxDiscountRate/100);
+
+        List<CartProduct> cartProducts = cartRepository.findCartProductByCartId(cartId);
+
+        if(cartProducts.size() == 0) {
+            throw new RuntimeException("Invalid Value : This cart is null");
+        }
+
+        long result = 0L;
+        for (CartProduct cartProduct : cartProducts) {
+            int productPrice = 0;
+            Product product = productRepository.findById(cartProduct.getProduct().getProductId());
+            productPrice += product.getProductPrice() * cartProduct.getProductQuantity();
+            for (CartProductChoiceOption productOptChoice:
+                    cartProduct.getCartProductChoiceOptions()) {
+                productPrice += productOptChoice.getProductOptChoice().getProductOptionChoicePrice() * cartProduct.getProductQuantity();
+            }
+
+            System.out.println("Service: " + productPrice);
+            // calculate discount rate
+            result += (long) productPrice - (productPrice * currentDiscountRate);
+
         }
         return result;
     }
