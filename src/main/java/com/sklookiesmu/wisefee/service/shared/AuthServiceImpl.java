@@ -39,8 +39,12 @@ public class AuthServiceImpl implements AuthService {
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         TokenInfoDto tokenInfo = jwtTokenProvider.generateToken(authentication);
 
-        Optional<List<FCMToken>> fbTokens = authRepositoryWithRedis.findAllByfireBaseToken(firebaseToken);
-        fbTokens.ifPresent(authRepositoryWithRedis::deleteAll);
+
+        if(firebaseToken != null && !firebaseToken.isEmpty()){
+            Optional<List<FCMToken>> fbTokens = authRepositoryWithRedis.findAllByfireBaseToken(firebaseToken);
+            fbTokens.ifPresent(authRepositoryWithRedis::deleteAll);
+        }
+
 
 
         // TODO : R0822_Insert Redis
