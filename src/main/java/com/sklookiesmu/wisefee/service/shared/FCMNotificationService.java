@@ -39,7 +39,7 @@ public class FCMNotificationService {
         return googleCredentials.getAccessToken().getTokenValue();
     }
 
-    private String sendNotificationByToken(FCMNotificationRequestDto requestDto) throws JsonProcessingException {
+    private void sendNotificationByToken(FCMNotificationRequestDto requestDto) throws JsonProcessingException {
         if (requestDto.getTo() != null) {
             Message message = Message.builder()
                     .setToken(requestDto.getTo())
@@ -52,27 +52,28 @@ public class FCMNotificationService {
 
             try {
                 firebaseMessaging.send(message);
-                log.info("알림을 성공적으로 전송했습니다");
-                return "알림을 성공적으로 전송했습니다. targetUserToken=" + requestDto.getTo();
+                log.info("알림을 성공적으로 전송했습니다 targetUserToken = "+ requestDto.getTo());
+                //return "알림을 성공적으로 전송했습니다. targetUserToken=" + requestDto.getTo();
             } catch (FirebaseMessagingException e) {
                 e.printStackTrace();
-                log.info("알림 보내기를 실패하였습니다");
-                return "알림 보내기를 실패하였습니다. targetUserToken=" + requestDto.getTo();
+                log.info("알림 보내기를 실패하였습니다. targetUserToken = "+ requestDto.getTo());
+                //return "알림 보내기를 실패하였습니다. targetUserToken=" + requestDto.getTo();
             }
         } else {
             log.info("FCM 토큰 값이 존재하지 않습니다");
 
-            return "FCM 토큰 값이 존재하지 않습니다.";
+            //return "FCM 토큰 값이 존재하지 않습니다.";
         }
     }
 
     public void sendMessageTo(FCMNotificationRequestDto requestDto) throws IOException {
-        String message = sendNotificationByToken(requestDto);
+        //String message = sendNotificationByToken(requestDto);
+        sendNotificationByToken(requestDto);
         OkHttpClient client = new OkHttpClient();
-        RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
+        //RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
         Request request = new Request.Builder()
                 .url(API_URL)
-                .post(requestBody)
+                //.post(requestBody)
                 .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
                 .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
                 .build();

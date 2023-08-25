@@ -36,9 +36,11 @@ public class ProductStatusController {
     )
     @PostMapping("/{orderId}/accept")
     @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
-    public void acceptOrder(@PathVariable Long orderId, FCMNotificationRequestDto requestDto) throws IOException {
+    public void acceptOrder(@PathVariable Long orderId) throws IOException {
 
         orderStatusComponent.acceptOrder(orderId);
+
+        FCMNotificationRequestDto requestDto = new FCMNotificationRequestDto();
 
         Map<String, String> data = new HashMap<>();
         data.put("title", "주문 승인 완료");
@@ -57,8 +59,10 @@ public class ProductStatusController {
     )
     @PostMapping("/{orderId}/reject")
     @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
-    public void rejectOrder(@PathVariable Long orderId, FCMNotificationRequestDto requestDto ) {
+    public void rejectOrder(@PathVariable Long orderId) throws IOException {
         orderStatusComponent.rejectOrder(orderId);
+
+        FCMNotificationRequestDto requestDto = new FCMNotificationRequestDto();
 
         Map<String, String> data = new HashMap<>();
 
@@ -67,6 +71,8 @@ public class ProductStatusController {
         requestDto.setData(data);
         requestDto.setTo(deviceToken);
         requestDto.setPriority("high");
+
+        fcmNotificationService.sendMessageTo(requestDto);
     }
 
     @ApiOperation(
@@ -85,8 +91,10 @@ public class ProductStatusController {
     )
     @PostMapping("/{orderId}/complete")
     @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
-    public void completeOrder(@PathVariable Long orderId, FCMNotificationRequestDto requestDto) {
+    public void completeOrder(@PathVariable Long orderId) throws IOException {
         orderStatusComponent.completeOrder(orderId);
+
+        FCMNotificationRequestDto requestDto = new FCMNotificationRequestDto();
 
         Map<String, String> data = new HashMap<>();
 
@@ -95,5 +103,7 @@ public class ProductStatusController {
         requestDto.setData(data);
         requestDto.setTo(deviceToken);
         requestDto.setPriority("high");
+
+        fcmNotificationService.sendMessageTo(requestDto);
     }
 }

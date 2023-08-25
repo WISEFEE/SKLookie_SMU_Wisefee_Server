@@ -23,7 +23,7 @@ public class ProductStatusComponent {
     }
 
     public void completeOrder(Long orderId) {
-        orderService.updateOrderStatus(orderId, ProductStatus.RECEIVE);
+        orderService.updateOrderStatus(orderId, ProductStatus.ALLSET);
     }
 
 }
