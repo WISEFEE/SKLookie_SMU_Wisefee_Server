@@ -72,7 +72,7 @@ public class Order {
         Order order = new Order();
         order.setSubscribe(subscribe);
         order.setPayment(order.getSubscribe().getPayment());
-        order.setProductStatus(ProductStatus.REQUIRE);
+        order.setProductStatus(ProductStatus.REQUESTED);
         order.setCreatedAt(LocalDateTime.now());
         for (OrderProduct op : orderProducts) {
             order.addOrderProduct(op);
