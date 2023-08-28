@@ -30,7 +30,7 @@ public class CafeSubController {
     private final OrderService orderService;
 
     @ApiOperation(
-            value = "SELL-A-05 :: 매장 구독 멤버 목록 조회",
+            value = "SELL-E-05 :: 매장 구독 멤버 목록 조회",
             notes = "매장에 구독한 멤버 목록을 조회하는 API입니다."
     )
     @GetMapping("/api/v1/seller/cafe/{cafeId}/subscribers")
@@ -44,7 +44,7 @@ public class CafeSubController {
     }
 
     @ApiOperation(
-            value = "SELL-A-06 :: 매장 구독 멤버 세부 정보 조회",
+            value = "SELL-E-06 :: 매장 구독 멤버 세부 정보 조회",
             notes = "매장에 구독한 멤버의 세부 정보를 조회하는 API입니다."
     )
     @GetMapping("/api/v1/seller/cafe/{cafeId}/subscribers/{memberId}")
