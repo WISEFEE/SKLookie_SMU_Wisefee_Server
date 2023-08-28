@@ -61,6 +61,7 @@ public class ProductDto {
     }
 
     @Getter
+    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ProductOptionResponseDto{
@@ -68,7 +69,7 @@ public class ProductDto {
         @ApiModelProperty(value = "제품옵션 PK", required = true)
         private Long productOptionId;
 
-        @ApiModelProperty(value = "제품옵션 명", required = true)
+        @ApiModelProperty(value = "제품옵션 명")
         private String productOptionName;
 
         @ApiModelProperty(value = "제품옵션 선택", required = true)
@@ -100,6 +101,7 @@ public class ProductDto {
     }
 
     @Getter
+    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ProductOptChoiceResponseDto{

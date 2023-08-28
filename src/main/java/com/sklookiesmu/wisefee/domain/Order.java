@@ -65,23 +65,30 @@ public class Order {
     @ManyToMany(mappedBy = "orders")
     private List<OrderOption> orderOptions = new ArrayList<>();
 
+    @OneToMany(mappedBy = "order")
+    private List<OrdOrderOption> ordOrderOptions = new ArrayList<>();
+
     /**
      * 비즈니스 로직
      */
-    public static Order createOrder(Subscribe subscribe, List<OrderProduct> orderProducts){
-        Order order = new Order();
-        order.setSubscribe(subscribe);
-        order.setPayment(order.getSubscribe().getPayment());
-        order.setProductStatus(ProductStatus.REQUESTED);
-        order.setCreatedAt(LocalDateTime.now());
+    public static Order createOrder(Order order, List<OrderProduct> orderProducts, List<OrdOrderOption> ordOrderOptions){
         for (OrderProduct op : orderProducts) {
             order.addOrderProduct(op);
         }
+        for (OrdOrderOption oop : ordOrderOptions) {
+            order.addOrdOrderOptions(oop);
+        }
         return order;
+    }
+
+    private void addOrdOrderOptions(OrdOrderOption ordOrderOption) {
+        ordOrderOptions.add(ordOrderOption);
+        ordOrderOption.setOrder(this);
     }
 
     private void addOrderProduct(OrderProduct orderProduct) {
         orderProducts.add(orderProduct);
         orderProduct.setOrder(this);
     }
+
 }

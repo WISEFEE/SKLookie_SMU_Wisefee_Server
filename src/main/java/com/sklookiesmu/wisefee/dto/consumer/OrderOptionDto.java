@@ -6,6 +6,8 @@ import lombok.*;
 
 import javax.persistence.Column;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class OrderOptionDto {
 
@@ -23,6 +25,7 @@ public class OrderOptionDto {
 
     @Getter
     @Setter
+    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     public static class OrderOptionResponseDto{
@@ -45,6 +48,21 @@ public class OrderOptionDto {
                     orderOption.getOrderOptionName(),
                     orderOption.getOrderOptionPrice(),
                     orderOption.getCreatedAt());
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class OrderOptionListResponseDto{
+        private List<OrderOptionResponseDto> orderOptions;
+
+        public static OrderOptionListResponseDto of(List<OrderOption> orderOptionList) {
+            List<OrderOptionResponseDto> orderOptionResponses = orderOptionList
+                    .stream()
+                    .map(OrderOptionResponseDto::from)
+                    .collect(Collectors.toList());
+
+            return new OrderOptionListResponseDto(orderOptionResponses);
         }
     }
 }

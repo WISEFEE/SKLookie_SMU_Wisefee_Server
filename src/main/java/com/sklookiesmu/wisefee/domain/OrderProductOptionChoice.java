@@ -3,7 +3,6 @@ package com.sklookiesmu.wisefee.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -12,30 +11,33 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "ORDER_PRODUCT_OPTION")
-public class OrderProductOption {
+@Table(name = "ORDER_PRODUCT_OPTION_CHOICE")
+public class OrderProductOptionChoice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ORDER_PRODUCT_OPTION_ID")
-    private Long orderProductOptionId;
+    @Column(name = "ORDER_PRODUCT_OPTION_CHOICE_ID")
+    private Long orderProductOptionChoiceId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ORDER_PRODUCT")
+    @JoinColumn(name = "ORDER_PRODUCT_ID")
     private OrderProduct orderProduct;
 
-    @OneToMany(mappedBy = "orderProductOption")
-    private List<ProductOptChoice> productOptChoice;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ORDER_PRODUCT_OPTION_ID")
+    private OrderProductOption orderProductOption;
 
-    public static OrderProductOption createOrderProductOptionChoice(List<ProductOptChoice> productOptChoice) {
-        OrderProductOption orderProductOption = new OrderProductOption();
-        for (ProductOptChoice poc : productOptChoice) {
-            orderProductOption.addOrderProductOptionChoice(poc);
-        }
-        return orderProductOption;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PRODUCT_OPT_CHOICE")
+    private ProductOptChoice productOptChoice;
 
-    private void addOrderProductOptionChoice(ProductOptChoice orderProductOptionChoice) {
-        orderProductOptionChoice.setOrderProductOptionId(this);
+    public static OrderProductOptionChoice createOrderProdOptChoice(OrderProduct orderProduct, OrderProductOption orderProductOption,
+                                                                    ProductOptChoice productOptChoice){
+        OrderProductOptionChoice orderProductOptionChoice = new OrderProductOptionChoice();
+        orderProductOptionChoice.setOrderProduct(orderProduct);
+        orderProductOptionChoice.setOrderProductOption(orderProductOption);
+        orderProductOptionChoice.setProductOptChoice(productOptChoice);
+
+        return orderProductOptionChoice;
     }
 }
