@@ -39,4 +39,13 @@ public interface AuthService {
      */
     public TokenInfoDto googleLogin(String accessToken, String firebaseToken) throws IOException;
 
+
+    /**
+     * [구글 Access Token 검증]
+     * Google Access Token 검증, 검증 성공 시 해당 토큰의 Email을 얻어옴
+     * @param [accessToken Google 계정 OAuth Access Token]
+     * @return [String 이메일 주소]
+     */
+    public String verifyGoogleToken(String accessToken) throws IOException;
+
 }

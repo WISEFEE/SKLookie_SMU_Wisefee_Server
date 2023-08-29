@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -168,11 +169,11 @@ public class MemberApiController {
                     "  \"회원 생년월일\": \"birth\",                 // 생년월일은 yyyyMMdd 형식으로 입력해야 합니다.\n" +
                     "  \"회원 비밀번호\": \"password\",              // 비밀번호는 영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8자 ~ 20자의 비밀번호여야 합니다.\n" +
                     "  \"회원 계정 타입\": \"accountType\",          // 계정 타입은 CONSUMER, SELLER(고객계정/매장계정) 중 하나여야 합니다.\n" +
-                    "  \"회원 인증 타입\": \"authType\",             // 회원 인증 타입은 일반인증(Common), 소셜인증(Kakao, Google, Naver) 중 하나여야 합니다.\n" +
                     "  \"이메일 인증 여부\": \"isAuthEmail\",         // 이메일 인증 여부는 TURE, FALSE 중 하나여야 합니다.\n" +
                     "  \"알림 수신 여부\": \"isAllowPushMsg\"        // 알림 수신 여부는 TRUE, FALSE 중 하나여야 합니다.\n" +
                     "}\n" +
-                    "```"
+                    "```\n\n<hr>" +
+                    "2023-08-30 : API 스펙 변경 : 더 이상 authType(회원 인증 타입)을 요청으로 받지 않습니다."
     )
     @PostMapping("/api/v1/member")
     public ResponseEntity<Long> addMember(@Valid @RequestBody MemberRequestDto member){
@@ -272,4 +273,35 @@ public class MemberApiController {
         Long result =  memberService.updatePasswordAsMember(id, entity);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
+
+
+
+    @ApiOperation(
+            value = "COMM-C-U6 :: 소셜 회원 가입 : Google",
+            notes = "해당 API는 Google OAuth를 통해 회원가입을 진행합니다.\n" +
+                    "Google API를 이용하여 OAuth 인증을 완료하면, 응답으로 AccessToken을 포함한 생년월일 등을 얻을 수도 있을 것입니다. \n" +
+                    "자동으로 얻을 수 있는 값은 채워주시고, 없는 값은 유저가 수동으로 입력하게 하여 AccessToken과 함께 회원 가입 요청을 날려주시면 됩니다. \n\n" +
+                    "입력 데이터:\n" +
+                    "```json\n" +
+                    "{\n" +
+                    "  \"구글 OAuth Access Token\": \"googleAccessToken\",               // 구글에서 소셜 로그인의 결과로 반환받은 accessToken\n" +
+                    "  \"회원 닉네임\": \"nickname\",               // 닉네임은 필수 입력 값입니다.\n" +
+                    "  \"회원 연락처\": \"phone\",                  // 전화번호는 9자리 이상 11자리 이하의 숫자만 가능합니다.\n" +
+                    "  \"회원 사무용 연락처\": \"phoneOffice\",       // 전화번호는 9자리 이상 11자리 이하의 숫자만 가능합니다.\n" +
+                    "  \"회원 생년월일\": \"birth\",                 // 생년월일은 yyyyMMdd 형식으로 입력해야 합니다.\n" +
+                    "  \"회원 계정 타입\": \"accountType\",          // 계정 타입은 CONSUMER, SELLER(고객계정/매장계정) 중 하나여야 합니다.\n" +
+                    "  \"알림 수신 여부\": \"isAllowPushMsg\"        // 알림 수신 여부는 TRUE, FALSE 중 하나여야 합니다.\n" +
+                    "}\n" +
+                    "```"
+    )
+    @PostMapping("/api/v1/member/google")
+    public ResponseEntity<Long> addMemberOAuthGoogle(@Valid @RequestBody OAuthGoogleMemberRequestDto member) throws IOException {
+        Member entity = modelMapper.map(member, Member.class);
+        String accessToken = member.getGoogleAccessToken();
+        entity.setAuthType(AuthConstant.AUTH_TYPE_COMMON);
+        Long id = memberService.joinGoogle(entity, accessToken);
+        return ResponseEntity.status(HttpStatus.OK).body(id);
+    }
+
+
 }
