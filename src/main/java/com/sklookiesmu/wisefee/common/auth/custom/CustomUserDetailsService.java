@@ -51,7 +51,8 @@ public class CustomUserDetailsService implements UserDetailsService {
                 member.getPassword(),
                 authorities,
                 member.getNickname(),
-                member.getMemberId());
+                member.getMemberId(),
+                member.getAuthType());
 
     }
 }

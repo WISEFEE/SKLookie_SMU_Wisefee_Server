@@ -31,7 +31,7 @@ public class SecurityUtil {
             throw new RuntimeException("No authentication information.");
         }
         CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
-        Long userPk = userDetails.getUserId();
+        Long userPk = userDetails.getMemberId();
         return userPk;
     }
 }
