@@ -31,13 +31,13 @@ public class Subscribe {
     @Column(name = "SUB_PEOPLE", nullable = false)
     private Integer subPeople;
 
-    @Column(name = "SUB_CNT")
+    @Column(name="SUB_CNT")
     private int subCnt; // 사용 누적 횟수
 
-    @Column(name = "SUBCNT_DAY")
+    @Column(name="SUBCNT_DAY")
     private int subCntDay; // 1일 1회 제한
 
-    @Column(name = "SUB_STATUS")
+    @Column(name="SUB_STATUS")
     private String subStatus;
 
     @Column(name = "CREATED_AT")

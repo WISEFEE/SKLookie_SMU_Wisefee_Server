@@ -1,9 +1,7 @@
 package com.sklookiesmu.wisefee.domain;
 
 import com.sklookiesmu.wisefee.common.constant.ProductStatus;
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,6 +10,9 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "ORDERS")
 public class Order {
     @Id
@@ -33,25 +34,17 @@ public class Order {
     @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
 
-    @Column(name = "UPDATED_AT")
-    private LocalDateTime updatedAt;
-
     @Column(name = "DELETED_AT")
     private LocalDateTime deletedAt;
 
     /**
-     * 생성일, 수정일 값 세팅
+     * 생성일 값 세팅
      */
     @PrePersist
     public void prePersist(){
         this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
     }
 
-    @PreUpdate
-    public void preUpdate(){
-        this.updatedAt = LocalDateTime.now();
-    }
 
     /**
      * 연관관계 매핑
@@ -59,9 +52,11 @@ public class Order {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PAYMENT_ID", nullable = false)
     private Payment payment;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SUB_ID")
     private Subscribe subscribe;
+
     @OneToMany(mappedBy = "order")
     private List<OrderProduct> orderProducts = new ArrayList<>();
 //    @OneToMany(mappedBy = "order_payment")
@@ -69,4 +64,24 @@ public class Order {
 
     @ManyToMany(mappedBy = "orders")
     private List<OrderOption> orderOptions = new ArrayList<>();
+
+    /**
+     * 비즈니스 로직
+     */
+    public static Order createOrder(Subscribe subscribe, List<OrderProduct> orderProducts){
+        Order order = new Order();
+        order.setSubscribe(subscribe);
+        order.setPayment(order.getSubscribe().getPayment());
+        order.setProductStatus(ProductStatus.REQUESTED);
+        order.setCreatedAt(LocalDateTime.now());
+        for (OrderProduct op : orderProducts) {
+            order.addOrderProduct(op);
+        }
+        return order;
+    }
+
+    private void addOrderProduct(OrderProduct orderProduct) {
+        orderProducts.add(orderProduct);
+        orderProduct.setOrder(this);
+    }
 }

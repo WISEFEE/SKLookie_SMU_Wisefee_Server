@@ -131,7 +131,7 @@ public class Member {
         this.phone = member.phone;
         this.phoneOffice = member.phoneOffice;
         this.birth = member.birth;
-        this.accountType = member.accountType;
+//        this.accountType = member.accountType;
         this.isAuthEmail = member.isAuthEmail;
         this.isAllowPushMsg = member.isAllowPushMsg;
         return 1L;

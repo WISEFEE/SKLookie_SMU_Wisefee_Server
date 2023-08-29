@@ -157,6 +157,7 @@ public class MemberApiController {
     @ApiOperation(
             value = "COMM-C-U2 :: 회원 신규 추가(가입)",
             notes = "본 API는 새로운 회원을 데이터베이스에 추가하는 기능입니다.\n\n" +
+                    "이메일 인증 여부나, 알림 수신 여부는 일단 미개발 상태이시므로, TRUE/FALSE로 넘겨주시면 됩니다." +
                     "입력 데이터:\n" +
                     "```json\n" +
                     "{\n" +
@@ -166,8 +167,8 @@ public class MemberApiController {
                     "  \"회원 사무용 연락처\": \"phoneOffice\",       // 전화번호는 9자리 이상 11자리 이하의 숫자만 가능합니다.\n" +
                     "  \"회원 생년월일\": \"birth\",                 // 생년월일은 yyyyMMdd 형식으로 입력해야 합니다.\n" +
                     "  \"회원 비밀번호\": \"password\",              // 비밀번호는 영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8자 ~ 20자의 비밀번호여야 합니다.\n" +
-                    "  \"회원 계정 타입\": \"accountType\",          // 계정 타입은 CONSUMER, SELLER 중 하나여야 합니다.\n" +
-                    "  \"회원 인증 타입\": \"authType\",             // 회원 인증 타입은 Kakao, Google, Naver 중 하나여야 합니다.\n" +
+                    "  \"회원 계정 타입\": \"accountType\",          // 계정 타입은 CONSUMER, SELLER(고객계정/매장계정) 중 하나여야 합니다.\n" +
+                    "  \"회원 인증 타입\": \"authType\",             // 회원 인증 타입은 일반인증(Common), 소셜인증(Kakao, Google, Naver) 중 하나여야 합니다.\n" +
                     "  \"이메일 인증 여부\": \"isAuthEmail\",         // 이메일 인증 여부는 TURE, FALSE 중 하나여야 합니다.\n" +
                     "  \"알림 수신 여부\": \"isAllowPushMsg\"        // 알림 수신 여부는 TRUE, FALSE 중 하나여야 합니다.\n" +
                     "}\n" +

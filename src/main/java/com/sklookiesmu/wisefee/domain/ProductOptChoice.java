@@ -1,14 +1,17 @@
 package com.sklookiesmu.wisefee.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "PRODUCT_OPT_CHOICE")
 public class ProductOptChoice {
     @Id
@@ -51,4 +54,21 @@ public class ProductOptChoice {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PRD_OPTION_ID", nullable = false)
     private ProductOption productOption;
+
+    @OneToMany(mappedBy = "productOptChoice")
+    private List<CartProductChoiceOption> cartProductChoiceOptions;
+
+    @Override
+    public String toString() {
+        return "ProductOptChoice{" +
+                "productOptionChoiceId=" + productOptionChoiceId +
+                ", productOptionChoiceName='" + productOptionChoiceName + '\'' +
+                ", productOptionChoicePrice=" + productOptionChoicePrice +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", deletedAt=" + deletedAt +
+                ", productOption=" + productOption +
+                ", cartProductChoiceOptions=" + cartProductChoiceOptions +
+                '}';
+    }
 }

@@ -4,6 +4,7 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+wisefee_service_key.json
 
 ### STS ###
 .apt_generated
@@ -40,6 +41,7 @@ out/
 ### Project ###
 local-mariadb
 volumes
+storage
 
 ### Mac OS ###
 src/.DS_Store

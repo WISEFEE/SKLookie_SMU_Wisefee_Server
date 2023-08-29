@@ -3,17 +3,16 @@ package com.sklookiesmu.wisefee.dto.consumer;
 import com.sklookiesmu.wisefee.domain.Product;
 import com.sklookiesmu.wisefee.domain.ProductOptChoice;
 import com.sklookiesmu.wisefee.domain.ProductOption;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
-import javax.persistence.Column;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ProductDto {
 
-    // TODO: 카페 음료 리스트 -> 음료 옵션 -> 음료 옵션 선택
+    // 카페 음료 리스트 -> 음료 옵션 -> 음료 옵션 선택
     @Getter
     @Builder
     @AllArgsConstructor
@@ -108,10 +107,10 @@ public class ProductDto {
         @ApiModelProperty(value = "제품옵션 PK", required = true)
         private Long productOptionChoiceId;
 
-        @ApiModelProperty(value = "제품옵션선택 명", required = true)
+        @ApiModelProperty(value = "제품옵션 선택 명", required = true)
         private String productOptionChoiceName;
 
-        @ApiModelProperty(value = "제품옵션선택 가격", required = true)
+        @ApiModelProperty(value = "제품옵션 선택 가격", required = true)
         private int productOptionChoicePrice;
 
         public static ProductOptChoiceResponseDto from (ProductOptChoice productOptChoice){
@@ -122,6 +121,37 @@ public class ProductDto {
         }
     }
 
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ProductOptionRequestDto{
+
+        @ApiModelProperty(value = "제품 옵션 PK", required = true)
+        private Long productOptionId;
+
+        @ApiModelProperty(value = "제품 옵션 선택 PK", required = true)
+        private List<ProductOptionChoiceRequestDto> productOptionChoice;
+
+        public static ProductOptionRequestDto prodOptToDto(ProductOption productOption) {
+            return ProductOptionRequestDto.builder()
+                    .productOptionId(productOption.getProductOptionId())
+                    .productOptionChoice(productOption.getProductOptChoices().stream()
+                            .map((productOptChoice -> ProductOptionChoiceRequestDto.builder()
+                                    .optionChoiceId(productOptChoice.getProductOptionChoiceId())
+                                    .build())).collect(Collectors.toList())).build();
+        }
+    }
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ProductOptionChoiceRequestDto{
+
+        @ApiModelProperty(value = "선택 상품옵션 아이디", example = "1")
+        private Long optionChoiceId;
+    }
 
     @Getter
     @AllArgsConstructor

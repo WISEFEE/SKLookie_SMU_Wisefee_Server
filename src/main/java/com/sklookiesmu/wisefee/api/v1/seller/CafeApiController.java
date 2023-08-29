@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Api(tags = "SELL-A :: 매장 정보 API")
 @RestController

@@ -1,7 +1,6 @@
 package com.sklookiesmu.wisefee.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,6 +10,9 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "PRODUCT_OPTION")
 public class ProductOption {
     @Id
@@ -50,6 +52,8 @@ public class ProductOption {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PRODUCT_ID", nullable = false)
     private Product product;
+
     @OneToMany(mappedBy = "productOption", cascade = CascadeType.ALL)
     private List<ProductOptChoice> productOptChoices = new ArrayList<>();
+
 }

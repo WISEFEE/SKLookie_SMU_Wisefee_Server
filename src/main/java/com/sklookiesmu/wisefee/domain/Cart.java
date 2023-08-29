@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -15,9 +16,6 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CART_ID")
     private Long cartId;
-
-    @Column(name = "CAFE_QUANTITY")
-    private Integer cafeQuantity;
 
     @Column(name = "CART_STATUS")
     private String cartStatus;
@@ -49,9 +47,22 @@ public class Cart {
      * 연관관계 매핑
      */
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member")
+    @JoinColumn(name = "MEMBER_ID")
     private Member member;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CAFE_ID")
-    private Cafe cafe;
+
+    @OneToMany(mappedBy = "cart")
+    private List<CartProduct> cartProducts;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "CAFE_ID")
+//    private Cafe cafe;
+
+
+    /**
+     * 비즈니스 로직
+     */
+    public void addCart(Member member){
+        this.cartStatus = "False";
+        this.member = member;
+    }
 }

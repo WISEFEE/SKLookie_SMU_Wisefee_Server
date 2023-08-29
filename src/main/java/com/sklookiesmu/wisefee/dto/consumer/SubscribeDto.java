@@ -4,6 +4,7 @@ import com.sklookiesmu.wisefee.domain.*;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 public class SubscribeDto {
 
     /**
-     * TODO : 구독권 만료일, 구독권 사용횟수, 구독권 정기 결제일, 구독 가입 여부
+     * TODO : 구독권 만료일(OK), 구독권 사용횟수(OK), 구독권 정기 결제일, 구독 가입 여부(OK)
      */
     @Getter @Setter
     @AllArgsConstructor
@@ -29,6 +30,12 @@ public class SubscribeDto {
         @ApiModelProperty(value = "구독 요청사항", required = true)
         private String subComment;
 
+        @ApiModelProperty(value = "구독 가입여부", required = true)
+        private String subStatus;
+
+        @ApiModelProperty(value = "구독권 사용횟수", required = true)
+        private int subCnt;
+
         @ApiModelProperty(value = "구독 인원", required = true)
         private Integer subPeople;
 
@@ -37,6 +44,9 @@ public class SubscribeDto {
 
         @ApiModelProperty(value = "구독 수정일", required = true)
         private LocalDateTime updatedAt;
+
+        @ApiModelProperty(value = "구독 만료일", required = true)
+        private LocalDateTime expiredAt;
 
         @ApiModelProperty(value = "구독권", required = true)
         private SubTicketTypeDto.SubTicketTypeResponseDto subTicketDto;
@@ -49,9 +59,12 @@ public class SubscribeDto {
                     subscribe.getSubId(),
                     subscribe.getTotalPrice(),
                     subscribe.getSubComment(),
+                    subscribe.getSubStatus(),
+                    subscribe.getSubCnt(),
                     subscribe.getSubPeople(),
                     subscribe.getCreatedAt(),
                     subscribe.getUpdatedAt(),
+                    subscribe.getExpiredAt(),
                     SubTicketTypeDto.SubTicketTypeResponseDto.from(subscribe.getSubTicketType()), // DTO로 구현한 이유 : LAZY 로딩으로 인한 Json 반환 오류
                     PaymentDto.PaymentResponseDto.from(subscribe.getPayment()));
         }
@@ -84,11 +97,32 @@ public class SubscribeDto {
         @ApiModelProperty(value = "구독 요청사항", required = true)
         private String subComment;
 
+        @ApiModelProperty(value = "구독 가입 여부", required = true)
+        private String subStatus;
+
+        @ApiModelProperty(value = "구독권 사용횟수", required = true)
+        private int subCnt;
+
+        @ApiModelProperty(value = "구독권 하루 사용 횟수", required = true)
+        private int subCntDay;
+
+        @ApiModelProperty(value = "구독권 생성일", required = true)
+        private LocalDateTime createdAt;
+
+        @ApiModelProperty(value = "구독권 만료일", required = true)
+        private LocalDateTime expiredAt;
+
+
 
         public Subscribe toEntity(Cafe cafe, SubTicketType subTicketType, Payment payment, Member member){
             return Subscribe.builder()
                     .subPeople(subPeople)
                     .subComment(subComment)
+                    .subStatus(subStatus)
+                    .subCnt(subCnt)
+                    .subCntDay(subCntDay)
+                    .createdAt(LocalDateTime.now())
+                    .expiredAt(LocalDateTime.now().plusMonths(1))
                     .cafe(cafe)
                     .subTicketType(subTicketType)
                     .payment(payment)

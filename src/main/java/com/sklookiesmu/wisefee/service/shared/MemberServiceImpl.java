@@ -44,6 +44,7 @@ public class MemberServiceImpl implements MemberService {
     }
     @Transactional
     public Member getMember(Long id) {
+
         Member member = memberRepository.find(id);
 
 //        /* 강제 예외처리 예시 */
