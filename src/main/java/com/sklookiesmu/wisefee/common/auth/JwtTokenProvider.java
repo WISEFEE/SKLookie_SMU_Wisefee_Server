@@ -55,8 +55,9 @@ public class JwtTokenProvider {
                 .collect(Collectors.joining(","));
 
         CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
-        Long userId = userDetails.getUserId();
+        Long userId = userDetails.getMemberId();
         String nickname = userDetails.getNickname();
+        String authType = userDetails.getAuthType();
 
         long now = (new Date()).getTime();
 
@@ -67,6 +68,7 @@ public class JwtTokenProvider {
                 .claim("userId", userId)
                 .claim("nickname", nickname)
                 .claim("auth", authorities)
+                .claim("authType", authType)
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
@@ -121,7 +123,8 @@ public class JwtTokenProvider {
                 "",
                 authorities,
                 (String)claims.get("nickname"),
-                Long.valueOf((Integer)claims.get("userId")));
+                Long.valueOf((Integer)claims.get("userId")),
+                (String)claims.get("authType"));
         return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
     }
 
