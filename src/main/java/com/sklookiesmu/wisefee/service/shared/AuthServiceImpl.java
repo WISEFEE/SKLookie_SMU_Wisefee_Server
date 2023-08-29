@@ -5,9 +5,13 @@ import com.google.gson.JsonParser;
 import com.sklookiesmu.wisefee.common.auth.JwtTokenProvider;
 import com.sklookiesmu.wisefee.common.auth.custom.CustomUserDetail;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
+import com.sklookiesmu.wisefee.common.constant.OAuthTokenStatus;
 import com.sklookiesmu.wisefee.common.exception.NotFoundException;
+import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.dto.shared.firebase.FCMToken;
 import com.sklookiesmu.wisefee.dto.shared.jwt.TokenInfoDto;
+import com.sklookiesmu.wisefee.dto.shared.member.OAuthGoogleTokenVerifyResponseDto;
+import com.sklookiesmu.wisefee.repository.MemberRepository;
 import com.sklookiesmu.wisefee.repository.redis.AuthRepositoryWithRedis;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +39,8 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthRepositoryWithRedis authRepositoryWithRedis;
+
+    private final MemberRepository memberRepository;
 
 
     /**
@@ -140,7 +146,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public TokenInfoDto googleLogin(String accessToken, String firebaseToken) throws IOException {
 
-        String email = verifyGoogleToken(accessToken);
+        String email = getEmailByGoogleToken(accessToken);
         String pwd = AuthConstant.OAUTH_PASSWORD;
         TokenInfoDto token = login(email, pwd, firebaseToken, AuthConstant.AUTH_TYPE_GOOGLE);
         return token;
@@ -154,7 +160,7 @@ public class AuthServiceImpl implements AuthService {
      * @param [accessToken Google 계정 OAuth Access Token]
      * @return [String 이메일 주소]
      */
-    public String verifyGoogleToken(String accessToken) throws IOException {
+    public String getEmailByGoogleToken(String accessToken) throws IOException {
         String url = AuthConstant.OAUTH_GOOGLE_AUTHENTICATION_URL + "?access_token=" + accessToken;
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -191,6 +197,52 @@ public class AuthServiceImpl implements AuthService {
         } else {
             return null;
         }
+    }
+
+
+    public OAuthGoogleTokenVerifyResponseDto verifyGoogleToken(String accessToken) throws IOException{
+        String url = AuthConstant.OAUTH_GOOGLE_AUTHENTICATION_URL + "?access_token=" + accessToken;
+        OAuthGoogleTokenVerifyResponseDto result = new OAuthGoogleTokenVerifyResponseDto();
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        Response response = client.newCall(request)
+                .execute();
+
+        if (response.code() == HttpStatus.SC_OK) {
+            String jsonResponse = response.body().string();
+            String email = extractEmail(jsonResponse);
+            if(email == null){
+                throw new RuntimeException("OAuth 서버에서 인증 정보를 가져오는데 문제 발생");
+            }
+            else{
+                Optional<Member> member = memberRepository.findByEmail(email);
+                if(member.isPresent()){
+                    if(member.get().getAuthType().equalsIgnoreCase(AuthConstant.AUTH_TYPE_GOOGLE)){
+                        //CASE2 : 이미 구글로 가입된 토큰
+                        result.setCode(OAuthTokenStatus.ALREADY.getValue());
+                        result.setDesc(OAuthTokenStatus.ALREADY.getMessage());
+                    }
+                    else{
+                        //CASE3 : 이미 일반 회원으로 가입된 토큰
+                        result.setCode(OAuthTokenStatus.EXIST.getValue());
+                        result.setDesc(OAuthTokenStatus.EXIST.getMessage());
+                    }
+                }
+                else{
+                    //CASE1 : 회원가입 필요 토큰
+                    result.setCode(OAuthTokenStatus.VOID.getValue());
+                    result.setDesc(OAuthTokenStatus.VOID.getMessage());
+                }
+            }
+
+        } else {
+            // CASE4 : 유효하지 않은 토큰
+            result.setCode(OAuthTokenStatus.FAIL_AUTH.getValue());
+            result.setDesc(OAuthTokenStatus.FAIL_AUTH.getMessage());
+        }
+        return result;
     }
 
 }

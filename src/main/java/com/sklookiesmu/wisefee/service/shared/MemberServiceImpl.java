@@ -102,7 +102,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     public Long joinGoogle(Member member, String accessToken) throws IOException {
-        String email = authService.verifyGoogleToken(accessToken);
+        String email = authService.getEmailByGoogleToken(accessToken);
         member.setEmail(email);
         member.setPassword(AuthConstant.OAUTH_PASSWORD);
         member.setIsAuthEmail("TRUE");

@@ -277,7 +277,7 @@ public class MemberApiController {
 
 
     @ApiOperation(
-            value = "COMM-C-U6 :: 소셜 회원 가입 : Google",
+            value = "COMM-C-G1 :: 소셜 회원 가입 : Google",
             notes = "해당 API는 Google OAuth를 통해 회원가입을 진행합니다.\n" +
                     "Google API를 이용하여 OAuth 인증을 완료하면, 응답으로 AccessToken을 포함한 생년월일 등을 얻을 수도 있을 것입니다. \n" +
                     "자동으로 얻을 수 있는 값은 채워주시고, 없는 값은 유저가 수동으로 입력하게 하여 AccessToken과 함께 회원 가입 요청을 날려주시면 됩니다. \n\n" +

@@ -6,9 +6,12 @@ import com.sklookiesmu.wisefee.common.constant.AuthConstant;
 import com.sklookiesmu.wisefee.dto.shared.jwt.TokenInfoDto;
 import com.sklookiesmu.wisefee.dto.shared.member.LoginOAuthGoogleRequestDto;
 import com.sklookiesmu.wisefee.dto.shared.member.LoginRequestDto;
+import com.sklookiesmu.wisefee.dto.shared.member.OAuthGoogleTokenVerifyRequestDto;
+import com.sklookiesmu.wisefee.dto.shared.member.OAuthGoogleTokenVerifyResponseDto;
 import com.sklookiesmu.wisefee.service.shared.AuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,13 +72,31 @@ public class AuthApiController {
 
 
     @ApiOperation(
-            value = "COMM-B-03 :: 구글 소셜 로그인",
-            notes = "토큰 재발급 API입니다. 프론트엔드 측에서는 토큰이 만료되는 시간이 되기 전에(payload의 exp를 체크) 해당 API를 호출해서" +
+            value = "COMM-B-G1 :: OAuth Google : 구글 소셜 로그인",
+            notes = "토큰 재발급 API입니다. 프론트엔드 측에서는 토큰이 만료되는 시간이 되기 전에(payload의 exp를 체크) 해당 API를 호출해서<br>" +
                     "토큰을 재발급받는 로직을 넣어야, 재로그인 필요 없이 API 사용이 가능합니다."
     )
-    @PostMapping("/login/google")
+    @PostMapping("/google/login")
     public ResponseEntity<TokenInfoDto> googleLogin(@RequestBody LoginOAuthGoogleRequestDto loginRequest) throws IOException {
         TokenInfoDto tokenInfo = authService.googleLogin(loginRequest.getGoogleAccessToken(), loginRequest.getFcmToken());
         return ResponseEntity.status(HttpStatus.OK).body(tokenInfo);
+    }
+
+
+
+    @ApiOperation(
+            value = "COMM-B-G2 :: OAuth Google : Google Access Token을 통해 가입/로그인 필요여부 판별",
+            notes = "OAuth 인증 후 발급받은 Google Access Token을 판별합니다<br>" +
+                    "해당 Access Token이 회원가입이 필요한 지, 이미 회원가입이 되어 있으니 로그인을 진행하면 되는지, 이미 일반 계정(Common)으로 가입되었는지를 판별합니다.<br>" +
+                    "따라서 해당 API 호출 후, COMM-B-G1(로그인) 혹은 COMM-C-G1(회원가입) API를 실행시키면 됩니다. <br>" +
+                    "응답의 자세한 판별코드 종류와 내용은 해당 API Swagger Response의 Schema를 반드시 확인"
+
+    )
+    @PostMapping("/google/verify")
+    public ResponseEntity<OAuthGoogleTokenVerifyResponseDto> varifyAccessToken(
+            @RequestBody
+            OAuthGoogleTokenVerifyRequestDto request) throws IOException {
+        OAuthGoogleTokenVerifyResponseDto res = authService.verifyGoogleToken(request.getGoogleAccessToken());
+        return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 }

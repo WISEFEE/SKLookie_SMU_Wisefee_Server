@@ -1,6 +1,7 @@
 package com.sklookiesmu.wisefee.service.shared;
 
 import com.sklookiesmu.wisefee.dto.shared.jwt.TokenInfoDto;
+import com.sklookiesmu.wisefee.dto.shared.member.OAuthGoogleTokenVerifyResponseDto;
 import org.springframework.security.core.Authentication;
 
 import java.io.IOException;
@@ -41,11 +42,19 @@ public interface AuthService {
 
 
     /**
-     * [구글 Access Token 검증]
+     * [구글 Access Token을 통해 이메일을 얻어옴]
      * Google Access Token 검증, 검증 성공 시 해당 토큰의 Email을 얻어옴
      * @param [accessToken Google 계정 OAuth Access Token]
      * @return [String 이메일 주소]
      */
-    public String verifyGoogleToken(String accessToken) throws IOException;
+    public String getEmailByGoogleToken(String accessToken) throws IOException;
+
+    /**
+     * [구글 Access Token 검증]
+     * Google Access Token 검증, 검증 성공 시 토큰에 해당하는 유저의 회원가입 상태를 나타내는 코드 반환
+     * @param [accessToken Google 계정 OAuth Access Token]
+     * @return [OAuthGoogleTokenVerifyResponseDto 회원가입 상태]
+     */
+    public OAuthGoogleTokenVerifyResponseDto verifyGoogleToken(String accessToken) throws IOException;
 
 }
