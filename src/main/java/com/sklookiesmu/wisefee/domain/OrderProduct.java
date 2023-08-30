@@ -3,6 +3,8 @@ package com.sklookiesmu.wisefee.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,14 +32,26 @@ public class OrderProduct {
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;
 
+    @OneToMany(mappedBy = "orderProduct")
+    private List<OrderProductOption> orderProductOptions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "orderProduct")
+    private List<OrderProductOptionChoice> orderProductOptionChoice = new ArrayList<>();
+
     /**
      * 비즈니스 로직
      */
-    public static OrderProduct createOrderProduct(Product product){
-        OrderProduct orderProduct = new OrderProduct();
-        orderProduct.setProduct(product);
 
+    public static OrderProduct createOrderProductOption(List<OrderProductOption> orderProductOptions) {
+        OrderProduct orderProduct = new OrderProduct();
+        for (OrderProductOption opo : orderProductOptions) {
+            orderProduct.addOrderProductOption(opo);
+        }
         return orderProduct;
     }
 
+    private void addOrderProductOption(OrderProductOption orderProductOption) {
+        orderProductOptions.add(orderProductOption);
+        orderProductOption.setOrderProduct(this);
+    }
 }
