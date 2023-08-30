@@ -26,6 +26,9 @@ public class PaymentDto {
         @ApiModelProperty(value = "결제 내역 정보")
         private String paymentInfo;
 
+        @ApiModelProperty(value = "결제 수단 정보")
+        private String paymentMethod;
+
         @ApiModelProperty(value = "결제 생성일")
         private LocalDateTime createdAt;
 
@@ -34,6 +37,7 @@ public class PaymentDto {
                     payment.getPaymentId(),
                     payment.getPaymentPrice(),
                     payment.getPaymentInfo(),
+                    payment.getPaymentMethod(),
                     payment.getCreatedAt());
         }
     }

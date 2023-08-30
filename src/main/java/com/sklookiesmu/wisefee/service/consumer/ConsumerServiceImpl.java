@@ -37,10 +37,11 @@ public class ConsumerServiceImpl implements ConsumerService {
         SubTicketType subTicketType = subTicketTypeRepository.findById(subTicketTypeId).orElseThrow();
         Payment payment = new Payment();
         payment.setPaymentPrice(subTicketType.getSubTicketPrice());
+        payment.setPaymentMethod(request.getPaymentMethod());
         paymentJpaRepository.save(payment);
 
         Member member = memberRepository.find(memberId);
-        subscribeRepository.save(request.toEntity(cafe, subTicketType, payment,member));
+        subscribeRepository.save(request.toEntity(cafe, subTicketType, payment, member));
     }
 
     /**
@@ -62,14 +63,14 @@ public class ConsumerServiceImpl implements ConsumerService {
     /**
      * 정기구독 결제 -> 필요없을지도..
      */
-    @Override
+   /* @Override
     public void createPayment(PaymentDto.PaymentRequestDto request, Long cafeId, Long subTicketTypeId) {
 
         Cafe cafe = cafeJpaRepository.findById(cafeId).orElseThrow();
         SubTicketType subTicketType = subTicketTypeRepository.findById(subTicketTypeId).orElseThrow();
 
         paymentJpaRepository.save(request.toEntity(subTicketType));
-    }
+    }*/
 
     /**
      * 정기구독 해지
