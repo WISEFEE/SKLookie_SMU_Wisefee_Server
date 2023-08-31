@@ -97,6 +97,7 @@ public class OrderDto {
         private Long productId;
 
         @ApiModelProperty(value = "제품 옵션", required = true)
+        //@ApiModelProperty(value = "제품 옵션")
         private List<OrderProductOptionDto.OrderProductOptionRequestDto> productOption;
     }
 
