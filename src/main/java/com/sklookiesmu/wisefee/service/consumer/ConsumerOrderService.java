@@ -11,7 +11,7 @@ public interface ConsumerOrderService {
      * @param cafeId
      * @return [주문 옵션 정보 DTO 반환]
      */
-    OrderOptionDto.OrderOptionResponseDto getOrderOptionInfo(Long cafeId);
+    OrderOptionDto.OrderOptionListResponseDto getOrderOptionInfo(Long cafeId);
 
 
     /**

@@ -1,7 +1,6 @@
 package com.sklookiesmu.wisefee.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -9,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Table(name = "ORDER_OPTION")
@@ -56,7 +58,7 @@ public class OrderOption {
 
 
     @ManyToMany
-    @JoinTable(name = "ORDER_ORDEROPTION",
+    @JoinTable(name = "ORD_ORDER_OPTION",
             joinColumns = @JoinColumn(name = "ORDER_OPTION_ID"),
             inverseJoinColumns = @JoinColumn(name = "ORDER_ID")
     )

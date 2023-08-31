@@ -55,6 +55,9 @@ public class ProductOptChoice {
     @JoinColumn(name = "PRD_OPTION_ID", nullable = false)
     private ProductOption productOption;
 
+   /* @OneToMany(mappedBy = "productOptChoice")
+    private List<OrderProductOption> orderProductOption;*/
+
     @OneToMany(mappedBy = "productOptChoice")
     private List<CartProductChoiceOption> cartProductChoiceOptions;
 

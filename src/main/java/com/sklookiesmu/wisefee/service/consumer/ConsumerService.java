@@ -27,7 +27,7 @@ public interface ConsumerService{
      * 선택한 정기 구독권을 결제한다.
      * @param request
      */
-    void createPayment(PaymentDto.PaymentRequestDto request, Long cafeId, Long subscribeId);
+   // void createPayment(PaymentDto.PaymentRequestDto request, Long cafeId, Long subscribeId);
 
 
     /**

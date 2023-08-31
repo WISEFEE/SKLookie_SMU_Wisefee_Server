@@ -97,30 +97,16 @@ public class SubscribeDto {
         @ApiModelProperty(value = "구독 요청사항", required = true)
         private String subComment;
 
-        @ApiModelProperty(value = "구독 가입 여부", required = true)
-        private String subStatus;
-
-        @ApiModelProperty(value = "구독권 사용횟수", required = true)
-        private int subCnt;
-
-        @ApiModelProperty(value = "구독권 하루 사용 횟수", required = true)
-        private int subCntDay;
-
-        @ApiModelProperty(value = "구독권 생성일", required = true)
-        private LocalDateTime createdAt;
-
-        @ApiModelProperty(value = "구독권 만료일", required = true)
-        private LocalDateTime expiredAt;
-
-
+        @ApiModelProperty(value = "결제수단", required = true)
+        private String paymentMethod;
 
         public Subscribe toEntity(Cafe cafe, SubTicketType subTicketType, Payment payment, Member member){
             return Subscribe.builder()
                     .subPeople(subPeople)
                     .subComment(subComment)
-                    .subStatus(subStatus)
-                    .subCnt(subCnt)
-                    .subCntDay(subCntDay)
+                    .subStatus("N")
+                    .subCnt(0)
+                    .subCntDay(0)
                     .createdAt(LocalDateTime.now())
                     .expiredAt(LocalDateTime.now().plusMonths(1))
                     .cafe(cafe)
