@@ -39,7 +39,7 @@ public class CafeSubController {
         List<Subscribe> subscriptions = cafeService.getSubscribersByCafeId(cafeId);
 
         return subscriptions.stream()
-                .map(subscription -> SubMemberDto.fromMemberAndSubscribe(subscription.getMember(), subscription))
+                .map(subscription -> SubMemberDto.fromMemberAndSubscribe(subscription.getMember(), subscription, subscription.getSubTicketType()))
                 .collect(Collectors.toList());
     }
 
@@ -60,11 +60,7 @@ public class CafeSubController {
 
         if (subscriptionOptional.isPresent()) {
             Subscribe subscribe = subscriptionOptional.get();
-            SubTicketType subTicketType = subscribe.getSubTicketType();
-            Member member = subscribe.getMember();
-            Order order = subscribe.getOrders().stream().findFirst().orElse(null);
-            Cafe cafe = subscribe.getCafe();
-            return SubMemberDetailsDto.fromSubscriptionAndMember(subscribe, subTicketType, member, order, cafe);
+            return SubMemberDetailsDto.fromSubscriptionAndMember(subscribe);
         } else {
             throw new NotFoundException("구독 정보를 찾을 수 없습니다.");
         }
