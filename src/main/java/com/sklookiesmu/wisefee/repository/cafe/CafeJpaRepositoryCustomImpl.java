@@ -23,6 +23,7 @@ public class CafeJpaRepositoryCustomImpl implements CafeJpaRepositoryCustom {
     public Slice<Cafe> findWithNameFilter(Pageable pageable) {
         List<Cafe> cafeListResponse = jpaQueryFactory
                 .selectFrom(cafe)
+                .where(cafe.deletedAt.isNull())
                 .orderBy(cafe.title.asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize()+1)// limit보다 데이터를 1개 더 들고와서 해당 데이터가 있으면 hasNext 변수에 true 넣어서 알림

@@ -41,6 +41,7 @@ public class ProductDto {
                     product.getProductPrice(),
                     product.getProductInfo(),
                     product.getProductOptions().stream()
+                            .filter(productOption -> productOption.getDeletedAt() == null)
                             .map(ProductOptionResponseDto::from)
                             .collect(Collectors.toList()));
         }
@@ -75,11 +76,12 @@ public class ProductDto {
         @ApiModelProperty(value = "제품옵션 선택", required = true)
         private List<ProductOptChoiceResponseDto> productOptChoice;
 
-        public static ProductOptionResponseDto from (ProductOption productOption){
+        public static ProductOptionResponseDto from (ProductOption productOption) {
             return new ProductOptionResponseDto(
                     productOption.getProductOptionId(),
                     productOption.getProductOptionName(),
                     productOption.getProductOptChoices().stream()
+                            .filter(productOptionChoice -> productOptionChoice.getDeletedAt() == null)
                             .map(ProductOptChoiceResponseDto::from)
                             .collect(Collectors.toList()));
         }

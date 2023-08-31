@@ -19,7 +19,7 @@ public interface ProductJpaRepository extends JpaRepository<Product, Long> {
      * @param cafeId
      * @return [매장 음료 리스트]
      */
-    @Query(value = "select p from Product p where p.cafe.cafeId = :cafeId")
+    @Query(value = "select p from Product p where p.cafe.cafeId = :cafeId and p.deletedAt is null")
     List<Product> findAllByCafeId(@Param("cafeId") Long cafeId);
 
     /**

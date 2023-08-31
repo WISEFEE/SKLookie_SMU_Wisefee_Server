@@ -18,7 +18,7 @@ public interface OrderOptionJpaRepository extends JpaRepository<OrderOption, Lon
      * @param cafeId
      * @return
      */
-    @Query(value = "select op from OrderOption op where op.cafe.cafeId = :cafeId")
+    @Query(value = "select op from OrderOption op where op.cafe.cafeId = :cafeId and op.deletedAt is null")
     List<OrderOption> findOptionByCafeId(@Param("cafeId") Long cafeId);
 
 }
