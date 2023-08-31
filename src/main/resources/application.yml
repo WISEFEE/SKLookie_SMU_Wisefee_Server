@@ -32,4 +32,6 @@ jwt:
 upload:
   directory: storage/upload
 
-
+push:
+  notification:
+    enabled: false

@@ -30,7 +30,7 @@ public class CafeSubController {
     private final OrderService orderService;
 
     @ApiOperation(
-            value = "SELL-A-05 :: 매장 구독 멤버 목록 조회",
+            value = "SELL-E-05 :: 매장 구독 멤버 목록 조회",
             notes = "매장에 구독한 멤버 목록을 조회하는 API입니다."
     )
     @GetMapping("/api/v1/seller/cafe/{cafeId}/subscribers")
@@ -39,12 +39,12 @@ public class CafeSubController {
         List<Subscribe> subscriptions = cafeService.getSubscribersByCafeId(cafeId);
 
         return subscriptions.stream()
-                .map(subscription -> SubMemberDto.fromMemberAndSubscribe(subscription.getMember(), subscription))
+                .map(subscription -> SubMemberDto.fromMemberAndSubscribe(subscription.getMember(), subscription, subscription.getSubTicketType()))
                 .collect(Collectors.toList());
     }
 
     @ApiOperation(
-            value = "SELL-A-06 :: 매장 구독 멤버 세부 정보 조회",
+            value = "SELL-E-06 :: 매장 구독 멤버 세부 정보 조회",
             notes = "매장에 구독한 멤버의 세부 정보를 조회하는 API입니다."
     )
     @GetMapping("/api/v1/seller/cafe/{cafeId}/subscribers/{memberId}")
@@ -60,11 +60,7 @@ public class CafeSubController {
 
         if (subscriptionOptional.isPresent()) {
             Subscribe subscribe = subscriptionOptional.get();
-            SubTicketType subTicketType = subscribe.getSubTicketType();
-            Member member = subscribe.getMember();
-            Order order = subscribe.getOrders().stream().findFirst().orElse(null);
-            Cafe cafe = subscribe.getCafe();
-            return SubMemberDetailsDto.fromSubscriptionAndMember(subscribe, subTicketType, member, order, cafe);
+            return SubMemberDetailsDto.fromSubscriptionAndMember(subscribe);
         } else {
             throw new NotFoundException("구독 정보를 찾을 수 없습니다.");
         }
