@@ -19,7 +19,7 @@
 //@Slf4j
 //public class CommonExceptionHandler {
 //
-//    @ExceptionHandler(ResponseStatusException.class)
+//    @ExceptionHandler(AlreadyhadCartException.class)
 //    @ResponseBody
 //    public CustomErrorResponse handleCustomHttpException(ResponseStatusException ex, HttpServletRequest request) {
 //        CustomErrorResponse errorResponse = new CustomErrorResponse();

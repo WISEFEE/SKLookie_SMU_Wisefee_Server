@@ -62,6 +62,8 @@ public class CartResponseDto {
     @AllArgsConstructor
     @ApiModel("장바구니 선택옵션 조회 API")
     public static class ProductOptChoiceResponseDTO {
+        @ApiModelProperty(value = "상품 옵션 아이디")
+        private Long productOptId;
         @ApiModelProperty(value = "상품 옵션 이름")
         private String productOptName;
         @ApiModelProperty(value = "선택 옵션 아이디")
