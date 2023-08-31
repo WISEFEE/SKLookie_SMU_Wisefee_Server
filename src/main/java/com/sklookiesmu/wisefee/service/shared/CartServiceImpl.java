@@ -1,6 +1,5 @@
 package com.sklookiesmu.wisefee.service.shared;
 
-import com.sklookiesmu.wisefee.common.error.AlreadyhadCartException;
 import com.sklookiesmu.wisefee.common.error.CafeNotFoundException;
 import com.sklookiesmu.wisefee.common.error.CartNotFoundException;
 import com.sklookiesmu.wisefee.domain.*;
@@ -147,6 +146,7 @@ public class CartServiceImpl implements CartService {
             for (CartProductChoiceOption productOptChoice : cartProducts.get(i).getCartProductChoiceOptions()
             ) {
                 productOptChoiceResponseDTOS.add(new CartResponseDto.ProductOptChoiceResponseDTO(
+                        productOptChoice.getProductOptChoice().getProductOption().getProductOptionId(),
                         productOptChoice.getProductOptChoice().getProductOption().getProductOptionName(),
                         productOptChoice.getProductOptChoice().getProductOptionChoiceId(),
                         productOptChoice.getProductOptChoice().getProductOptionChoiceName(),
@@ -232,8 +232,7 @@ public class CartServiceImpl implements CartService {
         if (cartProducts.size() == 0) {
             throw new RuntimeException("Invalid Value : This cart is null");
         }
-
-        long result = 0L;
+        long result = (long) subTicketDeposit;
         for (CartProduct cartProduct : cartProducts) {
             int productPrice = 0;
             Product product = productRepository.findById(cartProduct.getProduct().getProductId());
@@ -243,7 +242,7 @@ public class CartServiceImpl implements CartService {
                 productPrice += productOptChoice.getProductOptChoice().getProductOptionChoicePrice() * cartProduct.getProductQuantity();
             }
 
-            System.out.println("Service: " + productPrice);
+            System.out.println("Service: " + currentDiscountRate);
             // calculate discount rate
             result += (long) productPrice - (productPrice * currentDiscountRate);
 
