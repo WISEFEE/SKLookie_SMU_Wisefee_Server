@@ -11,6 +11,7 @@ import com.sklookiesmu.wisefee.dto.shared.firebase.FCMNotificationRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ import java.util.List;
 public class FCMNotificationService {
 
     private final FirebaseMessaging firebaseMessaging;
+    private final Environment environment;
 
     private final String API_URL = "https://fcm.googleapis.com/v1/projects/wisefee-b4b12/messages:send";
 
@@ -67,18 +69,26 @@ public class FCMNotificationService {
     }
 
     public void sendMessageTo(FCMNotificationRequestDto requestDto) throws IOException {
-        //String message = sendNotificationByToken(requestDto);
-        sendNotificationByToken(requestDto);
-        OkHttpClient client = new OkHttpClient();
-        //RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
-        Request request = new Request.Builder()
-                .url(API_URL)
-                //.post(requestBody)
-                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
-                .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
-                .build();
-        Response response = client.newCall(request)
-                .execute();
-        System.out.println(response.body().string());
+
+        // 환경변수 설정이 ture인 경우에만 사용 가능
+        boolean pushEnabled = Boolean.parseBoolean(environment.getProperty("push.notification.enabled", "false"));
+
+        if (pushEnabled) {
+            //String message = sendNotificationByToken(requestDto);
+            sendNotificationByToken(requestDto);
+            OkHttpClient client = new OkHttpClient();
+            //RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    //.post(requestBody)
+                    .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+                    .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
+                    .build();
+            Response response = client.newCall(request)
+                    .execute();
+            System.out.println(response.body().string());
+        } else {
+            log.info("푸시 알림 기능이 비활성화되어 있습니다.");
+        }
     }
 }
