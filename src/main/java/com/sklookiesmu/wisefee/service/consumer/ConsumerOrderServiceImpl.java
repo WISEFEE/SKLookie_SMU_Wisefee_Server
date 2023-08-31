@@ -43,15 +43,6 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
     private final OrderProductOptionJpaRepository orderProductOptionJpaRepository;
     private final OrderProdOptChoiceJpaRepository orderProdOptChoiceJpaRepository;
 
-    Order order = new Order();
-    Product product = new Product();
-    OrderProduct orderProduct = new OrderProduct();
-    ProductOption productOptions = new ProductOption();
-    OrderProductOption orderProductOption = new OrderProductOption();
-    ProductOptChoice productOptChoices = new ProductOptChoice();
-    OrderProductOptionChoice orderProductOptionChoice = new OrderProductOptionChoice();
-    OrdOrderOption ordOrderOption = new OrdOrderOption();
-
     /**
      * 매장 상세보기 -> 주문 옵션 정보
      */
@@ -69,6 +60,8 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
     @Override
     @Transactional
     public Long createOrder(Long cafeId, OrderDto.OrderRequestDto orderRequestDto) {
+
+        /* Create Order */
         Long memberId = SecurityUtil.getCurrentMemberPk();
         Cafe cafe = cafeJpaRepository.findById(cafeId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 매장입니다."));
@@ -77,42 +70,57 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
         Subscribe subscribe = subscribeJpaRepository.findByMemberAndCafe(member, cafe)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 구독권입니다."));
 
+        Order order = new Order();
+
         order.setSubscribe(subscribe);
         order.setPayment(order.getSubscribe().getPayment());
         order.setProductStatus(ProductStatus.REQUESTED);
         order.setCreatedAt(LocalDateTime.now());
-        Order ord = orderJpaRepository.save(order);
-        log.info("orderID : " + ord.getOrderId());
+        orderJpaRepository.save(order);
+        log.info("orderID : " + order.getOrderId());
+
+
         // 상품 주문
-        Order finalOrd = ord;
         List<OrderProduct> orderProducts = orderRequestDto.getOrderProduct().stream()
                 .map(op -> {
-                    product = productJpaRepository.findById(op.getProductId())
+                    Product product = productJpaRepository.findById(op.getProductId())
                             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
 
+                    OrderProduct orderProduct = new OrderProduct();
+
                     orderProduct.setProduct(product);
-                    orderProduct.setOrder(finalOrd);
+                    orderProduct.setOrder(order);
                     orderProductJpaRepository.save(orderProduct);
+
+                    // 상품옵션을 선택하지 않았을 시 continue
+                    if(op.getProductOption() == null){
+                        return null;
+                    }
+
+                    OrderProduct finalOrderProduct = orderProduct;
 
                     List<OrderProductOption> productOption = op.getProductOption().stream()
                             .map(prodOpt -> {
                                 log.info("OrderProductOption : " + prodOpt.getOrderProductOptionId());
 
-                                productOptions = productOptJpaRepository.findById(prodOpt.getOrderProductOptionId())
+                                ProductOption productOptions = productOptJpaRepository.findById(prodOpt.getOrderProductOptionId())
                                         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품옵션입니다."));
 
+                                OrderProductOption orderProductOption = new OrderProductOption();
+
                                 orderProductOption.setProductOption(productOptions);
-                                orderProductOption.setOrderProduct(orderProduct);
+                                orderProductOption.setOrderProduct(finalOrderProduct);
                                 orderProductOptionJpaRepository.save(orderProductOption);
+
 
                                 List<OrderProductOptionChoice> productOptChoice = prodOpt.getProductOptionChoices().stream()
                                         .map(prodOptChoice -> {
                                             log.info("OrderProductOptionChoice : " + prodOptChoice.getOrderProductOptionChoiceId());
 
-                                            productOptChoices = prodOptChoiceJpaRepository.findById(prodOptChoice.getOrderProductOptionChoiceId())
+                                            ProductOptChoice productOptChoices = prodOptChoiceJpaRepository.findById(prodOptChoice.getOrderProductOptionChoiceId())
                                                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품선택옵션입니다."));
 
-                                            orderProductOptionChoice = OrderProductOptionChoice.createOrderProdOptChoice(orderProduct, orderProductOption, productOptChoices);
+                                            OrderProductOptionChoice orderProductOptionChoice = OrderProductOptionChoice.createOrderProdOptChoice(finalOrderProduct, orderProductOption, productOptChoices);
                                             orderProdOptChoiceJpaRepository.save(orderProductOptionChoice);
 
                                             return OrderProductOptionChoice.builder()
@@ -120,7 +128,7 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
                                                     .build();
                                         }).collect(Collectors.toList());
 
-                                orderProductOption = OrderProductOption.createOrderProductOptionChoice(productOptChoice);
+                                OrderProductOption.createOrderProductOptionChoice(productOptChoice);
 
                                 return OrderProductOption.builder()
                                         .orderProductOptionId(productOptions.getProductOptionId())
@@ -138,27 +146,19 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
                     OrderOption orderOption = orderOptionRepository.findById(oop.getOrderOptionId())
                             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문 옵션입니다"));
 
-                    ordOrderOption = OrdOrderOption.createOrdOrderOption(orderOption);
+                    OrdOrderOption ordOrderOption = OrdOrderOption.createOrdOrderOption(orderOption);
+                    ordOrderOptionJpaRepository.save(ordOrderOption);
 
                     return ordOrderOption;
 
                 }).collect(Collectors.toList());
 
-        Order.createOrder(ord, orderProducts, orderOptions);
-        log.info("ordID : " + ord.getOrderId());
-        log.info("orderProductChoice : " + ord.getOrderProducts().get(0).getOrderProductOptionChoice().size());
-        log.info("orderProductOptions : " + ord.getOrderProducts().get(0).getOrderProductOptions().size());
+        Order.createOrder(order, orderProducts, orderOptions);
+        log.info("ordID : " + order.getOrderId());
+        log.info("orderProductChoice : " + order.getOrderProducts().get(0).getOrderProductOptionChoice().size());
+        log.info("orderProductOptions : " + order.getOrderProducts().get(0).getOrderProductOptions().size());
 
-
-       /* OrderProduct orderProd = orderProductJpaRepository.findById(orderProduct.getOrderProductId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문 상품입니다"));
-*/
-
-        ordOrderOptionJpaRepository.save(ordOrderOption);
-
-        Order finalOrder = orderJpaRepository.findById(ord.getOrderId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문니다"));
-        return orderJpaRepository.save(finalOrder).getOrderId();
+        return order.getOrderId();
     }
 
     @Override
