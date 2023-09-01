@@ -25,7 +25,8 @@ public class ConsumerController {
     private final ConsumerServiceImpl consumerService;
 
     @ApiOperation(value = "CONS-B-01 :: 정기 구독하기",
-            notes = "정기 구독을 요청합니다. cafeId에는 구독할 카페를, subTicketId에는, COMM-D의 구독권 유형 종류를 넣어주시면 됩니다." )
+            notes = "정기 구독을 요청합니다. cafeId에는 구독할 카페를, subTicketId에는, COMM-D의 구독권 유형 종류를 넣어주시면 됩니다.<br><br>" +
+                    "paymentMethod에는 결제수단을, subComment에는 구독 요청사항을, subPeople에는 구독 인원을 입력해주세요." )
 
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @PostMapping("/subscribe/{cafeId}/subTicketType/{subTicketTypeId}")
