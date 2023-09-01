@@ -1,5 +1,6 @@
 package com.sklookiesmu.wisefee.dto.consumer;
 
+import com.sklookiesmu.wisefee.domain.File;
 import com.sklookiesmu.wisefee.domain.Product;
 import com.sklookiesmu.wisefee.domain.ProductOptChoice;
 import com.sklookiesmu.wisefee.domain.ProductOption;
@@ -31,6 +32,9 @@ public class ProductDto {
         @ApiModelProperty(value = "제품정보", required = true)
         private String productInfo;
 
+        @ApiModelProperty(value = "제품 사진 ID 리스트", required = true)
+        private List<Long> productImages;
+
         @ApiModelProperty(value = "제품옵션", required = true)
         private List<ProductOptionResponseDto> productOptions;
 
@@ -40,6 +44,9 @@ public class ProductDto {
                     product.getProductName(),
                     product.getProductPrice(),
                     product.getProductInfo(),
+                    product.getFiles().stream()
+                            .map(File::getFileId)
+                            .collect(Collectors.toList()),
                     product.getProductOptions().stream()
                             .filter(productOption -> productOption.getDeletedAt() == null)
                             .map(ProductOptionResponseDto::from)

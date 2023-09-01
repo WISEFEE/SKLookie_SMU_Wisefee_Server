@@ -41,7 +41,7 @@ public class ConsumerCafeController {
 
     @ApiOperation(value = "CONS-A-02 :: 카페 음료 리스트 조회",
                     notes = "카페 ID(PK)로 카페를 선택한 후 해당하는 카페에 등록된 음료 목록들을 조회하는 API입니다. <br>" +
-                            "제품 ID(PK), 제품명, 제품 가격, 제품 정보, 제품 옵션을 조회할 수 있습니다.")
+                            "제품 ID(PK), 제품명, 제품 가격, 제품 정보, 제품 사진 ID, 제품 옵션을 조회할 수 있습니다.")
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @GetMapping("/{cafeId}/product")
     public ResponseEntity<ProductDto.ProductListResponseDto> getProductList(@ApiParam(value = "카페 ID", required = true)
@@ -51,7 +51,7 @@ public class ConsumerCafeController {
 
     @ApiOperation(value = "CONS-A-03 :: 매장 정보 조회",
             notes = "카페 ID(PK)로 카페를 선택한 후 해당하는 카페정보를 조회 API입니다. <br>" +
-                    "매장ID(PK), 매장명, 매장설명, 매장연락처를 조회할 수 있습니다.")
+                    "매장ID(PK), 매장명, 매장설명, 매장연락처, 매장 사진 ID, 매장 주젶를 조회할 수 있습니다.")
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @GetMapping("/{cafeId}")
     public ResponseEntity<CafeDto.CafeResponseDto> getCafeInfo(@ApiParam(value = "카페 ID", required = true)
