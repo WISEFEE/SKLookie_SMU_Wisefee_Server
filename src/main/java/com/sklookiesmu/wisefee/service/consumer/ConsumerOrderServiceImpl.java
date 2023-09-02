@@ -16,8 +16,6 @@ import com.sklookiesmu.wisefee.repository.subscribe.PaymentJpaRepository;
 import com.sklookiesmu.wisefee.repository.subscribe.SubscribeJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Or;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,8 +65,13 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 매장입니다."));
 
         Member member = memberRepository.find(memberId);
-        Subscribe subscribe = subscribeJpaRepository.findByMemberAndCafe(member, cafe)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 구독권입니다."));
+
+        Subscribe subscribe = subscribeJpaRepository.findByIdAndCafeId(orderRequestDto.getSubscribeId(), cafeId)
+                .orElseThrow(()-> new IllegalArgumentException("존재하지 않는 구독권입니다"));
+
+        if (subscribe.getExpiredAt().isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("만료된 구독권입니다.");
+        }
 
         Order order = new Order();
 
@@ -77,8 +80,6 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
         order.setProductStatus(ProductStatus.REQUESTED);
         order.setCreatedAt(LocalDateTime.now());
         orderJpaRepository.save(order);
-        log.info("orderID : " + order.getOrderId());
-
 
         // 상품 주문
         List<OrderProduct> orderProducts = orderRequestDto.getOrderProduct().stream()
@@ -101,7 +102,6 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
 
                     List<OrderProductOption> productOption = op.getProductOption().stream()
                             .map(prodOpt -> {
-                                log.info("OrderProductOption : " + prodOpt.getOrderProductOptionId());
 
                                 ProductOption productOptions = productOptJpaRepository.findById(prodOpt.getOrderProductOptionId())
                                         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품옵션입니다."));
@@ -115,7 +115,6 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
 
                                 List<OrderProductOptionChoice> productOptChoice = prodOpt.getProductOptionChoices().stream()
                                         .map(prodOptChoice -> {
-                                            log.info("OrderProductOptionChoice : " + prodOptChoice.getOrderProductOptionChoiceId());
 
                                             ProductOptChoice productOptChoices = prodOptChoiceJpaRepository.findById(prodOptChoice.getOrderProductOptionChoiceId())
                                                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품선택옵션입니다."));
@@ -154,9 +153,6 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
                 }).collect(Collectors.toList());
 
         Order.createOrder(order, orderProducts, orderOptions);
-        log.info("ordID : " + order.getOrderId());
-        log.info("orderProductChoice : " + order.getOrderProducts().get(0).getOrderProductOptionChoice().size());
-        log.info("orderProductOptions : " + order.getOrderProducts().get(0).getOrderProductOptions().size());
 
         return order.getOrderId();
     }

@@ -19,6 +19,10 @@ public class OrderDto {
     @Builder
     public static class OrderRequestDto{
 
+        @ApiModelProperty(value = "구독권 ID", required = true)
+        @NotNull(message = "구독권 ID는 필수 입력값입니다.")
+        private Long subscribeId;
+
         @ApiModelProperty(value = "주문 상품", required = true)
         @NotNull(message = "주문 상품은 필수 입력값입니다.")
         private List<OrderProductRequestDto> orderProduct;
@@ -26,7 +30,6 @@ public class OrderDto {
         @ApiModelProperty(value = "주문 옵션", required = true)
         private List<OrdOrderOptionRequestDto> orderOption;
     }
-
 
     @Getter
     @Setter

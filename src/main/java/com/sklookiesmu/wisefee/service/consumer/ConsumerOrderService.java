@@ -15,24 +15,28 @@ public interface ConsumerOrderService {
 
 
     /**
-     * TODO [주문하기]
+     * [주문하기]
+     * 특정 매장에서 주문한다.
+     * @param cafeId
+     * @param orderRequestDto
+     * @return [주문 PK 반환]
      */
     Long createOrder(Long cafeId, OrderDto.OrderRequestDto orderRequestDto);
 
 
     /**
-     * TODO [주문 내역 조회]
+     * [주문 내역 조회]
+     * 특정 매장에서 주문한 내역을 조회한다.
+     * @param cafeId
+     * @param orderId
+     * @return [주문 내역 정보 DTO 반환]
      */
     OrderDto.OrderResponseDto getOrderHistory(Long cafeId, Long orderId);
 
 
     /**
-     * TODO [주문 현황 확인] -> 동기 비동기?(카페 측 음료 준비 현황)
+     * TODO [주문 현황 확인] -> (카페 측 음료 준비 현황)
      */
 
-
-    /**
-     * TODO [주문 취소하기] -> 매장 측에서 접수완료하기 전에만 가능
-     */
 
 }

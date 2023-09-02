@@ -16,10 +16,17 @@ public interface SubscribeJpaRepository extends JpaRepository<Subscribe, Long> {
 
     @Query(value = "select s from Subscribe s where s.member.memberId = :memberId")
     List<Subscribe> findAllByMemberId(@Param(value = "memberId") Long memberId);
-
-    Optional<Subscribe> findByMemberAndSubStatus(Member member, String subStatus);
+    @Query(value = "select s from Subscribe s where s.member.memberId = :memberId and s.subId = :subId")
+    Optional<Subscribe> findByMemberIdAndSubscribeId(@Param(value = "memberId") Long memberId,
+                                                     @Param(value = "subId") Long subId);
 
     Optional<Subscribe> findByMemberAndCafe(Member member, Cafe cafe);
 
+    @Query(value = "select s from Subscribe s where s.subId = :subId and s.cafe.cafeId = :cafeId")
+    Optional<Subscribe> findByIdAndCafeId(@Param(value = "subId") Long subId,
+                                          @Param(value = "cafeId") Long cafeId);
+    @Query(value = "select s from Subscribe s where s.subTicketType.subTicketId = :subtctId and s.cafe.cafeId = :cafeId")
+    Subscribe findByCafeIdAndSubTicketTypeId(@Param(value = "subtctId") Long subtctId,
+                                                       @Param(value = "cafeId") Long cafeId);
 
 }
