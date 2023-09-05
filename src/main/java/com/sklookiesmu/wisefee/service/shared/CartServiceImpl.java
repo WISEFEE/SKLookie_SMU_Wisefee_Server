@@ -1,7 +1,8 @@
 package com.sklookiesmu.wisefee.service.shared;
 
-import com.sklookiesmu.wisefee.common.error.CafeNotFoundException;
-import com.sklookiesmu.wisefee.common.error.CartNotFoundException;
+import com.sklookiesmu.wisefee.common.exception.CafeNotFoundException;
+import com.sklookiesmu.wisefee.common.exception.CartNotFoundException;
+import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
 import com.sklookiesmu.wisefee.domain.*;
 import com.sklookiesmu.wisefee.dto.shared.member.CartRequestDto;
 import com.sklookiesmu.wisefee.dto.shared.member.CartResponseDto;
@@ -36,7 +37,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Long addCart(Long memberId) {
-        Member member = memberRepository.find(memberId);
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchElementFoundException("member not found"));
         Cart cart = new Cart().addCart(member);
 
         if (member.getCart() == null) {
@@ -124,7 +125,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<CartResponseDto.CartProductResponseDto> findAllCartProduct(Long memberId) {
-        Member member = memberRepository.find(memberId);
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchElementFoundException("member not found"));
         if (member.getCart() == null) {
             throw new CartNotFoundException("CartService Error : Not Exist Cart with " + memberId);
         }

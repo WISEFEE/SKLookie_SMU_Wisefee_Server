@@ -1,6 +1,6 @@
 package com.sklookiesmu.wisefee.service.consumer;
 
-import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
+import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
 import com.sklookiesmu.wisefee.domain.*;
 import com.sklookiesmu.wisefee.dto.consumer.PaymentDto;
 import com.sklookiesmu.wisefee.dto.consumer.SubscribeDto;
@@ -39,7 +39,7 @@ public class ConsumerServiceImpl implements ConsumerService {
         payment.setPaymentPrice(subTicketType.getSubTicketPrice());
         paymentJpaRepository.save(payment);
 
-        Member member = memberRepository.find(memberId);
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchElementFoundException("member not found")) ;
         subscribeRepository.save(request.toEntity(cafe, subTicketType, payment,member));
     }
 
@@ -52,7 +52,7 @@ public class ConsumerServiceImpl implements ConsumerService {
     public SubscribeDto.SubscribeListResponseDto getSubscribe(Long memberId) {
 
         // 유저 검증 필요
-        memberRepository.find(memberId);
+        memberRepository.findById(memberId);
 
         List<Subscribe> list =subscribeRepository.findAllByMemberId(memberId);
 
@@ -77,7 +77,7 @@ public class ConsumerServiceImpl implements ConsumerService {
     @Override
     public void cancelSubscribe(Long memberId) {
         //Long memberId = SecurityUtil.getCurrentMemberPk();
-        Member member = memberRepository.find(memberId);
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchElementFoundException("member not found")) ;
         Subscribe subscribe = subscribeRepository.findByMemberAndSubStatus(member, "Y")
                 .orElseThrow(() -> new IllegalArgumentException("구독권이 존재하지 않습니다."));
 

@@ -2,10 +2,9 @@ package com.sklookiesmu.wisefee.api.v1.shared;
 
 import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
-import com.sklookiesmu.wisefee.common.error.ValidateMemberException;
+import com.sklookiesmu.wisefee.common.exception.AlreadyExistElementException;
 import com.sklookiesmu.wisefee.dto.shared.member.CartRequestDto;
 import com.sklookiesmu.wisefee.dto.shared.member.CartResponseDto;
-import com.sklookiesmu.wisefee.service.shared.CartService;
 import com.sklookiesmu.wisefee.service.shared.CartServiceImpl;
 import com.sklookiesmu.wisefee.service.shared.MemberServiceImpl;
 import io.swagger.annotations.Api;
@@ -41,7 +40,7 @@ public class CartApiController {
             @PathVariable("memberId") Long memberId
     ) {
         if(!(memberId.equals(SecurityUtil.getCurrentMemberPk())))
-            throw new ValidateMemberException("invalid ID : The provided ID does not match your current logged-in ID"+memberId);
+            throw new AlreadyExistElementException("invalid ID : The provided ID does not match your current logged-in ID"+memberId);
 
         Long result = cartService.findCartId(memberId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -91,7 +90,7 @@ public class CartApiController {
     ){
 
         if(!(memberId.equals(SecurityUtil.getCurrentMemberPk())))
-            throw new ValidateMemberException("invalid ID : The provided ID does not match your current logged-in ID"+memberId);
+            throw new AlreadyExistElementException("invalid ID : The provided ID does not match your current logged-in ID"+memberId);
 
         List<CartResponseDto.CartProductResponseDto> result = cartService.findAllCartProduct(memberId);
 
@@ -111,7 +110,7 @@ public class CartApiController {
             @RequestBody CartRequestDto.CartProductRequestDto cartProductRequestDto
             ){
         if(!(memberId.equals(SecurityUtil.getCurrentMemberPk())))
-            throw new ValidateMemberException("invalid ID : The provided ID does not match your current logged-in ID"+memberId);
+            throw new AlreadyExistElementException("invalid ID : The provided ID does not match your current logged-in ID"+memberId);
 
         Long result = cartService.addCartProduct(memberId, cartProductRequestDto);
 

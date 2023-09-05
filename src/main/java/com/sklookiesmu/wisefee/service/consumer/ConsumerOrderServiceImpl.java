@@ -1,10 +1,10 @@
 package com.sklookiesmu.wisefee.service.consumer;
 
 import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
+import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
 import com.sklookiesmu.wisefee.domain.*;
 import com.sklookiesmu.wisefee.dto.consumer.OrderDto;
 import com.sklookiesmu.wisefee.dto.consumer.OrderOptionDto;
-import com.sklookiesmu.wisefee.dto.consumer.ProductDto;
 import com.sklookiesmu.wisefee.repository.MemberRepository;
 import com.sklookiesmu.wisefee.repository.cafe.CafeJpaRepository;
 import com.sklookiesmu.wisefee.repository.order.OrderJpaRepository;
@@ -13,7 +13,6 @@ import com.sklookiesmu.wisefee.repository.product.OrderProductJpaRepository;
 import com.sklookiesmu.wisefee.repository.product.ProdOptChoiceJpaRepository;
 import com.sklookiesmu.wisefee.repository.product.ProductJpaRepository;
 import com.sklookiesmu.wisefee.repository.product.ProductOptJpaRepository;
-import com.sklookiesmu.wisefee.repository.subscribe.PaymentJpaRepository;
 import com.sklookiesmu.wisefee.repository.subscribe.SubscribeJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +58,7 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
         Cafe cafe = cafeJpaRepository.findById(cafeId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 매장입니다."));
 
-        Member member = memberRepository.find(memberId);
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchElementFoundException("member not found"));
         Subscribe subscribe = subscribeJpaRepository.findByMemberAndCafe(member, cafe)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 구독권입니다."));
 

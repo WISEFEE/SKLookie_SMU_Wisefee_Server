@@ -1,16 +1,14 @@
 package com.sklookiesmu.wisefee.service.shared;
 
 import com.sklookiesmu.wisefee.common.constant.FileConstant;
-import com.sklookiesmu.wisefee.common.error.FileDownloadException;
-import com.sklookiesmu.wisefee.common.error.FileUploadException;
+import com.sklookiesmu.wisefee.common.exception.FileDownloadException;
+import com.sklookiesmu.wisefee.common.exception.FileUploadException;
 import com.sklookiesmu.wisefee.common.file.FileUtil;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.dto.shared.file.FileInfoDto;
 import com.sklookiesmu.wisefee.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;

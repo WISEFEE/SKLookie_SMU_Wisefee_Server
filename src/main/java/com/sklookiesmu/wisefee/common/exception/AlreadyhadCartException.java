@@ -1,26 +1,27 @@
-package com.sklookiesmu.wisefee.common.error;
+package com.sklookiesmu.wisefee.common.exception;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
 
-public class CartNotFoundException extends RuntimeException {
-    public CartNotFoundException() {
+public class AlreadyhadCartException extends RuntimeException {
+
+    public AlreadyhadCartException() {
         super();
     }
 
-    public CartNotFoundException(String message) {
+    public AlreadyhadCartException(String message) {
         super(message);
     }
 
-    public CartNotFoundException(String message, Throwable cause) {
+    public AlreadyhadCartException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public CartNotFoundException(Throwable cause) {
+    public AlreadyhadCartException(Throwable cause) {
         super(cause);
     }
 
-    protected CartNotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected AlreadyhadCartException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

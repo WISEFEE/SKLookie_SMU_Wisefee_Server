@@ -1,26 +1,26 @@
-package com.sklookiesmu.wisefee.common.error;
+package com.sklookiesmu.wisefee.common.exception;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
 
-public class CafeNotFoundException extends RuntimeException {
-    public CafeNotFoundException() {
+public class CartNotFoundException extends RuntimeException {
+    public CartNotFoundException() {
         super();
     }
 
-    public CafeNotFoundException(String message) {
+    public CartNotFoundException(String message) {
         super(message);
     }
 
-    public CafeNotFoundException(String message, Throwable cause) {
+    public CartNotFoundException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public CafeNotFoundException(Throwable cause) {
+    public CartNotFoundException(Throwable cause) {
         super(cause);
     }
 
-    protected CafeNotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected CartNotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 
