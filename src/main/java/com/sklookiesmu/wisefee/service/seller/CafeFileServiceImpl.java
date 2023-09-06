@@ -1,6 +1,7 @@
 package com.sklookiesmu.wisefee.service.seller;
 
 import com.sklookiesmu.wisefee.common.constant.FileConstant;
+import com.sklookiesmu.wisefee.common.exception.NotFoundException;
 import com.sklookiesmu.wisefee.domain.Cafe;
 import com.sklookiesmu.wisefee.domain.File;
 import com.sklookiesmu.wisefee.domain.Product;
@@ -50,7 +51,7 @@ public class CafeFileServiceImpl implements CafeFileService {
             file.setCafe(cafe);
         }
         else{
-            throw new IllegalArgumentException("존재하지 않는 매장이거나 이미지입니다.");
+            throw new NotFoundException("존재하지 않는 매장이거나 이미지입니다.");
         }
         return 1L;
     }
@@ -105,7 +106,7 @@ public class CafeFileServiceImpl implements CafeFileService {
             file.setProduct(product);
         }
         else{
-            throw new IllegalArgumentException("존재하지 않는 상품이거나 이미지입니다.");
+            throw new NotFoundException("존재하지 않는 상품이거나 이미지입니다.");
         }
         return 1L;
     }
@@ -130,7 +131,7 @@ public class CafeFileServiceImpl implements CafeFileService {
             file.setProduct(null);
         }
         else{
-            throw new IllegalArgumentException("존재하지 않는 상품이거나 이미지입니다.");
+            throw new NotFoundException("존재하지 않는 상품이거나 이미지입니다.");
         }
         return 1L;
     }

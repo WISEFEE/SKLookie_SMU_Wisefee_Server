@@ -43,7 +43,7 @@ public class FileApiController {
             MultipartFile file) {
         Long memberPK = SecurityUtil.getCurrentMemberPk();
         FileInfoDto fileinfo = fileService.uploadFile(file);
-        Long success = fileService.insertFileInfo(fileinfo, memberPK);
+        Long success = fileService.addFileInfo(fileinfo, memberPK);
 
         return ResponseEntity.status(HttpStatus.OK).body(success);
     }

@@ -6,6 +6,7 @@ import com.sklookiesmu.wisefee.common.auth.JwtTokenProvider;
 import com.sklookiesmu.wisefee.common.auth.custom.CustomUserDetail;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
 import com.sklookiesmu.wisefee.common.constant.OAuthTokenStatus;
+import com.sklookiesmu.wisefee.common.exception.AuthForbbidenException;
 import com.sklookiesmu.wisefee.common.exception.NotFoundException;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.dto.shared.firebase.FCMToken;
@@ -65,7 +66,7 @@ public class AuthServiceImpl implements AuthService {
         String authType = userDetail.getAuthType();
 
         if(!authType.equalsIgnoreCase(loginAuthType)){
-            throw new NotFoundException(loginAuthType + " 로그인으로 유효한 계정 타입이 아닙니다.");
+            throw new AuthForbbidenException(loginAuthType + " 로그인으로 유효한 계정 타입이 아닙니다.");
         }
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
@@ -177,7 +178,7 @@ public class AuthServiceImpl implements AuthService {
             }
             return email;
         } else {
-            throw new NotFoundException("사용자 토큰이 유효하지 않습니다.");
+            throw new AuthForbbidenException("사용자 토큰이 유효하지 않습니다.");
         }
 
     }
@@ -200,6 +201,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
 
+
+    /**
+     * [구글 Access Token 검증]
+     * Google Access Token 검증, 검증 성공 시 토큰에 해당하는 유저의 회원가입 상태를 나타내는 코드 반환
+     * @param [accessToken Google 계정 OAuth Access Token]
+     * @return [OAuthGoogleTokenVerifyResponseDto 회원가입 상태]
+     */
+    @Transactional
     public OAuthGoogleTokenVerifyResponseDto verifyGoogleToken(String accessToken) throws IOException{
         String url = AuthConstant.OAUTH_GOOGLE_AUTHENTICATION_URL + "?access_token=" + accessToken;
         OAuthGoogleTokenVerifyResponseDto result = new OAuthGoogleTokenVerifyResponseDto();

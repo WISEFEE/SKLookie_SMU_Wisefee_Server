@@ -2,6 +2,7 @@ package com.sklookiesmu.wisefee.service.shared;
 
 import com.sklookiesmu.wisefee.common.error.MemberNotFoundException;
 import com.sklookiesmu.wisefee.common.error.ValidateMemberException;
+import com.sklookiesmu.wisefee.common.exception.NotFoundException;
 import com.sklookiesmu.wisefee.domain.Address;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.repository.AddressRepository;
@@ -21,14 +22,17 @@ public class AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepository;
 
     @Transactional
-    public Long insert(Address address){
+    public Long addAddress(Address address){
         addressRepository.create(address);
         return address.getAddrId();
     }
 
     @Transactional
-    public Address selectById(Long id){
+    public Address getAddressById(Long id){
         Address address = addressRepository.find(id);
+        if(address == null){
+            throw new NotFoundException("주소 정보를 찾을 수 없습니다.");
+        }
         return address;
     }
 
