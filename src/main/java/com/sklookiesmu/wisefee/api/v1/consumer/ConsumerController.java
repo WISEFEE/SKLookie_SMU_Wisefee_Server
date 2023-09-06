@@ -30,33 +30,33 @@ public class ConsumerController {
 
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @PostMapping("/subscribe/{cafeId}/subTicketType/{subTicketTypeId}")
-    public ResponseEntity<?> createSubscribe(@PathVariable("cafeId") Long cafeId,
+    public ResponseEntity<Long> createSubscribe(@PathVariable("cafeId") Long cafeId,
                                              @PathVariable("subTicketTypeId") Long subTicketTypeId,
                                              @RequestBody @Valid SubscribeDto.SubscribeRequestDto request) {
 
-        Long userId = SecurityUtil.getCurrentMemberPk();
-        consumerService.createSubscribe(request, cafeId, subTicketTypeId, userId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Long memberId = SecurityUtil.getCurrentMemberPk();
+        Long result = consumerService.createSubscribe(request, cafeId, subTicketTypeId, memberId);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @ApiOperation(value = "CONS-B-02 :: 정기구독 내역 조회하기",
-            notes = "정기 구독 내역을 조회합니다. memberId에는 조회할 사용자의 PK를 넣어서 요청합니다.")
+            notes = "정기 구독 내역을 조회합니다.")
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
-    @GetMapping("/{memberId}/subscribe")
-    public ResponseEntity<SubscribeDto.SubscribeListResponseDto> getSubscribe(@PathVariable("memberId") Long memberId) {
+    @GetMapping("/subscribe")
+    public ResponseEntity<SubscribeDto.SubscribeListResponseDto> getSubscribe() {
 
-        // 유저 검증 필요
-        //Long memberId = SecurityUtil.getCurrentMemberPk();
+        Long memberId = SecurityUtil.getCurrentMemberPk();
         return ResponseEntity.status(HttpStatus.OK).body(consumerService.getSubscribe(memberId));
     }
 
     @ApiOperation(value = "CONS-B-03 :: 정기구독 해지하기",
-            notes = "정기 구독을 해지합니다. memberId에는 해지할 사용자의 PK를 넣어서 요청합니다.")
+            notes = "정기 구독을 해지합니다. subscribeId에는 해지할 구독권 PK를 넣어서 요청합니다.")
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
-    @DeleteMapping("/{memberId}/subscribe")
-    public ResponseEntity<?> cancelSubscribe(@PathVariable("memberId") Long memberId){
+    @DeleteMapping("/subscribe/{subscribeId}")
+    public ResponseEntity<?> cancelSubscribe(@PathVariable("subscribeId") Long subscribeId){
 
-        consumerService.cancelSubscribe(memberId);
+        Long memberId = SecurityUtil.getCurrentMemberPk();
+        consumerService.cancelSubscribe(memberId, subscribeId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

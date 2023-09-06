@@ -67,7 +67,6 @@ public class ConsumerOrderServiceImplV2 implements ConsumerOrderService{
     @Transactional
     public Long createOrder(Long cafeId, OrderDto.OrderRequestDto orderRequestDto) {
 
-
         /* Create Order */
         Long memberId = SecurityUtil.getCurrentMemberPk();
         Cafe cafe = cafeJpaRepository.findById(cafeId)

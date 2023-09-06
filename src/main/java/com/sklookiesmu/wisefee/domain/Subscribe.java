@@ -85,6 +85,6 @@ public class Subscribe {
     private List<Order> orders = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SUBTCT_ID")
+    @JoinColumn(name = "SUBTCT_ID", nullable = false)
     private SubTicketType subTicketType;
 }
