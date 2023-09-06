@@ -2,6 +2,7 @@ package com.sklookiesmu.wisefee.service.shared;
 
 import com.sklookiesmu.wisefee.common.error.CafeNotFoundException;
 import com.sklookiesmu.wisefee.common.error.CartNotFoundException;
+import com.sklookiesmu.wisefee.common.exception.NotFoundException;
 import com.sklookiesmu.wisefee.domain.*;
 import com.sklookiesmu.wisefee.dto.shared.member.CartRequestDto;
 import com.sklookiesmu.wisefee.dto.shared.member.CartResponseDto;
@@ -11,6 +12,8 @@ import com.sklookiesmu.wisefee.repository.SubTicketTypeRepository;
 import com.sklookiesmu.wisefee.repository.cafe.CafeRepository;
 import com.sklookiesmu.wisefee.repository.product.ProductOptChoiceRepository;
 import com.sklookiesmu.wisefee.repository.product.ProductRepository;
+import com.sklookiesmu.wisefee.repository.subscribe.SubscribeJpaRepository;
+import com.sklookiesmu.wisefee.repository.subscribe.SubscribeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +30,8 @@ public class CartServiceImpl implements CartService {
     private final ProductRepository productRepository;
     private final ProductOptChoiceRepository productOptChoiceRepository;
     private final CafeRepository cafeRepository;
+
+    private final SubscribeJpaRepository subscribeRepository;
     private final SubTicketTypeRepository subTicketTypeRepository;
 
     @Override
@@ -216,15 +221,22 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Long calculateCartWithSubTicket(Long memberId, Long subTicketId) {
+    public Long calculateCartWithSubTicket(Long memberId, Long subscribeId) {
         // get discount rate value
-        SubTicketType subTicketType = subTicketTypeRepository.find(subTicketId);
-        double subPeople = subTicketType.getSubscribe().getSubPeople();
+        Optional<Subscribe> subscribe = subscribeRepository.findById(subscribeId);
+        if(subscribe.isEmpty()){
+            throw new NotFoundException("해당 구독 ID를 찾을 수 없습니다.");
+        }
+        if(subscribe.get().getMember().getMemberId() != memberId){
+            throw new IllegalStateException("해당 구독을 맺지 않았습니다.");
+        }
+        SubTicketType subTicketType = subscribe.get().getSubTicketType();
+        double subPeople = subscribe.get().getSubPeople();
         double subTicketAdditionalDiscountRate = subTicketType.getSubTicketAdditionalDiscountRate() * subPeople; // 인원당 추가 할인율
         double subTicketDeposit = subTicketType.getSubTicketDeposit() * subPeople; //  텀블러 보증금
         double subTicketBaseDiscountRate = subTicketType.getSubTicketBaseDiscountRate(); // 기본 할인율
         double subTicketMaxDiscountRate = subTicketType.getSubTicketMaxDiscountRate(); // 최대 할인율
-        double totalDiscountRate = (subTicketBaseDiscountRate / 100) + (subTicketAdditionalDiscountRate / 100);
+        double totalDiscountRate = ((subTicketBaseDiscountRate + subTicketAdditionalDiscountRate) / 100);
         double currentDiscountRate = Math.min(totalDiscountRate, subTicketMaxDiscountRate / 100);
 
         List<CartProduct> cartProducts = cartRepository.findCartProductByCartId(cartRepository.findCartByMemberId(memberId).getCartId());
@@ -232,7 +244,8 @@ public class CartServiceImpl implements CartService {
         if (cartProducts.size() == 0) {
             throw new RuntimeException("Invalid Value : This cart is null");
         }
-        long result = (long) subTicketDeposit;
+//        long result = (long) subTicketDeposit;
+        long result = 0L;
         for (CartProduct cartProduct : cartProducts) {
             int productPrice = 0;
             Product product = productRepository.findById(cartProduct.getProduct().getProductId());

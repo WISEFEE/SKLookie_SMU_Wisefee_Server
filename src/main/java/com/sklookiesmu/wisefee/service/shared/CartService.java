@@ -64,5 +64,5 @@ public interface CartService {
      * @param [subTIcketId 적용할 구독권 아이디]
      * @return [계산금액, 계산 로직 -> productPrice * productQuantity + productOptChoicePrice * productQuantity ]
      */
-    Long calculateCartWithSubTicket(Long memberId, Long subTicketId);
+    Long calculateCartWithSubTicket(Long memberId, Long subscribeId);
 }

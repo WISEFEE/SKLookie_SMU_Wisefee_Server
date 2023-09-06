@@ -72,10 +72,10 @@ public class CartApiController {
     public ResponseEntity<Long> findCartTotalPriceWithSubTicket(
             @ApiParam(value = "회원 PK")
             @PathVariable("memberId") Long memberId,
-            @ApiParam(value = "적용할 구독권 아이디")
-            @RequestParam("subTicketId") Long subTicketId
+            @ApiParam(value = "적용할 구독 아이디")
+            @RequestParam("subscribeId") Long subscribeId
     ) {
-        Long result = cartService.calculateCartWithSubTicket(memberId, subTicketId);
+        Long result = cartService.calculateCartWithSubTicket(memberId, subscribeId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
