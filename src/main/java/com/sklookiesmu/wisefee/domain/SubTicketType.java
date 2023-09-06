@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -71,6 +72,7 @@ public class SubTicketType {
      * 연관관계 매핑
      */
     // 구독권에서 구독 정보를 가져올 일은 없을 것 같아 단방향 설정.
-    @OneToOne(mappedBy = "subTicketType")
-    private Subscribe subscribe;
+
+    @OneToMany(mappedBy = "subTicketType")
+    private List<Subscribe> subscribe;
 }

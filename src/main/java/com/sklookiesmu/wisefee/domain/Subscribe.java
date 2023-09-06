@@ -84,7 +84,7 @@ public class Subscribe {
     @OneToMany(mappedBy = "subscribe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SUBTCT_ID", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SUBTCT_ID")
     private SubTicketType subTicketType;
 }
