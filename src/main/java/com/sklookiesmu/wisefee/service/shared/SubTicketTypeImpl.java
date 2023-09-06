@@ -20,7 +20,6 @@ public class SubTicketTypeImpl implements SubTicketTypeService {
         return ticket.getSubTicketId();
     }
 
-    @Transactional
     public SubTicketType selectById(Long id){
         SubTicketType ticket = subTicketTypeRepository.find(id);
         return ticket;

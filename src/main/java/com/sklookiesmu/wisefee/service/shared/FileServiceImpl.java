@@ -106,7 +106,6 @@ public class FileServiceImpl implements FileService {
      * @param [Long 파일 PK]
      * @return [FileInfoDto 이미지 Info]
      */
-    @Transactional
     public FileInfoDto getImageInfoById(Long id){
         FileInfoDto info = this.fileRepository.getFilePathById(id);
         return info;
@@ -118,7 +117,6 @@ public class FileServiceImpl implements FileService {
      * @param [Path 파일 경로]
      * @return [byte[] 이미지 바이트 배열]
      */
-    @Transactional
     public byte[] getImageFile(Path path){
         try {
             byte[] imageBytes = Files.readAllBytes(path);
