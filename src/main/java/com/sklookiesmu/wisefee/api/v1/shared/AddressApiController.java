@@ -39,7 +39,7 @@ public class AddressApiController {
     @PostMapping("")
     public ResponseEntity<Long> addAddress(@Valid @RequestBody AddressRequestDto address){
         Address entity = modelMapper.map(address, Address.class);
-        Long id = addressService.insert(entity);
+        Long id = addressService.addAddress(entity);
         return ResponseEntity.status(HttpStatus.OK).body(id);
     }
 
@@ -54,7 +54,7 @@ public class AddressApiController {
             @ApiParam(value = "주소 ID", required = true)
             @PathVariable("id") Long id
     ){
-        Address address = addressService.selectById(id);
+        Address address = addressService.getAddressById(id);
         if(address == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

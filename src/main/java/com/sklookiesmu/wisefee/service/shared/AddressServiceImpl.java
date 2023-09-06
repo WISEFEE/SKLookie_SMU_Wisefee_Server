@@ -22,13 +22,13 @@ public class AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepository;
 
     @Transactional
-    public Long insert(Address address){
+    public Long addAddress(Address address){
         addressRepository.create(address);
         return address.getAddrId();
     }
 
     @Transactional
-    public Address selectById(Long id){
+    public Address getAddressById(Long id){
         Address address = addressRepository.find(id);
         if(address == null){
             throw new NotFoundException("주소 정보를 찾을 수 없습니다.");

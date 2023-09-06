@@ -15,7 +15,7 @@ public class SubTicketTypeImpl implements SubTicketTypeService {
     private final SubTicketTypeRepository subTicketTypeRepository;
 
     @Transactional
-    public Long insert(SubTicketType ticket){
+    public Long addTicketType(SubTicketType ticket){
         subTicketTypeRepository.create(ticket);
         return ticket.getSubTicketId();
     }

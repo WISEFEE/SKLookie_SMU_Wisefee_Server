@@ -11,7 +11,7 @@ public interface SubTicketTypeService {
      * @param [member 구독권 유형 엔티티 모델(id=null)]
      * @return [성공 시 구독권 유형 PK 반환]
      */
-    public abstract Long insert(SubTicketType ticket);
+    public abstract Long addTicketType(SubTicketType ticket);
 
 
     /**

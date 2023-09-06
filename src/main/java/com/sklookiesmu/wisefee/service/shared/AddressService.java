@@ -14,7 +14,7 @@ public interface AddressService {
      * @param [member 주소 엔티티 모델(id=null)]
      * @return [성공 시 주소 PK 반환]
      */
-    public abstract Long insert(Address address);
+    public abstract Long addAddress(Address address);
 
 
     /**
@@ -23,7 +23,7 @@ public interface AddressService {
      * @param [member 주소 ID(PK)]
      * @return [성공 시 Address 반환]
      */
-    public abstract Address selectById(Long id);
+    public abstract Address getAddressById(Long id);
 
 
 

@@ -46,7 +46,7 @@ public class SubscribeTicketController {
     @PostMapping("")
     public ResponseEntity<Long> addSubTicketType(@Valid @RequestBody SubTicketTypeRequestDto ticket){
         SubTicketType entity = modelMapper.map(ticket, SubTicketType.class);
-        Long id = subTicketTypeService.insert(entity);
+        Long id = subTicketTypeService.addTicketType(entity);
         return ResponseEntity.status(HttpStatus.OK).body(id);
     }
 
