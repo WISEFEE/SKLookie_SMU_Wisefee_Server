@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @ApiModel(description = "Access Token 판별 요청 Dto")
 public class OAuthGoogleTokenVerifyRequestDto {
-    @ApiModelProperty(value = "구글 Access Token", required = true, example = "YOUR_OAUTH_ACCESS_TOKEN")
+    @ApiModelProperty(value = "Google OAuth Access Token", required = true, example = "YOUR_GOOGLE_OAUTH_ACCESS_TOKEN")
     @NotBlank(message = "구글 Access Token은 필수 입력 값입니다.")
     private String googleAccessToken;
 
