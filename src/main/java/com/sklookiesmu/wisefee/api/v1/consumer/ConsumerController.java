@@ -30,13 +30,13 @@ public class ConsumerController {
 
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @PostMapping("/subscribe/{cafeId}/subTicketType/{subTicketTypeId}")
-    public ResponseEntity<?> createSubscribe(@PathVariable("cafeId") Long cafeId,
+    public ResponseEntity<Long> createSubscribe(@PathVariable("cafeId") Long cafeId,
                                              @PathVariable("subTicketTypeId") Long subTicketTypeId,
                                              @RequestBody @Valid SubscribeDto.SubscribeRequestDto request) {
 
         Long memberId = SecurityUtil.getCurrentMemberPk();
-        consumerService.createSubscribe(request, cafeId, subTicketTypeId, memberId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Long result = consumerService.createSubscribe(request, cafeId, subTicketTypeId, memberId);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @ApiOperation(value = "CONS-B-02 :: 정기구독 내역 조회하기",

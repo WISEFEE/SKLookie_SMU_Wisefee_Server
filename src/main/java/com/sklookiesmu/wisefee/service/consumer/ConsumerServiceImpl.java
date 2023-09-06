@@ -34,13 +34,13 @@ public class ConsumerServiceImpl implements ConsumerService {
      */
     @Transactional
     @Override
-    public void createSubscribe(SubscribeDto.SubscribeRequestDto request, Long cafeId, Long subTicketTypeId, Long memberId) {
+    public Long createSubscribe(SubscribeDto.SubscribeRequestDto request, Long cafeId, Long subTicketTypeId, Long memberId) {
 
         Cafe cafe = cafeJpaRepository.findById(cafeId).orElseThrow();
 
         // 한 카페에서 한 종류의 구독권만 체결 가능
 
-        Subscribe subscribe = subscribeRepository.findByCafeIdAndSubTicketTypeId(subTicketTypeId, cafeId);
+        Subscribe subscribe = subscribeRepository.findByCafeIdAndMemberId(cafeId, memberId);
         if (subscribe != null && subscribe.getExpiredAt().isAfter(LocalDateTime.now())) {
             throw new IllegalArgumentException("이미 구독하셨습니다.");
         }
@@ -53,7 +53,8 @@ public class ConsumerServiceImpl implements ConsumerService {
         paymentJpaRepository.save(payment);
 
         Member member = memberRepository.find(memberId);
-        subscribeRepository.save(request.toEntity(cafe, subTicketType, payment, member));
+
+        return subscribeRepository.save(request.toEntity(cafe, subTicketType, payment, member)).getSubId();
     }
 
     /**

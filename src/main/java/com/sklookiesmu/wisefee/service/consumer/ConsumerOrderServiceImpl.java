@@ -157,6 +157,12 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
         return order.getOrderId();
     }
 
+    /**
+     * 주문내역 조회
+     * @param cafeId
+     * @param orderId
+     * @return OrderResponseDto
+     */
     @Override
     public OrderDto.OrderResponseDto getOrderHistory(Long cafeId, Long orderId) {
         Cafe cafe = cafeJpaRepository.findById(cafeId)

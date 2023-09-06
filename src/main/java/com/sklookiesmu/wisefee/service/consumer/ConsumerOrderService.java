@@ -34,9 +34,5 @@ public interface ConsumerOrderService {
     OrderDto.OrderResponseDto getOrderHistory(Long cafeId, Long orderId);
 
 
-    /**
-     * TODO [주문 현황 확인] -> (카페 측 음료 준비 현황)
-     */
-
 
 }
