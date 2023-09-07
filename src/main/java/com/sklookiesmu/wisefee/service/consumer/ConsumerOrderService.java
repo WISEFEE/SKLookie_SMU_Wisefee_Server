@@ -2,6 +2,7 @@ package com.sklookiesmu.wisefee.service.consumer;
 
 import com.sklookiesmu.wisefee.dto.consumer.OrderDto;
 import com.sklookiesmu.wisefee.dto.consumer.OrderOptionDto;
+import com.sklookiesmu.wisefee.dto.consumer.PaymentDto;
 import com.sklookiesmu.wisefee.dto.consumer.ProductDto;
 
 public interface ConsumerOrderService {
@@ -32,6 +33,15 @@ public interface ConsumerOrderService {
      * @return [주문 내역 정보 DTO 반환]
      */
     OrderDto.OrderResponseDto getOrderHistory(Long cafeId, Long orderId);
+
+
+    /**
+     * [주문 내역 결제]
+     * 주문 내역을 결제한다.
+     * @param request
+     */
+    void createPayment(PaymentDto.PaymentRequestDto request, Long cafeId, Long orderId);
+
 
 
 

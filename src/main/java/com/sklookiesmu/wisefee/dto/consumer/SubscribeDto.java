@@ -90,14 +90,14 @@ public class SubscribeDto {
     @NoArgsConstructor
     public static class SubscribeRequestDto{
 
-        @ApiModelProperty(value = "구독 인원", required = true)
+        @ApiModelProperty(value = "구독 인원", required = true, example = "8")
         @NotNull(message = "구독 인원은 필수 입력값입니다.")
         private Integer subPeople;
 
-        @ApiModelProperty(value = "구독 요청사항", required = true)
+        @ApiModelProperty(value = "구독 요청사항", required = true, example = "구독 요청사항입니다")
         private String subComment;
 
-        @ApiModelProperty(value = "결제수단", required = true)
+        @ApiModelProperty(value = "결제수단", required = true, example = "현장결제")
         private String paymentMethod;
 
         public Subscribe toEntity(Cafe cafe, SubTicketType subTicketType, Payment payment, Member member){

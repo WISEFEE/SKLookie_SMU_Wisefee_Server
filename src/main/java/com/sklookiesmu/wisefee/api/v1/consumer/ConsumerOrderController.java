@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@Api(tags = "CONS-C :: 매장 정보(주문관련) API")
+@Api(tags = "CONS-C :: 주문관련 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/consumer")

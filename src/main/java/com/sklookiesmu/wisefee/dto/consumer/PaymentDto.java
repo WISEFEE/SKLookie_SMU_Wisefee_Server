@@ -63,7 +63,7 @@ public class PaymentDto {
         public Payment toEntity(SubTicketType subTicketType){
             return Payment.builder()
                     .paymentInfo(paymentInfo)
-                    .paymentPrice(subTicketType.getSubTicketPrice())
+                    .paymentPrice(paymentPrice)
                     .paymentMethod(paymentMethod)
                     .build();
         }

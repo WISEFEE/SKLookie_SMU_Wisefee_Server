@@ -2,9 +2,11 @@ package com.sklookiesmu.wisefee.service.consumer;
 
 import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
 import com.sklookiesmu.wisefee.common.constant.ProductStatus;
+import com.sklookiesmu.wisefee.common.exception.NotFoundException;
 import com.sklookiesmu.wisefee.domain.*;
 import com.sklookiesmu.wisefee.dto.consumer.OrderDto;
 import com.sklookiesmu.wisefee.dto.consumer.OrderOptionDto;
+import com.sklookiesmu.wisefee.dto.consumer.PaymentDto;
 import com.sklookiesmu.wisefee.repository.MemberRepository;
 import com.sklookiesmu.wisefee.repository.cafe.CafeJpaRepository;
 import com.sklookiesmu.wisefee.repository.order.*;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -55,6 +58,7 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
      * @return orderId
      */
     // TODO : 코드 리팩토링 필요 !
+    // TODO : 주문 수량 >= 구독권 조건의 최소 인원 부합하도록 Valid 검사
     @Override
     @Transactional
     public Long createOrder(Long cafeId, OrderDto.OrderRequestDto orderRequestDto) {
@@ -62,12 +66,12 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
         /* Create Order */
         Long memberId = SecurityUtil.getCurrentMemberPk();
         Cafe cafe = cafeJpaRepository.findById(cafeId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 매장입니다."));
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 매장입니다."));
 
         Member member = memberRepository.find(memberId);
 
         Subscribe subscribe = subscribeJpaRepository.findByIdAndCafeId(orderRequestDto.getSubscribeId(), cafeId)
-                .orElseThrow(()-> new IllegalArgumentException("존재하지 않는 구독권입니다"));
+                .orElseThrow(()-> new NotFoundException("존재하지 않는 구독권입니다"));
 
         if (subscribe.getExpiredAt().isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("만료된 구독권입니다.");
@@ -85,7 +89,11 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
         List<OrderProduct> orderProducts = orderRequestDto.getOrderProduct().stream()
                 .map(op -> {
                     Product product = productJpaRepository.findById(op.getProductId())
-                            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+                            .orElseThrow(() -> new NotFoundException("존재하지 않는 상품입니다."));
+
+                    if (!Objects.equals(product.getCafe().getCafeId(), cafeId)) {
+                        throw new NotFoundException("해당 카페에 존재하지 않는 상품입니다");
+                    }
 
                     OrderProduct orderProduct = new OrderProduct();
 
@@ -104,7 +112,11 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
                             .map(prodOpt -> {
 
                                 ProductOption productOptions = productOptJpaRepository.findById(prodOpt.getOrderProductOptionId())
-                                        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품옵션입니다."));
+                                        .orElseThrow(() -> new NotFoundException("존재하지 않는 상품옵션입니다."));
+
+                                if (!Objects.equals(productOptions.getProduct().getCafe().getCafeId(), cafeId)) {
+                                    throw new NotFoundException("해당 카페에 존재하지 않는 상품옵션입니다");
+                                }
 
                                 OrderProductOption orderProductOption = new OrderProductOption();
 
@@ -117,7 +129,11 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
                                         .map(prodOptChoice -> {
 
                                             ProductOptChoice productOptChoices = prodOptChoiceJpaRepository.findById(prodOptChoice.getOrderProductOptionChoiceId())
-                                                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품선택옵션입니다."));
+                                                    .orElseThrow(() -> new NotFoundException("존재하지 않는 상품선택옵션입니다."));
+
+                                            if (!Objects.equals(productOptChoices.getProductOption().getProduct().getCafe().getCafeId(), cafeId)) {
+                                                throw new NotFoundException("해당 카페에 존재하지 않는 상품선택옵션입니다.");
+                                            }
 
                                             OrderProductOptionChoice orderProductOptionChoice = OrderProductOptionChoice.createOrderProdOptChoice(finalOrderProduct, orderProductOption, productOptChoices);
                                             orderProdOptChoiceJpaRepository.save(orderProductOptionChoice);
@@ -139,11 +155,26 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
 
                 }).collect(Collectors.toList());
 
+        int minPeople = subscribe.getSubTicketType().getSubTicketMinUserCount();
+        int maxPeople = subscribe.getSubTicketType().getSubTicketMaxUserCount();
+
+        if (orderProducts.size() < minPeople) {
+            throw new IllegalArgumentException("최소 " + minPeople +  "개 이상 주문해야합니다.");
+        }
+
+        if (orderProducts.size() > maxPeople) {
+            throw new IllegalArgumentException("최대 " + maxPeople +  "개 이하 주문해야합니다.");
+        }
+
         // 주문 옵션 설정
         List<OrdOrderOption> orderOptions = orderRequestDto.getOrderOption().stream()
                 .map(oop -> {
                     OrderOption orderOption = orderOptionRepository.findById(oop.getOrderOptionId())
-                            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문 옵션입니다"));
+                            .orElseThrow(() -> new NotFoundException("존재하지 않는 주문 옵션입니다"));
+
+                    if (orderOption.getCafe().getCafeId() != cafeId) {
+                        throw new IllegalArgumentException("해당 카페에 존재하지 않는 주문 옵션입니다");
+                    }
 
                     OrdOrderOption ordOrderOption = OrdOrderOption.createOrdOrderOption(orderOption);
                     ordOrderOptionJpaRepository.save(ordOrderOption);
@@ -166,10 +197,22 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
     @Override
     public OrderDto.OrderResponseDto getOrderHistory(Long cafeId, Long orderId) {
         Cafe cafe = cafeJpaRepository.findById(cafeId)
-                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 카페입니다."));
+                .orElseThrow(()->new NotFoundException("존재하지 않는 카페입니다."));
 
         Order order = orderJpaRepository.findById(orderId)
-                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 주문입니다"));
+                .orElseThrow(()->new NotFoundException("존재하지 않는 주문입니다."));
         return OrderDto.OrderResponseDto.orderToDto(order);
+    }
+
+    /**
+     * 주문 내역 결제
+     */
+    @Transactional
+    @Override
+    public void createPayment(PaymentDto.PaymentRequestDto request, Long cafeId, Long orderId){
+        Order order = orderJpaRepository.findById(orderId)
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 주문내역입니다."));
+
+
     }
 }

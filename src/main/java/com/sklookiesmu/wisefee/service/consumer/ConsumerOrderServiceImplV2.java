@@ -5,6 +5,7 @@ import com.sklookiesmu.wisefee.common.constant.ProductStatus;
 import com.sklookiesmu.wisefee.domain.*;
 import com.sklookiesmu.wisefee.dto.consumer.OrderDto;
 import com.sklookiesmu.wisefee.dto.consumer.OrderOptionDto;
+import com.sklookiesmu.wisefee.dto.consumer.PaymentDto;
 import com.sklookiesmu.wisefee.repository.MemberRepository;
 import com.sklookiesmu.wisefee.repository.cafe.CafeJpaRepository;
 import com.sklookiesmu.wisefee.repository.order.*;
@@ -172,4 +173,10 @@ public class ConsumerOrderServiceImplV2 implements ConsumerOrderService{
                 .orElseThrow(()->new IllegalArgumentException("존재하지 않는 주문입니다"));
         return OrderDto.OrderResponseDto.orderToDto(order);
     }
+
+    @Override
+    public void createPayment(PaymentDto.PaymentRequestDto request, Long cafeId, Long orderId) {
+
+    }
+
 }
