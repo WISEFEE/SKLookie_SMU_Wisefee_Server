@@ -23,7 +23,7 @@ public class LoginRequestDto {
     private String password;
 
 
-    @ApiModelProperty(value = "파이어베이스 FCM Token(푸시알림 동의여부에 따른 Optional Param, 해당 값을 넣어서 로그인해야 해당 기기로 푸시 알림이 전송되도록 함)", required = false, example = "null")
+    @ApiModelProperty(value = "파이어베이스 FCM Token(푸시알림 동의여부에 따른 Optional Param, 해당 값을 넣어서 로그인해야 해당 기기로 푸시 알림이 전송되도록 함)", required = false, example = "YOUR_FCM_TOKEN or NULL")
     private String fcmToken;
 
 }
