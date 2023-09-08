@@ -36,12 +36,18 @@ public interface ConsumerOrderService {
 
 
     /**
-     * [주문 내역 결제]
-     * 주문 내역을 결제한다.
+     * [주문 내역 금액 조회]
+     * 주문 내역 금액을 조회한다.
      * @param request
      */
-    void createPayment(PaymentDto.PaymentRequestDto request, Long cafeId, Long orderId);
+    PaymentDto.PaymentResponseDto getPayment(Long cafeId, Long orderId);
 
+    /**
+     * [결제 수단 생성]
+     * 결제수단을 생성한다.
+     * @param orderId
+     */
+    Long createPaymentMethod(Long cafeId, Long orderId, PaymentDto.PaymentRequestDto paymentRequestDto);
 
 
 

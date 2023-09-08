@@ -3,6 +3,7 @@ package com.sklookiesmu.wisefee.api.v1.consumer;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
 import com.sklookiesmu.wisefee.dto.consumer.OrderDto;
 import com.sklookiesmu.wisefee.dto.consumer.OrderOptionDto;
+import com.sklookiesmu.wisefee.dto.consumer.PaymentDto;
 import com.sklookiesmu.wisefee.service.consumer.ConsumerOrderServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -64,4 +67,22 @@ public class ConsumerOrderController {
         return ResponseEntity.status(HttpStatus.OK).body(consumerOrderService.getOrderHistory(cafeId, orderId));
     }
 
+    @ApiOperation(value = "CONS-C-04 :: 주문 금액 생성하기",
+            notes = "주문한 내역의 총금액을 생성합니다.")
+    @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
+    @PostMapping("/{cafeId}/order/{orderId}/payment")
+    public ResponseEntity<Long> createPayment(@PathVariable("cafeId") Long cafeId,
+                                              @PathVariable("orderId") Long orderId,
+                                              @Valid @RequestBody PaymentDto.PaymentRequestDto paymentRequestDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(consumerOrderService.createPaymentMethod(cafeId, orderId, paymentRequestDto));
+    }
+
+    @ApiOperation(value = "CONS-C-05 :: 주문 금액 조회하기",
+            notes = "주문한 내역의 금액을 조회합니다.")
+    @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
+    @GetMapping("/{cafeId}/order/{orderId}/payment")
+    public ResponseEntity<PaymentDto.PaymentResponseDto> getPayment(@PathVariable("cafeId") Long cafeId,
+                                                                    @PathVariable("orderId") Long orderId) {
+        return ResponseEntity.status(HttpStatus.OK).body(consumerOrderService.getPayment(cafeId, orderId));
+    }
 }

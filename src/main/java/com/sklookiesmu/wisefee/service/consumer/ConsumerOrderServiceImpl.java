@@ -43,6 +43,7 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
     private final OrdOrderOptionJpaRepository ordOrderOptionJpaRepository;
     private final OrderProductOptionJpaRepository orderProductOptionJpaRepository;
     private final OrderProdOptChoiceJpaRepository orderProdOptChoiceJpaRepository;
+    private final PaymentJpaRepository paymentJpaRepository;
 
     /**
      * 매장 상세보기 -> 주문 옵션 정보
@@ -58,7 +59,6 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
      * @return orderId
      */
     // TODO : 코드 리팩토링 필요 !
-    // TODO : 주문 수량 >= 구독권 조건의 최소 인원 부합하도록 Valid 검사
     @Override
     @Transactional
     public Long createOrder(Long cafeId, OrderDto.OrderRequestDto orderRequestDto) {
@@ -78,9 +78,12 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
         }
 
         Order order = new Order();
+        Payment payment = new Payment();
+
+        Payment finalPayment = paymentJpaRepository.save(payment);
 
         order.setSubscribe(subscribe);
-        order.setPayment(order.getSubscribe().getPayment());
+        order.setPayment(finalPayment);
         order.setProductStatus(ProductStatus.REQUESTED);
         order.setCreatedAt(LocalDateTime.now());
         orderJpaRepository.save(order);
@@ -106,8 +109,6 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
                         return null;
                     }
 
-                    OrderProduct finalOrderProduct = orderProduct;
-
                     List<OrderProductOption> productOption = op.getProductOption().stream()
                             .map(prodOpt -> {
 
@@ -121,7 +122,7 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
                                 OrderProductOption orderProductOption = new OrderProductOption();
 
                                 orderProductOption.setProductOption(productOptions);
-                                orderProductOption.setOrderProduct(finalOrderProduct);
+                                orderProductOption.setOrderProduct(orderProduct);
                                 orderProductOptionJpaRepository.save(orderProductOption);
 
 
@@ -135,28 +136,27 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
                                                 throw new NotFoundException("해당 카페에 존재하지 않는 상품선택옵션입니다.");
                                             }
 
-                                            OrderProductOptionChoice orderProductOptionChoice = OrderProductOptionChoice.createOrderProdOptChoice(finalOrderProduct, orderProductOption, productOptChoices);
+                                            OrderProductOptionChoice orderProductOptionChoice = OrderProductOptionChoice.createOrderProdOptChoice(orderProduct, orderProductOption, productOptChoices);
                                             orderProdOptChoiceJpaRepository.save(orderProductOptionChoice);
 
-                                            return OrderProductOptionChoice.builder()
-                                                    .orderProductOptionChoiceId(productOptChoices.getProductOptionChoiceId())
-                                                    .build();
+                                            return orderProductOptionChoice;
                                         }).collect(Collectors.toList());
 
-                                OrderProductOption.createOrderProductOptionChoice(productOptChoice);
+                                OrderProductOption.createOrderProductOptionChoice(productOptChoice, orderProductOption);
 
-                                return OrderProductOption.builder()
-                                        .orderProductOptionId(productOptions.getProductOptionId())
-                                        .build();
+                                return orderProductOption;
                             }).collect(Collectors.toList());
 
-                    orderProduct = OrderProduct.createOrderProductOption(productOption);
+                    OrderProduct.createOrderProductOption(productOption, orderProduct);
+
                     return orderProduct;
 
                 }).collect(Collectors.toList());
 
         int minPeople = subscribe.getSubTicketType().getSubTicketMinUserCount();
         int maxPeople = subscribe.getSubTicketType().getSubTicketMaxUserCount();
+
+        log.info("주문제품 개수 : " + orderProducts.size());
 
         if (orderProducts.size() < minPeople) {
             throw new IllegalArgumentException("최소 " + minPeople +  "개 이상 주문해야합니다.");
@@ -172,7 +172,7 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
                     OrderOption orderOption = orderOptionRepository.findById(oop.getOrderOptionId())
                             .orElseThrow(() -> new NotFoundException("존재하지 않는 주문 옵션입니다"));
 
-                    if (orderOption.getCafe().getCafeId() != cafeId) {
+                    if (!Objects.equals(orderOption.getCafe().getCafeId(), cafeId)) {
                         throw new IllegalArgumentException("해당 카페에 존재하지 않는 주문 옵션입니다");
                     }
 
@@ -182,6 +182,47 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
                     return ordOrderOption;
 
                 }).collect(Collectors.toList());
+
+        /*
+         * 금액 계산 로직
+         */
+        double totalPrice = 0;
+
+        for (OrderProduct orderProduct : orderProducts) {
+
+            log.info("제품주문 id : " +orderProduct.getOrder().getOrderId());
+            // 제품 금액
+            totalPrice += orderProduct.getProduct().getProductPrice();
+            log.info("제품가격 : " + totalPrice);
+
+            // 제품 옵션 추가 금액
+            totalPrice += orderProduct.getOrderProductOptions()
+                    .stream()
+                    .mapToInt(option -> option.getOrderProductOptChoice().stream()
+                            .mapToInt(optionChoice -> optionChoice.getProductOptChoice().getProductOptionChoicePrice())
+                            .sum())
+                    .sum();
+
+            log.info("제품옵션추가된가격 : " + totalPrice);
+
+        }
+
+
+        // 주문 옵션 추가 금액
+        for(OrdOrderOption ordOrderOption :orderOptions){
+            log.info("주문 옵션 추가 금액 : " + ordOrderOption.getOrderOption().getOrderOptionPrice());
+
+            totalPrice += ordOrderOption.getOrderOption().getOrderOptionPrice();
+        }
+
+        int subTicketDeposit = subscribe.getSubTicketType().getSubTicketDeposit() * subscribe.getSubPeople(); //  텀블러 보증금
+
+        finalPayment.setPaymentPrice(discountPayment(totalPrice, subscribe)+subTicketDeposit);
+
+        log.info("할인된 금액: " + (discountPayment(totalPrice, subscribe)));
+        log.info("할인+보증금 총금액: " + (discountPayment(totalPrice, subscribe)+subTicketDeposit));
+        finalPayment.setCreatedAt(LocalDateTime.now());
+
 
         Order.createOrder(order, orderProducts, orderOptions);
 
@@ -204,15 +245,62 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
         return OrderDto.OrderResponseDto.orderToDto(order);
     }
 
+
     /**
-     * 주문 내역 결제
+     * 결제수단 생성
      */
     @Transactional
     @Override
-    public void createPayment(PaymentDto.PaymentRequestDto request, Long cafeId, Long orderId){
+    public Long createPaymentMethod(Long cafeId, Long orderId, PaymentDto.PaymentRequestDto paymentRequestDto) {
+        Cafe cafe = cafeJpaRepository.findById(cafeId)
+                .orElseThrow(()->new NotFoundException("존재하지 않는 카페입니다."));
+
         Order order = orderJpaRepository.findById(orderId)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 주문내역입니다."));
 
+        Payment payment = paymentJpaRepository.findById(order.getPayment().getPaymentId())
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 금액입니다"));
 
+        payment.setPaymentMethod(paymentRequestDto.getPaymentMethod());
+
+        return payment.getPaymentId();
+    }
+
+    /**
+     * 주문 내역 금액 조회
+     */
+    @Override
+    public PaymentDto.PaymentResponseDto getPayment(Long cafeId, Long orderId){
+
+        Cafe cafe = cafeJpaRepository.findById(cafeId)
+                .orElseThrow(()->new NotFoundException("존재하지 않는 카페입니다."));
+
+        Order order = orderJpaRepository.findById(orderId)
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 주문내역입니다."));
+
+       /*Subscribe subscribe = subscribeJpaRepository.findById(order.getSubscribe().getSubId())
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 구독권입니다."));*/
+
+        Payment payment = paymentJpaRepository.findById(order.getPayment().getPaymentId())
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 주문금액입니다"));
+
+        return PaymentDto.PaymentResponseDto.from(payment);
+    }
+
+    public long discountPayment(double price, Subscribe subscribe) {
+
+        long result = 0L;
+
+        SubTicketType subTicketType = subscribe.getSubTicketType();
+        double subPeople = subscribe.getSubPeople();
+        double subTicketAdditionalDiscountRate = subTicketType.getSubTicketAdditionalDiscountRate() * subPeople; // 인원당 추가 할인율
+        double subTicketBaseDiscountRate = subTicketType.getSubTicketBaseDiscountRate(); // 기본 할인율
+        double subTicketMaxDiscountRate = subTicketType.getSubTicketMaxDiscountRate(); // 최대 할인율
+        double totalDiscountRate = ((subTicketBaseDiscountRate + subTicketAdditionalDiscountRate) / 100);
+        double currentDiscountRate = Math.min(totalDiscountRate, subTicketMaxDiscountRate / 100);
+        log.info("적용될 할인율 : " + currentDiscountRate);
+        result += price - (price * currentDiscountRate);
+
+        return result;
     }
 }

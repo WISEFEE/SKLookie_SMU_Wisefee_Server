@@ -96,9 +96,6 @@ public class ConsumerOrderServiceImplV2 implements ConsumerOrderService{
                     orderProduct.setOrder(order);
                     orderProductJpaRepository.save(orderProduct);
 
-                    /* 상품 옵션 */
-                    OrderProduct finalOrderProduct = orderProduct;
-
                     // 상품옵션을 선택하지 않았을 시 continue
                     if(op.getProductOption() == null){
                         return null;
@@ -112,7 +109,7 @@ public class ConsumerOrderServiceImplV2 implements ConsumerOrderService{
 
                                 OrderProductOption orderProductOption = new OrderProductOption();
                                 orderProductOption.setProductOption(productOptions);
-                                orderProductOption.setOrderProduct(finalOrderProduct);
+                                orderProductOption.setOrderProduct(orderProduct);
                                 orderProductOptionJpaRepository.save(orderProductOption);
 
                                 /* 상품 옵션 선택지 */
@@ -124,7 +121,7 @@ public class ConsumerOrderServiceImplV2 implements ConsumerOrderService{
                                                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품선택옵션입니다."));
 
                                             OrderProductOptionChoice orderProductOptionChoice = new OrderProductOptionChoice();
-                                            orderProductOptionChoice = OrderProductOptionChoice.createOrderProdOptChoice(finalOrderProduct, finalOrderProductOption, productOptChoices);
+                                            orderProductOptionChoice = OrderProductOptionChoice.createOrderProdOptChoice(orderProduct, finalOrderProductOption, productOptChoices);
                                             orderProdOptChoiceJpaRepository.save(orderProductOptionChoice);
 
                                             return OrderProductOptionChoice.builder()
@@ -132,14 +129,14 @@ public class ConsumerOrderServiceImplV2 implements ConsumerOrderService{
                                                     .build();
                                         }).collect(Collectors.toList());
 
-                                OrderProductOption.createOrderProductOptionChoice(productOptChoice);
+                                OrderProductOption.createOrderProductOptionChoice(productOptChoice, orderProductOption);
 
                                 return OrderProductOption.builder()
                                         .orderProductOptionId(productOptions.getProductOptionId())
                                         .build();
                             }).collect(Collectors.toList());
 
-                    orderProduct = OrderProduct.createOrderProductOption(productOption);
+                    OrderProduct.createOrderProductOption(productOption, orderProduct);
                     return orderProduct;
 
                 }).filter(Objects::nonNull)
@@ -175,8 +172,12 @@ public class ConsumerOrderServiceImplV2 implements ConsumerOrderService{
     }
 
     @Override
-    public void createPayment(PaymentDto.PaymentRequestDto request, Long cafeId, Long orderId) {
-
+    public PaymentDto.PaymentResponseDto getPayment(Long cafeId, Long orderId) {
+        return null;
     }
 
+    @Override
+    public Long createPaymentMethod(Long cafeId, Long orderId, PaymentDto.PaymentRequestDto paymentRequestDto) {
+        return 0L;
+    }
 }
