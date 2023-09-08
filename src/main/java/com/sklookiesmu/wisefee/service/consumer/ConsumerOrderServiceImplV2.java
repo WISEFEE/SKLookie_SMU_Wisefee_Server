@@ -2,6 +2,7 @@ package com.sklookiesmu.wisefee.service.consumer;
 
 import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
 import com.sklookiesmu.wisefee.common.constant.ProductStatus;
+import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
 import com.sklookiesmu.wisefee.domain.*;
 import com.sklookiesmu.wisefee.dto.consumer.OrderDto;
 import com.sklookiesmu.wisefee.dto.consumer.OrderOptionDto;
@@ -72,7 +73,7 @@ public class ConsumerOrderServiceImplV2 implements ConsumerOrderService{
         Cafe cafe = cafeJpaRepository.findById(cafeId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 매장입니다."));
 
-        Member member = memberRepository.find(memberId);
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchElementFoundException("member not found"));
         Subscribe subscribe = subscribeJpaRepository.findByMemberAndCafe(member, cafe)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 구독권입니다."));
 
