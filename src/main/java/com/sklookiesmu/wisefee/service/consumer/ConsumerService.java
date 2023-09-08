@@ -12,7 +12,7 @@ public interface ConsumerService{
      * 고객이 매장의 구독권을 구독한다.
      * @param request
      */
-    void createSubscribe(SubscribeDto.SubscribeRequestDto request, Long cafeId, Long subTicketTypeId, Long userId);
+    Long createSubscribe(SubscribeDto.SubscribeRequestDto request, Long cafeId, Long subTicketTypeId, Long userId);
 
     /**
      * [구독 조회]
@@ -27,12 +27,12 @@ public interface ConsumerService{
      * 선택한 정기 구독권을 결제한다.
      * @param request
      */
-    void createPayment(PaymentDto.PaymentRequestDto request, Long cafeId, Long subscribeId);
+   // void createPayment(PaymentDto.PaymentRequestDto request, Long cafeId, Long subscribeId);
 
 
     /**
      * [정기구독 해지]
      * 구독하고 있는 정기 구독권을 해지한다.
      */
-    void cancelSubscribe(Long memberId);
+    void cancelSubscribe(Long memberId, Long subscribeId);
 }

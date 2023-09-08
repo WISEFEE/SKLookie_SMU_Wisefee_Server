@@ -39,7 +39,13 @@ public class SubMemberDetailsDto {
     @ApiModelProperty(value = "매장명")
     private String title;
 
-    public static SubMemberDetailsDto fromSubscriptionAndMember(Subscribe subscribe, SubTicketType subTicketType, Member member, Order order, Cafe cafe) {
+    public static SubMemberDetailsDto fromSubscriptionAndMember(Subscribe subscribe) {
+
+        SubTicketType subTicketType = subscribe.getSubTicketType();
+        Member member = subscribe.getMember();
+        Order order = subscribe.getOrders().stream().findFirst().orElse(null);
+        Cafe cafe = subscribe.getCafe();
+
         return new SubMemberDetailsDto(
                 member.getNickname(),
                 member.getPhone(),

@@ -29,6 +29,12 @@ public class CafeDetailsDto {
     @ApiModelProperty(value = "매장 전화번호")
     private String cafePhone;
 
+    @ApiModelProperty(value = "매장의 주소 ID")
+    private Long addrId;
+
+    @ApiModelProperty(value = "매장에 업로드된 파일 ID 리스트")
+    private List<Long> fileIds;
+
     @ApiModelProperty(value = "매장 상품 리스트")
     private List<ProductsDto> products;
 
@@ -44,11 +50,17 @@ public class CafeDetailsDto {
                 .map(orderOption -> OrderOptionsDto.fromOrderOption(orderOption))
                 .collect(Collectors.toList());
 
+        List<Long> fileIds = cafe.getFiles().stream()
+                .map(file -> file.getFileId())
+                .collect(Collectors.toList());
+
         return new CafeDetailsDto(
                 cafe.getCafeId(),
                 cafe.getTitle(),
                 cafe.getContent(),
                 cafe.getCafePhone(),
+                cafe.getAddress().getAddrId(),
+                fileIds,
                 productDtoList,
                 orderOptionDtoList
         );

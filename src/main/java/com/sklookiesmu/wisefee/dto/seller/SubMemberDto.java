@@ -1,6 +1,7 @@
 package com.sklookiesmu.wisefee.dto.seller;
 
 import com.sklookiesmu.wisefee.domain.Member;
+import com.sklookiesmu.wisefee.domain.SubTicketType;
 import com.sklookiesmu.wisefee.domain.Subscribe;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -23,13 +24,16 @@ public class SubMemberDto {
     @ApiModelProperty(value = "구독 ID")
     private Long subId;
 
-    //구독권 유형
+    @ApiModelProperty(value = "구독권 유형")
+    private String subTicketName;
 
-    public static SubMemberDto fromMemberAndSubscribe(Member member, Subscribe subscribe) {
+
+    public static SubMemberDto fromMemberAndSubscribe(Member member, Subscribe subscribe, SubTicketType subTicketType) {
         return new SubMemberDto(
                 member.getMemberId(),
                 member.getNickname(),
-                subscribe.getSubId()
+                subscribe.getSubId(),
+                subTicketType.getSubTicketName()
         );
 
     }

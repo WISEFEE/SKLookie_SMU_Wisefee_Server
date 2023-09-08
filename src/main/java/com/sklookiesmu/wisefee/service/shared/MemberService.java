@@ -2,6 +2,7 @@ package com.sklookiesmu.wisefee.service.shared;
 
 import com.sklookiesmu.wisefee.domain.Member;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,5 +63,14 @@ public interface MemberService {
      * @return
      */
     public abstract Member getMemberByEmail(String email);
+
+
+    /**
+     * [OAuth 구글 회원 가입]
+     * OAuth Google 계정을 통해 가입시킨다.
+     * @param [member 회원 엔티티 모델(id=null)]
+     * @return [성공 시 회원 PK 반환]
+     */
+    public abstract Long joinGoogle(Member member, String accessToken) throws IOException;
 
 }

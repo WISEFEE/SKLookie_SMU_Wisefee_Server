@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class FCMTokenServiceImpl implements FCMTokenService {
     private final AuthRepositoryWithRedis authRepositoryWithRedis;
 

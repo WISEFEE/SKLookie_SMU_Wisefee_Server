@@ -19,14 +19,17 @@ public class OrderDto {
     @Builder
     public static class OrderRequestDto{
 
+        @ApiModelProperty(value = "구독권 ID", required = true)
+        @NotNull(message = "구독권 ID는 필수 입력값입니다.")
+        private Long subscribeId;
+
         @ApiModelProperty(value = "주문 상품", required = true)
         @NotNull(message = "주문 상품은 필수 입력값입니다.")
         private List<OrderProductRequestDto> orderProduct;
 
         @ApiModelProperty(value = "주문 옵션", required = true)
-        private List<OrderOptionDto.OrderOptionRequestDto> orderOption;
+        private List<OrdOrderOptionRequestDto> orderOption;
     }
-
 
     @Getter
     @Setter
@@ -51,7 +54,7 @@ public class OrderDto {
         private List<OrderProductRequestDto> orderProduct;
 
         @ApiModelProperty(value = "주문 옵션", required = true)
-        private List<OrderOptionDto.OrderOptionRequestDto> orderOption;
+        private List<OrdOrderOptionRequestDto> orderOption;
 
         public static OrderResponseDto orderToDto(Order order){
             return OrderResponseDto.builder()
@@ -62,15 +65,15 @@ public class OrderDto {
 
                     .orderProduct(order.getOrderProducts().stream()
                             .map(orderProd -> OrderProductRequestDto.builder()
-                                    .productId(orderProd.getOrderProductId())
+                                    .productId(orderProd.getProduct().getProductId())
 
-                                    .productOption(orderProd.getProduct().getProductOptions().stream()
-                                            .map(prodOpt -> ProductDto.ProductOptionRequestDto.builder()
-                                                    .productOptionId(prodOpt.getProductOptionId())
+                                    .productOption(orderProd.getOrderProductOptions().stream()
+                                            .map(prodOpt -> OrderProductOptionDto.OrderProductOptionRequestDto.builder()
+                                                    .orderProductOptionId(prodOpt.getProductOption().getProductOptionId())
 
-                                                    .productOptionChoice(prodOpt.getProductOptChoices().stream()
-                                                            .map(prodOptChoice -> ProductDto.ProductOptionChoiceRequestDto.builder()
-                                                                    .optionChoiceId(prodOptChoice.getProductOptionChoiceId())
+                                                    .productOptionChoices(prodOpt.getOrderProductOptChoice().stream()
+                                                            .map(prodOptChoice -> OrderProductOptionDto.OrderProductOptionChoiceRequestDto.builder()
+                                                                    .orderProductOptionChoiceId(prodOptChoice.getProductOptChoice().getProductOptionChoiceId())
                                                                     .build())
                                                             .collect(Collectors.toList()))
                                                     .build())
@@ -79,9 +82,9 @@ public class OrderDto {
                                     .build())
                             .collect(Collectors.toList()))
 
-                    .orderOption(order.getOrderOptions().stream()
-                            .map(orderOpt-> OrderOptionDto.OrderOptionRequestDto.builder()
-                                    .orderOptionId(orderOpt.getOrderOptionId())
+                    .orderOption(order.getOrdOrderOptions().stream()
+                            .map(orderOpt-> OrdOrderOptionRequestDto.builder()
+                                    .orderOptionId(orderOpt.getOrderOption().getOrderOptionId())
                                     .build())
                             .collect(Collectors.toList())).build();
         }
@@ -97,6 +100,17 @@ public class OrderDto {
         private Long productId;
 
         @ApiModelProperty(value = "제품 옵션", required = true)
-        private List<ProductDto.ProductOptionRequestDto> productOption;
+        //@ApiModelProperty(value = "제품 옵션")
+        private List<OrderProductOptionDto.OrderProductOptionRequestDto> productOption;
+    }
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class OrdOrderOptionRequestDto{
+
+        @ApiModelProperty(value = "주문 옵션 PK", required = true)
+        private Long orderOptionId;
     }
 }

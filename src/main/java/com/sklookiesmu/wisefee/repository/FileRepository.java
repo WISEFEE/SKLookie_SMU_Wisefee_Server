@@ -17,7 +17,7 @@ public class FileRepository {
      * 파일 추가
      * @param [File File 엔티티(pk=null)]
      */
-    public void insertFile(File file){
+    public void create(File file){
         em.persist(file);
     }
 

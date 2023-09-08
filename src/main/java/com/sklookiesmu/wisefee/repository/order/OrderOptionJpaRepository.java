@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -17,7 +18,7 @@ public interface OrderOptionJpaRepository extends JpaRepository<OrderOption, Lon
      * @param cafeId
      * @return
      */
-    @Query(value = "select op from OrderOption op where op.cafe.cafeId = :cafeId")
-    Optional<OrderOption> findOptionByCafeId(@Param("cafeId") Long cafeId);
+    @Query(value = "select op from OrderOption op where op.cafe.cafeId = :cafeId and op.deletedAt is null")
+    List<OrderOption> findOptionByCafeId(@Param("cafeId") Long cafeId);
 
 }

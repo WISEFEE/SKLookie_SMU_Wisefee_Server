@@ -5,11 +5,13 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class SubTicketTypeDto {
 
     @Getter
-    @NoArgsConstructor
+    //@NoArgsConstructor
     @AllArgsConstructor
     public static class SubTicketTypeResponseDto{
 
@@ -19,10 +21,12 @@ public class SubTicketTypeDto {
         @ApiModelProperty(value = "정기구독권 이름")
         private String subTicketName;
 
-        @ApiModelProperty(value = "정기구독권 가격")
+       @ApiModelProperty(value = "정기구독권 가격")
         private int subTicketPrice;
 
         public static SubTicketTypeResponseDto from(SubTicketType subTicketType) {
+            log.info("subTicketTypeId : " + subTicketType.getSubTicketId());
+
             return new SubTicketTypeResponseDto(
                     subTicketType.getSubTicketId(),
                     subTicketType.getSubTicketName(),

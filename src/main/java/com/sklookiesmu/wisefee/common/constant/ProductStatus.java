@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ProductStatus {
 
-    REQUIRE(0, "요청"),
+    REQUESTED(0, "요청"),
     ACCEPT(1, "접수"),
     REJECT(2, "거절"),
     ALLSET(3,"준비완료"),

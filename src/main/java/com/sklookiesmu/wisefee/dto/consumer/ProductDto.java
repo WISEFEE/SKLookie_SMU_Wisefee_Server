@@ -1,5 +1,6 @@
 package com.sklookiesmu.wisefee.dto.consumer;
 
+import com.sklookiesmu.wisefee.domain.File;
 import com.sklookiesmu.wisefee.domain.Product;
 import com.sklookiesmu.wisefee.domain.ProductOptChoice;
 import com.sklookiesmu.wisefee.domain.ProductOption;
@@ -31,6 +32,9 @@ public class ProductDto {
         @ApiModelProperty(value = "제품정보", required = true)
         private String productInfo;
 
+        @ApiModelProperty(value = "제품 사진 ID 리스트", required = true)
+        private List<Long> productImages;
+
         @ApiModelProperty(value = "제품옵션", required = true)
         private List<ProductOptionResponseDto> productOptions;
 
@@ -40,7 +44,11 @@ public class ProductDto {
                     product.getProductName(),
                     product.getProductPrice(),
                     product.getProductInfo(),
+                    product.getFiles().stream()
+                            .map(File::getFileId)
+                            .collect(Collectors.toList()),
                     product.getProductOptions().stream()
+                            .filter(productOption -> productOption.getDeletedAt() == null)
                             .map(ProductOptionResponseDto::from)
                             .collect(Collectors.toList()));
         }
@@ -61,6 +69,7 @@ public class ProductDto {
     }
 
     @Getter
+    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ProductOptionResponseDto{
@@ -68,17 +77,18 @@ public class ProductDto {
         @ApiModelProperty(value = "제품옵션 PK", required = true)
         private Long productOptionId;
 
-        @ApiModelProperty(value = "제품옵션 명", required = true)
+        @ApiModelProperty(value = "제품옵션 명")
         private String productOptionName;
 
         @ApiModelProperty(value = "제품옵션 선택", required = true)
         private List<ProductOptChoiceResponseDto> productOptChoice;
 
-        public static ProductOptionResponseDto from (ProductOption productOption){
+        public static ProductOptionResponseDto from (ProductOption productOption) {
             return new ProductOptionResponseDto(
                     productOption.getProductOptionId(),
                     productOption.getProductOptionName(),
                     productOption.getProductOptChoices().stream()
+                            .filter(productOptionChoice -> productOptionChoice.getDeletedAt() == null)
                             .map(ProductOptChoiceResponseDto::from)
                             .collect(Collectors.toList()));
         }
@@ -100,6 +110,7 @@ public class ProductDto {
     }
 
     @Getter
+    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ProductOptChoiceResponseDto{

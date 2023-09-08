@@ -63,18 +63,18 @@ public class CartApiController {
 
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @ApiOperation(
-            value = "장바구니 금액조회 (구독권 금액 포함)",
-            notes = "구독권 금액비율 반영한 장바구니 총 금액 조회 API입니다. <br>" +
+            value = "장바구니 금액조회 (구독권 할인 적용)",
+            notes = "구독권의 할인률을 적용한 장바구니 총 금액 조회 API입니다. <br>" +
                     "회원 아이디 입력 시 현재 회원의 장바구니에 담긴 상품들의 총 가격을 조회합니다."
     )
     @GetMapping("/api/v1/cart/price/sub-ticket/{memberId}")
     public ResponseEntity<Long> findCartTotalPriceWithSubTicket(
             @ApiParam(value = "회원 PK")
             @PathVariable("memberId") Long memberId,
-            @ApiParam(value = "적용할 구독권 아이디")
-            @RequestParam("subTicketId") Long subTicketId
+            @ApiParam(value = "적용할 구독 아이디")
+            @RequestParam("subscribeId") Long subscribeId
     ) {
-        Long result = cartService.calculateCartWithSubTicket(memberId, subTicketId);
+        Long result = cartService.calculateCartWithSubTicket(memberId, subscribeId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

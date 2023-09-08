@@ -24,19 +24,30 @@ public class ConsumerOrderController {
     @ApiOperation(value = "CONS-C-01 :: 주문 옵션 정보 조회")
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @GetMapping("/{cafeId}/orderOption")
-    public ResponseEntity<OrderOptionDto.OrderOptionResponseDto> getOrderOption(@PathVariable("cafeId") Long cafeId){
+    public ResponseEntity<OrderOptionDto.OrderOptionListResponseDto> getOrderOption(@PathVariable("cafeId") Long cafeId){
         return ResponseEntity.status(HttpStatus.OK).body(consumerOrderService.getOrderOptionInfo(cafeId));
     }
 
 
     @ApiOperation(value = "CONS-C-02 :: 주문하기",
-                notes = "- 아이스 아메리카노(PRODUCT : ID=13)\n" +
-                        "    - 사이즈 선택(PRODUCT_OPTION : ID=1)\n" +
-                        "        - 벤티(+1000)  (PRODUCT_OPT_CHOICE : ID=101)\n" +
-                        "        - 그란데(+2000)  (PRODUCT_OPT_CHOICE : ID=102)\n" +
-                        "    - 휘핑크림 추가 (PRODUCT_OPTION : ID=2)\n" +
-                        "        - 추가 (+500)  (PRODUCT_OPT_CHOICE : ID=103)\n\n" +
-                        "- orderOption는 주문 옵션 - 빨대 추가 여부, 고무컵홀더 사용여부 등등..")
+                notes = "본 API는 카페 음료를 주문하는 기능입니다.\n\n" +
+                        "입력 데이터:\n" +
+                        "```json\n" +
+                        "{\n" +
+                        "  \"주문 옵션 ID \"    : \"orderOptionId\",                // 주문 옵션 Id은 필수 입력값이 아닙니다.   ex). 빨대추가\n" +
+                        "  \"제품 ID\"         : \"productId\",                    // 주문할 제품의 ID를 입력합니다.         ex). 아이스 아메리카노\n" +
+                        "  \"제품 옵션 ID\"     : \"orderProductOptionId\",         // 주문할 제품의 옵션 ID를 입력합니다.     ex). 사이즈 선택\n" +
+                        "  \"제품 옵션 선택지 ID\": \"orderProductOptionId\",         // 주문할 제품의 옵션 선택 ID를 입력합니다. ex). 벤티\n" +
+                        "}\n" +
+                        "```\n\n<hr>"+
+                        "- orderOption는 주문 옵션을 입력합니다. - 빨대 추가 여부, 고무컵홀더 사용여부 등등..\n\n"+
+                        "- orderProduct는 주문할 제품을 입력합니다.\n"+
+                        "   - 아이스 아메리카노(PRODUCT : ID=13)\n" +
+                        "       - 사이즈 선택(PRODUCT_OPTION : ID=1)\n" +
+                        "           - 벤티(+1000)  (PRODUCT_OPT_CHOICE : ID=101)\n" +
+                        "           - 그란데(+2000)  (PRODUCT_OPT_CHOICE : ID=102)\n" +
+                        "       - 휘핑크림 추가 (PRODUCT_OPTION : ID=2)\n" +
+                        "           - 추가 (+500)  (PRODUCT_OPT_CHOICE : ID=103)")
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @PostMapping("/{cafeId}/order")
     public ResponseEntity<Long> createOrder(@PathVariable("cafeId") Long cafeId,
