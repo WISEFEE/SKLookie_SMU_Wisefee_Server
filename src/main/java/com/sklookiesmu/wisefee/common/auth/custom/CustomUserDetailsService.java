@@ -1,5 +1,6 @@
 package com.sklookiesmu.wisefee.common.auth.custom;
 
+import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public CustomUserDetail loadUserByUsername(String username) throws UsernameNotFoundException {
         return memberRepository.findByEmail(username)
                 .map(this::createUserDetails)
-                .orElseThrow(() -> new UsernameNotFoundException("해당하는 유저를 찾을 수 없습니다."));
+                .orElseThrow(() -> new NoSuchElementFoundException("해당하는 유저를 찾을 수 없습니다."));
     }
 
     /**

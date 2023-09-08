@@ -6,8 +6,7 @@ import com.sklookiesmu.wisefee.common.auth.JwtTokenProvider;
 import com.sklookiesmu.wisefee.common.auth.custom.CustomUserDetail;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
 import com.sklookiesmu.wisefee.common.constant.OAuthTokenStatus;
-import com.sklookiesmu.wisefee.common.exception.AuthForbbidenException;
-import com.sklookiesmu.wisefee.common.exception.NotFoundException;
+import com.sklookiesmu.wisefee.common.exception.AuthForbiddenException;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.dto.shared.firebase.FCMToken;
 import com.sklookiesmu.wisefee.dto.shared.jwt.TokenInfoDto;
@@ -66,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
         String authType = userDetail.getAuthType();
 
         if(!authType.equalsIgnoreCase(loginAuthType)){
-            throw new AuthForbbidenException(loginAuthType + " 로그인으로 유효한 계정 타입이 아닙니다.");
+            throw new AuthForbiddenException(loginAuthType + " 로그인으로 유효한 계정 타입이 아닙니다.");
         }
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
@@ -178,7 +177,7 @@ public class AuthServiceImpl implements AuthService {
             }
             return email;
         } else {
-            throw new AuthForbbidenException("사용자 토큰이 유효하지 않습니다.");
+            throw new AuthForbiddenException("사용자 토큰이 유효하지 않습니다.");
         }
 
     }

@@ -1,7 +1,7 @@
 package com.sklookiesmu.wisefee.api.v1.seller;
 
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
-import com.sklookiesmu.wisefee.common.exception.NotFoundException;
+import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
 import com.sklookiesmu.wisefee.domain.*;
 import com.sklookiesmu.wisefee.dto.seller.SubMemberDetailsDto;
 import com.sklookiesmu.wisefee.dto.seller.SubMemberDto;
@@ -62,7 +62,7 @@ public class CafeSubController {
             Subscribe subscribe = subscriptionOptional.get();
             return SubMemberDetailsDto.fromSubscriptionAndMember(subscribe);
         } else {
-            throw new NotFoundException("구독 정보를 찾을 수 없습니다.");
+            throw new NoSuchElementFoundException("구독 정보를 찾을 수 없습니다.");
         }
 
     }

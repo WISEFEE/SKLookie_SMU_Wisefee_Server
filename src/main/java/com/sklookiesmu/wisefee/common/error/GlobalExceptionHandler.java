@@ -1,8 +1,8 @@
 package com.sklookiesmu.wisefee.common.error;
 
 
-import com.sklookiesmu.wisefee.common.exception.AlreadyExistElementException;
-import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
+import com.google.api.Http;
+import com.sklookiesmu.wisefee.common.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,7 +48,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<Object> handleNoSuchElementFoundException(NoSuchElementFoundException noSuchElementFoundException, WebRequest request) {
         log.error("Failed to find the request element", noSuchElementFoundException);
-        return buildErrorResponse(noSuchElementFoundException, HttpStatus.NOT_FOUND, request);
+        return buildErrorResponse(noSuchElementFoundException, HttpStatus.BAD_REQUEST, request);
     }
 
     // AlreadyExistElementException
@@ -56,7 +56,31 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Object> handleAlreadyExistElementException(AlreadyExistElementException alreadyExistElementException, WebRequest request) {
         log.error("Failed to element is already exist", alreadyExistElementException);
-        return buildErrorResponse(alreadyExistElementException, HttpStatus.NOT_FOUND, request);
+        return buildErrorResponse(alreadyExistElementException, HttpStatus.BAD_REQUEST, request);
+    }
+
+    // AuthForbiddenException
+    @ExceptionHandler(AuthForbiddenException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> handleAuthForbiddenException(AuthForbiddenException authForbiddenException, WebRequest request) {
+        log.error("Failed to Auth fail", authForbiddenException);
+        return buildErrorResponse(authForbiddenException, HttpStatus.BAD_REQUEST, request);
+    }
+
+    // FileDownloadException
+    @ExceptionHandler(FileDownloadException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> handleFileDownloadException(FileDownloadException fileDownloadException, WebRequest request) {
+        log.error("Failed to while file download", fileDownloadException);
+        return buildErrorResponse(fileDownloadException, HttpStatus.BAD_REQUEST, request);
+    }
+
+    // FileUploadException
+    @ExceptionHandler(FileUploadException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> handleFileUploadException(FileUploadException fileUploadException, WebRequest request) {
+        log.error("Failed to while file upload", fileUploadException);
+        return buildErrorResponse(fileUploadException, HttpStatus.BAD_REQUEST, request);
     }
 
     // 필요시 ExceptionHandler 추가 - 예상가는 오류 있다면 전부 ExceptionHandler 이용해 처리.
