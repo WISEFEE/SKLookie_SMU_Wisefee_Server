@@ -5,6 +5,7 @@ import com.sklookiesmu.wisefee.common.constant.ProductStatus;
 
 import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
 
+import com.sklookiesmu.wisefee.common.exception.PreconditionFailException;
 import com.sklookiesmu.wisefee.domain.*;
 import com.sklookiesmu.wisefee.dto.consumer.OrderDto;
 import com.sklookiesmu.wisefee.dto.consumer.OrderOptionDto;
@@ -263,7 +264,12 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
         Payment payment = paymentJpaRepository.findById(order.getPayment().getPaymentId())
                 .orElseThrow(() -> new NoSuchElementFoundException("존재하지 않는 금액입니다"));
 
-        payment.setPaymentMethod(paymentRequestDto.getPaymentMethod());
+
+        if (paymentRequestDto.getPaymentPrice() != payment.getPaymentPrice()) {
+            throw new PreconditionFailException("결제금액이 일치하지 않습니다");
+        } else {
+            payment.setPaymentMethod(paymentRequestDto.getPaymentMethod());
+        }
 
         return payment.getPaymentId();
     }

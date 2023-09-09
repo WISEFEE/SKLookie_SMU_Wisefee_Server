@@ -51,6 +51,11 @@ public class PaymentDto {
         @NotNull(message = "결제 수단은 필수 입력값입니다.")
         private String paymentMethod;
 
+        @ApiModelProperty(value = "결제 금액", example = "13500")
+        @NotNull(message = "결제금액은 필수 입력값입니다.")
+        private int paymentPrice;
+
+
        /* public Payment toEntity(Payment payment){
             return Payment.builder()
                     .paymentInfo(payment.getPaymentInfo())
