@@ -1,5 +1,6 @@
 package com.sklookiesmu.wisefee.dto.seller;
 
+import com.sklookiesmu.wisefee.domain.File;
 import com.sklookiesmu.wisefee.domain.Product;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -22,6 +23,9 @@ public class ProductsDto {
     @ApiModelProperty(value = "상품명")
     private String productName;
 
+    @ApiModelProperty(value = "상품 파일 ID 리스트")
+    private List<Long> fileIds;
+
     @ApiModelProperty(value = "상품 가격")
     private int productPrice;
 
@@ -37,9 +41,14 @@ public class ProductsDto {
                 .map(productOption -> ProductOptionsDto.fromProductOption(productOption))
                 .collect(Collectors.toList());
 
+        List<Long> fileIds = product.getFiles().stream()
+                .map(File::getFileId)
+                .collect(Collectors.toList());
+
         return new ProductsDto(
                 product.getProductId(),
                 product.getProductName(),
+                fileIds,
                 product.getProductPrice(),
                 product.getProductInfo(),
                 productOptionsDtoList

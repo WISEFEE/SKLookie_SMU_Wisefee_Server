@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @ApiModel(description = "상품 옵션 수정 요청 DTO")
 public class UpdateProductOptionRequestDto {
 
-    @ApiModelProperty(value = "상품 옵션명")
+    @ApiModelProperty(value = "상품 옵션명", example = "사이즈 업")
     private String productOptionName;
 }
