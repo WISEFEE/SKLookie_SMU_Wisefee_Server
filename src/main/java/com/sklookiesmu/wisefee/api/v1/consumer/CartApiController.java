@@ -1,4 +1,4 @@
-package com.sklookiesmu.wisefee.api.v1.shared;
+package com.sklookiesmu.wisefee.api.v1.consumer;
 
 import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
@@ -20,21 +20,20 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@Api(tags= "Cart API")
+@Api(tags = "CONS-D :: 장바구니 API")
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/consumer")
 public class CartApiController {
-    private final MemberServiceImpl memberService;
-    private final ModelMapper modelMapper;
     private final CartServiceImpl cartService;
 
 
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @ApiOperation(
-            value = "장바구니 id 조회",
+            value = "CONS-D-01 :: 장바구니 id 조회",
             notes = "회원 id를 입력해 회원의 장바구니 id를 조회합니다."
     )
-    @GetMapping("api/v1/cart/find/{memberId}")
+    @GetMapping("/cart/find/{memberId}")
     public ResponseEntity<Long> findCartId(
             @ApiParam("회원 아이디")
             @PathVariable("memberId") Long memberId
@@ -48,11 +47,11 @@ public class CartApiController {
 
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @ApiOperation(
-            value = "장바구니 금액조회",
+            value = "CONS-D-02 :: 장바구니 금액조회",
             notes = "장바구니 총 금액 조회 API입니다. <br>" +
                     "회원 아이디 입력 시 현재 회원의 장바구니에 담긴 상품들의 총 가격을 조회합니다."
     )
-    @GetMapping("/api/v1/cart/price/{memberId}")
+    @GetMapping("/cart/price/{memberId}")
     public ResponseEntity<Long> findCartTotalPrice(
             @ApiParam(value = "회원 ID")
             @PathVariable("memberId") Long memberId
@@ -63,11 +62,11 @@ public class CartApiController {
 
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @ApiOperation(
-            value = "장바구니 금액조회 (구독권 할인 적용)",
+            value = "CONS-D-03 :: 장바구니 금액조회 (구독권 할인 적용)",
             notes = "구독권의 할인률을 적용한 장바구니 총 금액 조회 API입니다. <br>" +
                     "회원 아이디 입력 시 현재 회원의 장바구니에 담긴 상품들의 총 가격을 조회합니다."
     )
-    @GetMapping("/api/v1/cart/price/sub-ticket/{memberId}")
+    @GetMapping("/cart/price/sub-ticket/{memberId}")
     public ResponseEntity<Long> findCartTotalPriceWithSubTicket(
             @ApiParam(value = "회원 PK")
             @PathVariable("memberId") Long memberId,
@@ -81,10 +80,10 @@ public class CartApiController {
 
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @ApiOperation(
-            value = "장바구니 조회",
+            value = "CONS-D-04 :: 장바구니 조회",
             notes = "회원의 장바구니 List를 조회합니다."
     )
-    @GetMapping("/api/v1/cart/{memberId}")
+    @GetMapping("/cart/{memberId}")
     public ResponseEntity<List<CartResponseDto.CartProductResponseDto>> findCartProduct(
             @PathVariable("memberId") Long memberId
     ){
@@ -99,11 +98,11 @@ public class CartApiController {
 
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @ApiOperation(
-            value = "장바구니 상품 추가",
+            value = "CONS-D-05 :: 장바구니 상품 추가",
             notes = "카페, 장바구니, 상품, 선택옵션 아이디를 입력해 장바구니에 등록한다. +" +
                     "productOptChoices \"[]\" 에서 \"를 제거하고 [1,2,3] 과 같이 입력해야 한다."
     )
-    @PostMapping("/api/v1/cart/{memberId}")
+    @PostMapping("/cart/{memberId}")
     public ResponseEntity<Long> addCartProduct(
             @ApiParam(value = "회원 PK")
             @PathVariable("memberId") Long memberId,
@@ -118,12 +117,14 @@ public class CartApiController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+
+    @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @ApiOperation(
-            value = "상품옵션 수정",
+            value = "CONS-D-06 :: 상품옵션 수정",
             notes = "수정할 장바구니 상품 아이디와 수정할 개수를 입력합니다." +
                     "<br> 또한, 상품 개수가 0 이하가 될 시 자동으로 상품을 삭제합니다."
     )
-    @PutMapping("/api/v1/cart/update/{cartProductId}")
+    @PutMapping("/cart/update/{cartProductId}")
     public ResponseEntity<Long> updateCartProduct(
             @ApiParam("장바구니 상품 아이디")
             @PathVariable("cartProductId") Long cartProductId,
@@ -133,11 +134,13 @@ public class CartApiController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+
+    @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
     @ApiOperation(
-            value = "장바구니 상품 삭제",
+            value = "CONS-D-07 :: 장바구니 상품 삭제",
             notes = "장바구니 상품을 삭제합니다."
     )
-    @DeleteMapping("/api/v1/cart/delete/{cartProductId}")
+    @DeleteMapping("/cart/delete/{cartProductId}")
     public ResponseEntity<Long> deleteCartProduct(
             @ApiParam(value = "장바구니 상품 PK")
             @PathVariable("cartProductId") Long cartProductId

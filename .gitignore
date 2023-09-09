@@ -50,3 +50,4 @@ src/.DS_Store
 ### log ###
 log/*
 !log/_
+**/backup/**

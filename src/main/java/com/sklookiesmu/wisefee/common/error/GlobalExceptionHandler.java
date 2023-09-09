@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -41,6 +42,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler imple
         }
         return ResponseEntity.unprocessableEntity().body(errorResponse);
     }
+
+    // Access Denied Exception
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN) // 403 Forbidden
+    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException exception, WebRequest request) {
+        log.error("Access denied", exception);
+        return buildErrorResponse(exception, "Access denied", HttpStatus.FORBIDDEN, request);
+    }
+
+
 
     // NoSuchElementFoundException
     @ExceptionHandler(NoSuchElementFoundException.class)

@@ -254,7 +254,7 @@ public class MemberApiController {
                     "}\n" +
                     "```"
     )
-    @PutMapping("/api/v1/member/updatePW{id}")
+    @PutMapping("/api/v1/member/updatePW/{id}")
     public ResponseEntity<Long> updatePasswordAsMember(
             @ApiParam(value = "회원 Id", required = true)
             @PathVariable("id") Long id,
