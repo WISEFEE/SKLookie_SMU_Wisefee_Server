@@ -31,10 +31,11 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mariadb://wisefee-database:3306/wisefee-database?characterEncoding=UTF-8&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 1111
-      SPRING_REDIS_HOST: wisefee-redis  # Redis 호스트 이름 (컨테이너 이름)
+      SPRING_REDIS_HOST: wisefee-redis-dev-deploy  # Redis 호스트 이름 (컨테이너 이름)
       SPRING_REDIS_PORT: 6391  # Redis 기본 포트
     volumes:
       - ./volumes/storage/upload:/app/wisefee/storage/upload
+      - ./volumes/log:/app/wisefee/log
     networks:
       - wisefee-network-dev-deploy
 

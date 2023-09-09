@@ -39,6 +39,7 @@ services:
       SPRING_REDIS_PORT: 6379  # Redis 기본 포트
     volumes:
       - ./volumes/storage/upload:/app/wisefee/storage/upload
+      - ./volumes/log:/app/wisefee/log
     networks:
       - wisefee-network
 
