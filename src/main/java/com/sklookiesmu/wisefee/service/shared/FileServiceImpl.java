@@ -44,6 +44,7 @@ public class FileServiceImpl implements FileService {
         String originalFileName = file.getOriginalFilename();
         String mimeType = file.getContentType();
 
+
         //최대용량 체크
         if (file.getSize() > FileConstant.MAX_FILE_SIZE) {
             throw new FileUploadException("10MB 이하 파일만 업로드 할 수 있습니다.");
@@ -64,7 +65,7 @@ public class FileServiceImpl implements FileService {
         try {
             Files.copy(file.getInputStream(), filePath);
         } catch (IOException e) {
-            throw new FileUploadException("File upload exception. " + e.getStackTrace());
+            throw new FileUploadException("File upload exception");
         }
 
         return new FileInfoDto(file.getContentType(),

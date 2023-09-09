@@ -2,6 +2,7 @@ package com.sklookiesmu.wisefee.service.seller;
 
 import com.sklookiesmu.wisefee.common.constant.FileConstant;
 import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
+import com.sklookiesmu.wisefee.common.exception.PreconditionFailException;
 import com.sklookiesmu.wisefee.domain.Cafe;
 import com.sklookiesmu.wisefee.domain.File;
 import com.sklookiesmu.wisefee.domain.Product;
@@ -96,11 +97,11 @@ public class CafeFileServiceImpl implements CafeFileService {
         File file = fileRepository.findById(fileId);
 
         if(count >= FileConstant.MAX_PRODUCT_IMAGE_CNT){
-            throw new IllegalStateException(String.format("상품에 최대 등록 가능한 이미지 개수는 %d개입니다.", FileConstant.MAX_CAFE_IMAGE_CNT));
+            throw new PreconditionFailException(String.format("상품에 최대 등록 가능한 이미지 개수는 %d개입니다.", FileConstant.MAX_CAFE_IMAGE_CNT));
         }
         if (product != null && file != null) {
             if(!file.getFileInfo().equals(FileConstant.FILE_INFO_NO_USE)){
-                throw new IllegalArgumentException("이미 사용중이거나 삭제된 이미지입니다.");
+                throw new NoSuchElementFoundException("이미 사용중이거나 삭제된 이미지입니다.");
             }
             file.setFileInfo(FileConstant.FILE_INFO_PRODUCT_IMAGE);
             file.setProduct(product);

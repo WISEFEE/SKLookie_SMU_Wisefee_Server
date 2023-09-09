@@ -128,7 +128,7 @@ public class AuthServiceImpl implements AuthService {
             FCMToken save = authRepositoryWithRedis.save(updateFCMToken);
             authRepositoryWithRedis.deleteById(jwt);
         } else {
-            throw new RuntimeException("토큰이 존재하지 않습니다. 토큰을 새로 발급받으시기 바랍니다.");
+            throw new AuthForbiddenException("토큰 정보가 서버에 존재하지 않습니다. 토큰을 새로 발급받으시기 바랍니다.");
         }
 
 
@@ -173,7 +173,7 @@ public class AuthServiceImpl implements AuthService {
             String jsonResponse = response.body().string();
             String email = extractEmail(jsonResponse);
             if(email == null){
-                throw new RuntimeException("OAuth 서버에서 인증 정보를 가져오는데 문제 발생");
+                throw new AuthForbiddenException("OAuth 서버에서 인증 정보를 가져오는데 문제 발생");
             }
             return email;
         } else {
@@ -222,7 +222,7 @@ public class AuthServiceImpl implements AuthService {
             String jsonResponse = response.body().string();
             String email = extractEmail(jsonResponse);
             if(email == null){
-                throw new RuntimeException("OAuth 서버에서 인증 정보를 가져오는데 문제 발생");
+                throw new AuthForbiddenException("OAuth 서버에서 인증 정보를 가져오는데 문제 발생");
             }
             else{
                 Optional<Member> member = memberRepository.findByEmail(email);
