@@ -22,13 +22,6 @@ public interface ConsumerService{
      */
     SubscribeDto.SubscribeListResponseDto getSubscribe(Long memberId);
 
-    /**
-     * [구독 결제]
-     * 선택한 정기 구독권을 결제한다.
-     * @param request
-     */
-   // void createPayment(PaymentDto.PaymentRequestDto request, Long cafeId, Long subscribeId);
-
 
     /**
      * [정기구독 해지]

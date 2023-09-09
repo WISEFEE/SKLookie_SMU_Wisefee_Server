@@ -31,8 +31,8 @@ public class OrderProductOption {
     @OneToMany(mappedBy = "orderProductOption")
     private List<OrderProductOptionChoice> orderProductOptChoice = new ArrayList<>();
 
-    public static OrderProductOption createOrderProductOptionChoice(List<OrderProductOptionChoice> productOptChoice) {
-        OrderProductOption orderProductOption = new OrderProductOption();
+    public static OrderProductOption createOrderProductOptionChoice(List<OrderProductOptionChoice> productOptChoice,
+                                                                    OrderProductOption orderProductOption) {
         for (OrderProductOptionChoice poc : productOptChoice) {
             orderProductOption.addOrderProductOptionChoice(poc);
         }

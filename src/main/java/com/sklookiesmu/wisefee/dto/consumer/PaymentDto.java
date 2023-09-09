@@ -17,11 +17,11 @@ public class PaymentDto {
     @AllArgsConstructor
     public static class PaymentResponseDto{
 
-        @ApiModelProperty(value = "결제 PK")
-        private Long paymentId;
+        @ApiModelProperty(value = "결제 총금액")
+        private long paymentPrice;
 
-        @ApiModelProperty(value = "결제 금액")
-        private Integer paymentPrice;
+        /*@ApiModelProperty(value = "보증금")
+        private int depositPrice;*/
 
         @ApiModelProperty(value = "결제 내역 정보")
         private String paymentInfo;
@@ -34,7 +34,6 @@ public class PaymentDto {
 
         public static PaymentResponseDto from(Payment payment){
             return new PaymentResponseDto(
-                    payment.getPaymentId(),
                     payment.getPaymentPrice(),
                     payment.getPaymentInfo(),
                     payment.getPaymentMethod(),
@@ -48,24 +47,21 @@ public class PaymentDto {
     @AllArgsConstructor
     public static class PaymentRequestDto{
 
-        @ApiModelProperty(value = "결제 금액")
-        @NotNull(message = "결제 금액은 필수 입력값입니다.")
-        private Integer paymentPrice;
-
-        @ApiModelProperty(value = "결제 내역 정보")
-        @NotNull(message = "결제 내역 정보는 필수 입력값입니다.")
-        private String paymentInfo;
-
-        @ApiModelProperty(value = "결제 수단")
+        @ApiModelProperty(value = "결제 수단", example = "현장결제")
         @NotNull(message = "결제 수단은 필수 입력값입니다.")
         private String paymentMethod;
 
-        public Payment toEntity(SubTicketType subTicketType){
+        @ApiModelProperty(value = "결제 금액", example = "13500")
+        @NotNull(message = "결제금액은 필수 입력값입니다.")
+        private int paymentPrice;
+
+
+       /* public Payment toEntity(Payment payment){
             return Payment.builder()
-                    .paymentInfo(paymentInfo)
-                    .paymentPrice(subTicketType.getSubTicketPrice())
+                    .paymentInfo(payment.getPaymentInfo())
+                    .paymentPrice(payment.getPaymentPrice())
                     .paymentMethod(paymentMethod)
                     .build();
-        }
+        }*/
     }
 }

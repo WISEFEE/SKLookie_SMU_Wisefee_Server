@@ -1,8 +1,8 @@
 package com.sklookiesmu.wisefee.service.consumer;
 
+
 import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
 import com.sklookiesmu.wisefee.domain.*;
-import com.sklookiesmu.wisefee.dto.consumer.PaymentDto;
 import com.sklookiesmu.wisefee.dto.consumer.SubscribeDto;
 import com.sklookiesmu.wisefee.repository.MemberRepository;
 import com.sklookiesmu.wisefee.repository.subscribe.PaymentJpaRepository;
@@ -46,7 +46,15 @@ public class ConsumerServiceImpl implements ConsumerService {
         }
 
         SubTicketType subTicketType = subTicketTypeRepository.findById(subTicketTypeId)
-                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 구독권 종류입니다."));
+                .orElseThrow(()->new NoSuchElementFoundException("존재하지 않는 구독권 종류입니다."));
+
+        if (request.getSubPeople() < subTicketType.getSubTicketMinUserCount()) {
+            throw new IllegalArgumentException("구독 인원은 최소 "+ subTicketType.getSubTicketMinUserCount()+ "명입니다.");
+        }
+        if (request.getSubPeople() > subTicketType.getSubTicketMaxUserCount()){
+            throw new IllegalArgumentException("구독 인원은 최대 "+ subTicketType.getSubTicketMaxUserCount()+ "명입니다.");
+        }
+
         Payment payment = new Payment();
         payment.setPaymentPrice(subTicketType.getSubTicketPrice());
         payment.setPaymentMethod(request.getPaymentMethod());
@@ -80,7 +88,7 @@ public class ConsumerServiceImpl implements ConsumerService {
     @Override
     public void cancelSubscribe(Long memberId, Long subscribeId) {
         Subscribe subscribe = subscribeRepository.findByMemberIdAndSubscribeId(memberId, subscribeId)
-                .orElseThrow(() -> new IllegalArgumentException("구독권이 존재하지 않습니다."));
+                .orElseThrow(() -> new NoSuchElementFoundException("구독권이 존재하지 않습니다."));
 
         subscribeRepository.deleteById(subscribe.getSubId()); // TODO 환불 조건....
     }

@@ -50,7 +50,7 @@ public class Order {
      * 연관관계 매핑
      */
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PAYMENT_ID", nullable = false)
+    @JoinColumn(name = "PAYMENT_ID")
     private Payment payment;
 
     @ManyToOne(fetch = FetchType.LAZY)

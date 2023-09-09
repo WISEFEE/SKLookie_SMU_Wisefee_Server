@@ -42,8 +42,8 @@ public class OrderProduct {
      * 비즈니스 로직
      */
 
-    public static OrderProduct createOrderProductOption(List<OrderProductOption> orderProductOptions) {
-        OrderProduct orderProduct = new OrderProduct();
+    public static OrderProduct createOrderProductOption(List<OrderProductOption> orderProductOptions,
+                                                        OrderProduct orderProduct) {
         for (OrderProductOption opo : orderProductOptions) {
             orderProduct.addOrderProductOption(opo);
         }

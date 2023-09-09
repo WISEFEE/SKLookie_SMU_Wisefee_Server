@@ -18,8 +18,8 @@ public class Payment {
     @Column(name = "PAYMENT_ID")
     private Long paymentId;
 
-    @Column(name = "PAYMENT_PRICE", nullable = false)
-    private Integer paymentPrice;
+    @Column(name = "PAYMENT_PRICE")
+    private long paymentPrice;
 
     @Column(name = "PAYMENT_INFO")
     private String paymentInfo;
@@ -46,4 +46,5 @@ public class Payment {
 //    private Subscribe subscribe;
 //    @OneToOne(mappedBy = "payment", orphanRemoval = true)
 //    private Order order;
+
 }
