@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 @ApiModel(description = "주문 옵션 수정 요청 DTO")
 public class UpdateOrderOptionRequestDto {
 
-    @ApiModelProperty(value = "주문 옵션명")
+    @ApiModelProperty(value = "주문 옵션명", example = "빨대 빼주세요")
     private String orderOptionName;
 
-    @ApiModelProperty(value = "주문 옵션 추가 금액")
+    @ApiModelProperty(value = "주문 옵션 추가 금액", example = "0")
     private int orderOptionPrice;
 }

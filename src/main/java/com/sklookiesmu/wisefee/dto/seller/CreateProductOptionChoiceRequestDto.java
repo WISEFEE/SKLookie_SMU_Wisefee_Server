@@ -15,11 +15,11 @@ import javax.validation.constraints.NotNull;
 @ApiModel(description = "상품 옵션 선택지 추가 요청 DTO")
 public class CreateProductOptionChoiceRequestDto {
 
-    @ApiModelProperty(value = "상품 옵션 선택지명", required = true)
+    @ApiModelProperty(value = "상품 옵션 선택지명", required = true, example = "벤티")
     @NotBlank(message = "상품 옵션 선택지명은 필수 입력 값입니다.")
     private String productOptionChoiceName;
 
-    @ApiModelProperty(value = "상품 옵션 선택지 추가 금액", required = true)
+    @ApiModelProperty(value = "상품 옵션 선택지 추가 금액", required = true, example = "1000")
     @NotNull(message = "상품 옵션 선택지 추가 금액은 필수 입력 값입니다.")
     private int productOptionChoicePrice;
 }
