@@ -2,7 +2,7 @@ package com.sklookiesmu.wisefee.api.v1.shared;
 
 import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
-import com.sklookiesmu.wisefee.common.error.ValidateMemberException;
+import com.sklookiesmu.wisefee.common.exception.AlreadyExistElementException;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.dto.shared.member.*;
 import com.sklookiesmu.wisefee.service.shared.MemberService;
@@ -10,7 +10,6 @@ import io.swagger.annotations.*;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -146,7 +145,7 @@ public class MemberApiController {
             @PathVariable("id") Long id
     ){
         if(!(id.equals(SecurityUtil.getCurrentMemberPk())))
-            throw new ValidateMemberException("invalid ID : The provided ID does not match your current logged-in ID"+id);
+            throw new AlreadyExistElementException("invalid ID : The provided ID does not match your current logged-in ID"+id);
         Member member = memberService.getMember(id);
         if(member == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -206,12 +205,7 @@ public class MemberApiController {
             @ApiParam(value = "회원 Email", required = true)
             @PathVariable("email") String email
     ){
-        Optional<Member> optionalMember = memberService.getMemberByEmail(email);
-        if(optionalMember.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        Member member = optionalMember.get();
+        Member member = memberService.getMemberByEmail(email);
         MemberEmailResponseDto result = modelMapper.map(member, MemberEmailResponseDto.class);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
@@ -241,7 +235,7 @@ public class MemberApiController {
             @Valid @RequestBody MemberUpdateRequestDto member){
 
         if(!(id.equals(SecurityUtil.getCurrentMemberPk())))
-            throw new ValidateMemberException("invalid ID : The provided ID does not match your current logged-in ID"+id);
+            throw new AlreadyExistElementException("invalid ID : The provided ID does not match your current logged-in ID"+id);
 
         Member entity = modelMapper.map(member, Member.class);
         Long result =  memberService.updateMember(id, entity);
@@ -267,7 +261,7 @@ public class MemberApiController {
             @Valid @RequestBody MemberUpdatePasswordRequestDTO member){
 
         if(!(id.equals(SecurityUtil.getCurrentMemberPk())))
-            throw new ValidateMemberException("invalid ID : The provided ID does not match your current logged-in ID"+id);
+            throw new AlreadyExistElementException("invalid ID : The provided ID does not match your current logged-in ID"+id);
 
         Member entity = modelMapper.map(member, Member.class);
         Long result =  memberService.updatePasswordAsMember(id, entity);

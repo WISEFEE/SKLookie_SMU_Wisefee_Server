@@ -1,8 +1,8 @@
 package com.sklookiesmu.wisefee.service.shared;
 
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
-import com.sklookiesmu.wisefee.common.error.MemberNotFoundException;
-import com.sklookiesmu.wisefee.common.error.ValidateMemberException;
+import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
+import com.sklookiesmu.wisefee.common.exception.AlreadyExistElementException;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,58 +24,37 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     public Long join(Member member){
-        Optional<Member> vailMember = memberRepository.findByEmail(member.getEmail());
-        if(vailMember.isPresent()) {
-            throw new ValidateMemberException("이미 존재하는 이메일입니다." + member.getEmail());
-        }
+        memberRepository.findByEmail(member.getEmail()).ifPresent((existingMember) -> {
+            throw new AlreadyExistElementException("이미 존재하는 이메일입니다.");
+        });
         member.setAuthType(AuthConstant.AUTH_TYPE_COMMON);
         // 비밀번호 해시 처리
         member.encodePassword(encoder.encode(member.getPassword()));
-        memberRepository.create(member);
-        return member.getMemberId();
+        return memberRepository.create(member);
     }
 
     @Transactional
     public List<Member> getMembers(String order){
-        List<Member> members = memberRepository.findAll(order);
-
-        /* 예외 처리 */
-        if(members.isEmpty()){
-            throw new MemberNotFoundException("회원을 찾을 수 없습니다");
-        }
-
-        return members;
+        return memberRepository.findAll(order)
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new NoSuchElementFoundException("members not found"));
     }
     @Transactional
     public Member getMember(Long id) {
-
-        Member member = memberRepository.find(id);
-
-//        /* 강제 예외처리 예시 */
-//        if(id == 1){
-//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "강제 예외 처리");
-//            //throw new IllegalStateException("Forbidden");
-//        }
-
-        return member;
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementFoundException("member not found"));
     }
 
     @Transactional
     public Long updateMember(Long id, Member updateMember) {
-        Member member = memberRepository.find(id);
-
-        /* 예외 처리 */
-        if(member == null) {
-            throw new MemberNotFoundException("Member not found with email " + id);
-        }
-
-        return member.updateMember(updateMember);
-
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementFoundException("member not found"))
+                .updateMember(updateMember);
     }
 
     @Transactional
     public Long updatePasswordAsMember(Long id, Member updateMember) {
-        Member member = memberRepository.find(id);
+        Member member = memberRepository.findById(id).orElseThrow(() -> new NoSuchElementFoundException("member not found"));
         String authType = member.getAuthType();
         if(!authType.equalsIgnoreCase(AuthConstant.AUTH_TYPE_COMMON)){
             throw new RuntimeException("소셜 로그인 유저는 비밀번호를 수정할 수 없습니다.");
@@ -87,17 +66,10 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Transactional
-    public Optional<Member> getMemberByEmail(String email) {
-        Optional<Member> member = memberRepository.findByEmail(email);
-
-        /* 예외 처리 */
-        if(member.isEmpty()) {
-            throw new MemberNotFoundException("해당 이메일로 회원을 찾을 수 없습니다 " + email);
-        }
-
-        return member;
+    public Member getMemberByEmail(String email) {
+        return memberRepository.
+                findByEmail(email).orElseThrow(() -> new NoSuchElementFoundException("member not found"));
     }
-
 
 
     @Transactional
@@ -110,7 +82,7 @@ public class MemberServiceImpl implements MemberService {
 
         Optional<Member> vailMember = memberRepository.findByEmail(email);
         if(vailMember.isPresent()) {
-            throw new ValidateMemberException("이미 존재하는 계정입니다." + member.getEmail());
+            throw new AlreadyExistElementException("이미 존재하는 계정입니다." + member.getEmail());
         }
 
         // 비밀번호 해시 처리

@@ -2,7 +2,9 @@ package com.sklookiesmu.wisefee.service.consumer;
 
 import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
 import com.sklookiesmu.wisefee.common.constant.ProductStatus;
-import com.sklookiesmu.wisefee.common.exception.NotFoundException;
+
+import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
+
 import com.sklookiesmu.wisefee.domain.*;
 import com.sklookiesmu.wisefee.dto.consumer.OrderDto;
 import com.sklookiesmu.wisefee.dto.consumer.OrderOptionDto;
@@ -66,12 +68,12 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
         /* Create Order */
         Long memberId = SecurityUtil.getCurrentMemberPk();
         Cafe cafe = cafeJpaRepository.findById(cafeId)
-                .orElseThrow(() -> new NotFoundException("존재하지 않는 매장입니다."));
+                .orElseThrow(() -> new NoSuchElementFoundException("존재하지 않는 매장입니다."));
 
-        Member member = memberRepository.find(memberId);
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchElementFoundException("member not found"));
 
         Subscribe subscribe = subscribeJpaRepository.findByIdAndCafeId(orderRequestDto.getSubscribeId(), cafeId)
-                .orElseThrow(()-> new NotFoundException("존재하지 않는 구독권입니다"));
+                .orElseThrow(()-> new NoSuchElementFoundException("존재하지 않는 구독권입니다"));
 
         if (subscribe.getExpiredAt().isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("만료된 구독권입니다.");
@@ -92,10 +94,10 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
         List<OrderProduct> orderProducts = orderRequestDto.getOrderProduct().stream()
                 .map(op -> {
                     Product product = productJpaRepository.findById(op.getProductId())
-                            .orElseThrow(() -> new NotFoundException("존재하지 않는 상품입니다."));
+                            .orElseThrow(() -> new NoSuchElementFoundException("존재하지 않는 상품입니다."));
 
                     if (!Objects.equals(product.getCafe().getCafeId(), cafeId)) {
-                        throw new NotFoundException("해당 카페에 존재하지 않는 상품입니다");
+                        throw new NoSuchElementFoundException("해당 카페에 존재하지 않는 상품입니다");
                     }
 
                     OrderProduct orderProduct = new OrderProduct();
@@ -113,10 +115,10 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
                             .map(prodOpt -> {
 
                                 ProductOption productOptions = productOptJpaRepository.findById(prodOpt.getOrderProductOptionId())
-                                        .orElseThrow(() -> new NotFoundException("존재하지 않는 상품옵션입니다."));
+                                        .orElseThrow(() -> new NoSuchElementFoundException("존재하지 않는 상품옵션입니다."));
 
                                 if (!Objects.equals(productOptions.getProduct().getCafe().getCafeId(), cafeId)) {
-                                    throw new NotFoundException("해당 카페에 존재하지 않는 상품옵션입니다");
+                                    throw new NoSuchElementFoundException("해당 카페에 존재하지 않는 상품옵션입니다");
                                 }
 
                                 OrderProductOption orderProductOption = new OrderProductOption();
@@ -130,10 +132,10 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
                                         .map(prodOptChoice -> {
 
                                             ProductOptChoice productOptChoices = prodOptChoiceJpaRepository.findById(prodOptChoice.getOrderProductOptionChoiceId())
-                                                    .orElseThrow(() -> new NotFoundException("존재하지 않는 상품선택옵션입니다."));
+                                                    .orElseThrow(() -> new NoSuchElementFoundException("존재하지 않는 상품선택옵션입니다."));
 
                                             if (!Objects.equals(productOptChoices.getProductOption().getProduct().getCafe().getCafeId(), cafeId)) {
-                                                throw new NotFoundException("해당 카페에 존재하지 않는 상품선택옵션입니다.");
+                                                throw new NoSuchElementFoundException("해당 카페에 존재하지 않는 상품선택옵션입니다.");
                                             }
 
                                             OrderProductOptionChoice orderProductOptionChoice = OrderProductOptionChoice.createOrderProdOptChoice(orderProduct, orderProductOption, productOptChoices);
@@ -170,7 +172,7 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
         List<OrdOrderOption> orderOptions = orderRequestDto.getOrderOption().stream()
                 .map(oop -> {
                     OrderOption orderOption = orderOptionRepository.findById(oop.getOrderOptionId())
-                            .orElseThrow(() -> new NotFoundException("존재하지 않는 주문 옵션입니다"));
+                            .orElseThrow(() -> new NoSuchElementFoundException("존재하지 않는 주문 옵션입니다"));
 
                     if (!Objects.equals(orderOption.getCafe().getCafeId(), cafeId)) {
                         throw new IllegalArgumentException("해당 카페에 존재하지 않는 주문 옵션입니다");
@@ -238,10 +240,10 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
     @Override
     public OrderDto.OrderResponseDto getOrderHistory(Long cafeId, Long orderId) {
         Cafe cafe = cafeJpaRepository.findById(cafeId)
-                .orElseThrow(()->new NotFoundException("존재하지 않는 카페입니다."));
+                .orElseThrow(()->new NoSuchElementFoundException("존재하지 않는 카페입니다."));
 
         Order order = orderJpaRepository.findById(orderId)
-                .orElseThrow(()->new NotFoundException("존재하지 않는 주문입니다."));
+                .orElseThrow(()->new NoSuchElementFoundException("존재하지 않는 주문입니다."));
         return OrderDto.OrderResponseDto.orderToDto(order);
     }
 
@@ -253,13 +255,13 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
     @Override
     public Long createPaymentMethod(Long cafeId, Long orderId, PaymentDto.PaymentRequestDto paymentRequestDto) {
         Cafe cafe = cafeJpaRepository.findById(cafeId)
-                .orElseThrow(()->new NotFoundException("존재하지 않는 카페입니다."));
+                .orElseThrow(()->new NoSuchElementFoundException("존재하지 않는 카페입니다."));
 
         Order order = orderJpaRepository.findById(orderId)
-                .orElseThrow(() -> new NotFoundException("존재하지 않는 주문내역입니다."));
+                .orElseThrow(() -> new NoSuchElementFoundException("존재하지 않는 주문내역입니다."));
 
         Payment payment = paymentJpaRepository.findById(order.getPayment().getPaymentId())
-                .orElseThrow(() -> new NotFoundException("존재하지 않는 금액입니다"));
+                .orElseThrow(() -> new NoSuchElementFoundException("존재하지 않는 금액입니다"));
 
         payment.setPaymentMethod(paymentRequestDto.getPaymentMethod());
 
@@ -273,16 +275,16 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
     public PaymentDto.PaymentResponseDto getPayment(Long cafeId, Long orderId){
 
         Cafe cafe = cafeJpaRepository.findById(cafeId)
-                .orElseThrow(()->new NotFoundException("존재하지 않는 카페입니다."));
+                .orElseThrow(()->new NoSuchElementFoundException("존재하지 않는 카페입니다."));
 
         Order order = orderJpaRepository.findById(orderId)
-                .orElseThrow(() -> new NotFoundException("존재하지 않는 주문내역입니다."));
+                .orElseThrow(() -> new NoSuchElementFoundException("존재하지 않는 주문내역입니다."));
 
        /*Subscribe subscribe = subscribeJpaRepository.findById(order.getSubscribe().getSubId())
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 구독권입니다."));*/
 
         Payment payment = paymentJpaRepository.findById(order.getPayment().getPaymentId())
-                .orElseThrow(() -> new NotFoundException("존재하지 않는 주문금액입니다"));
+                .orElseThrow(() -> new NoSuchElementFoundException("존재하지 않는 주문금액입니다"));
 
         return PaymentDto.PaymentResponseDto.from(payment);
     }

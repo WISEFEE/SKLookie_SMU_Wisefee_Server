@@ -21,38 +21,18 @@ public class MemberRepository {
     /**
      * [#PHS1 Member 엔티티 전체조회]
      * 회원 리스트 조회
+     *
      * @param [order 정렬 순서(asc,desc)]
      * @return [Member 엔티티 리스트]
-     *
      */
-    public List<Member> findAll(String order) {
-        /* JPQL */
-//        List<Member> result = em.createQuery("select m from Member m", Member.class).getResultList();
-//        return result;
-
-        /* JPA Criteria */
-//        CriteriaBuilder cb = em.getCriteriaBuilder();
-//        CriteriaQuery<Member> query = cb.createQuery(Member.class);
-//        Root<Member> root = query.from(Member.class);
-//        query.select(root);
-//        if(order.equals("desc")){
-//            query.orderBy(cb.desc(root.get("id")));
-//        }
-//
-//
-//        TypedQuery<Member> typedQuery = em.createQuery(query);
-//        List<Member> result = typedQuery.getResultList();
-//
-//        return result;
-
-        /* QueryDSL */
+    public Optional<List<Member>> findAll(String order) {
         QMember qMember = QMember.member;
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-        List<Member> result = queryFactory.selectFrom(qMember).fetch();
+        Optional<List<Member>> result = Optional.ofNullable(queryFactory.selectFrom(qMember).fetch());
 
         if(order.equals("desc")){
-            result = queryFactory.selectFrom(qMember).orderBy(qMember.memberId.desc()).fetch();
+            result = Optional.ofNullable(queryFactory.selectFrom(qMember).orderBy(qMember.memberId.desc()).fetch());
         }
         return result;
     }
@@ -61,11 +41,12 @@ public class MemberRepository {
     /**
      * [Member 엔티티 단일조회]
      * 회원 조회.
+     *
      * @param [id PK]
      * @return [Member 엔티티]
      */
-    public Member find(Long id){
-        Member result = em.find(Member.class, id);
+    public Optional<Member> findById(Long id){
+        Optional<Member> result = Optional.ofNullable(em.find(Member.class, id));
         return result;
     }
 
@@ -75,8 +56,9 @@ public class MemberRepository {
      * 회원 추가
      * @param [Member Member 엔티티(pk=null)]
      */
-    public void create(Member member){
+    public Long create(Member member){
         em.persist(member);
+        return member.getMemberId();
     }
     
 

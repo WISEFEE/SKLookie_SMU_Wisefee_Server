@@ -62,7 +62,7 @@ public interface MemberService {
      * @param email
      * @return
      */
-    public abstract Optional<Member> getMemberByEmail(String email);
+    public abstract Member getMemberByEmail(String email);
 
 
     /**

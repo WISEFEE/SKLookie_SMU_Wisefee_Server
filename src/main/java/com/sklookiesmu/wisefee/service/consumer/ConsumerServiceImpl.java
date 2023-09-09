@@ -1,9 +1,8 @@
 package com.sklookiesmu.wisefee.service.consumer;
 
-import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
-import com.sklookiesmu.wisefee.common.exception.NotFoundException;
+
+import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
 import com.sklookiesmu.wisefee.domain.*;
-import com.sklookiesmu.wisefee.dto.consumer.PaymentDto;
 import com.sklookiesmu.wisefee.dto.consumer.SubscribeDto;
 import com.sklookiesmu.wisefee.repository.MemberRepository;
 import com.sklookiesmu.wisefee.repository.subscribe.PaymentJpaRepository;
@@ -47,7 +46,7 @@ public class ConsumerServiceImpl implements ConsumerService {
         }
 
         SubTicketType subTicketType = subTicketTypeRepository.findById(subTicketTypeId)
-                .orElseThrow(()->new NotFoundException("존재하지 않는 구독권 종류입니다."));
+                .orElseThrow(()->new NoSuchElementFoundException("존재하지 않는 구독권 종류입니다."));
 
         if (request.getSubPeople() < subTicketType.getSubTicketMinUserCount()) {
             throw new IllegalArgumentException("구독 인원은 최소 "+ subTicketType.getSubTicketMinUserCount()+ "명입니다.");
@@ -61,7 +60,7 @@ public class ConsumerServiceImpl implements ConsumerService {
         payment.setPaymentMethod(request.getPaymentMethod());
         paymentJpaRepository.save(payment);
 
-        Member member = memberRepository.find(memberId);
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchElementFoundException("member not found")) ;
 
         return subscribeRepository.save(request.toEntity(cafe, subTicketType, payment, member)).getSubId();
     }
@@ -73,6 +72,9 @@ public class ConsumerServiceImpl implements ConsumerService {
      */
     @Override
     public SubscribeDto.SubscribeListResponseDto getSubscribe(Long memberId) {
+
+        // 유저 검증 필요
+        memberRepository.findById(memberId).orElseThrow(() -> new NoSuchElementFoundException("member not found"));
 
         List<Subscribe> list =subscribeRepository.findAllByMemberId(memberId);
 
@@ -86,10 +88,8 @@ public class ConsumerServiceImpl implements ConsumerService {
     @Override
     public void cancelSubscribe(Long memberId, Long subscribeId) {
         Subscribe subscribe = subscribeRepository.findByMemberIdAndSubscribeId(memberId, subscribeId)
-                .orElseThrow(() -> new NotFoundException("구독권이 존재하지 않습니다."));
+                .orElseThrow(() -> new NoSuchElementFoundException("구독권이 존재하지 않습니다."));
 
         subscribeRepository.deleteById(subscribe.getSubId()); // TODO 환불 조건....
     }
-
-
 }

@@ -1,8 +1,6 @@
 package com.sklookiesmu.wisefee.service.shared;
 
-import com.sklookiesmu.wisefee.common.error.CafeNotFoundException;
-import com.sklookiesmu.wisefee.common.error.CartNotFoundException;
-import com.sklookiesmu.wisefee.common.exception.NotFoundException;
+import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
 import com.sklookiesmu.wisefee.domain.*;
 import com.sklookiesmu.wisefee.dto.shared.member.CartRequestDto;
 import com.sklookiesmu.wisefee.dto.shared.member.CartResponseDto;
@@ -41,7 +39,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Long addCart(Long memberId) {
-        Member member = memberRepository.find(memberId);
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchElementFoundException("member not found"));
         Cart cart = new Cart().addCart(member);
 
         if (member.getCart() == null) {
@@ -55,7 +53,7 @@ public class CartServiceImpl implements CartService {
     public Long addCartProduct(Long memberId, CartRequestDto.CartProductRequestDto cartRequestDto) {
         Cafe cafe = cafeRepository.findById(cartRequestDto.getCafeId());
         if (cafe == null) {
-            throw new CafeNotFoundException("Invalid Value : Not found cafe with " + cartRequestDto.getCafeId());
+            throw new NoSuchElementFoundException("Invalid Value : Not found cafe with " + cartRequestDto.getCafeId());
         }
         Product product = productRepository.findById(cartRequestDto.getProductId());
 
@@ -129,13 +127,13 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<CartResponseDto.CartProductResponseDto> findAllCartProduct(Long memberId) {
-        Member member = memberRepository.find(memberId);
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchElementFoundException("member not found"));
         if (member.getCart() == null) {
-            throw new CartNotFoundException("CartService Error : Not Exist Cart with " + memberId);
+            throw new NoSuchElementFoundException("CartService Error : Not Exist Cart with " + memberId);
         }
         Cart cart = cartRepository.findCartByCartId(member.getCart().getCartId());
         if (cart == null) {
-            throw new CartNotFoundException("CartService Error : Not Found Cart with " + memberId);
+            throw new NoSuchElementFoundException("CartService Error : Not Found Cart with " + memberId);
         }
 
         List<CartProduct> cartProducts = cartRepository.findCartProductByCartId(cart.getCartId());
@@ -225,7 +223,7 @@ public class CartServiceImpl implements CartService {
         // get discount rate value
         Optional<Subscribe> subscribe = subscribeRepository.findById(subscribeId);
         if(subscribe.isEmpty()){
-            throw new NotFoundException("해당 구독 ID를 찾을 수 없습니다.");
+            throw new NoSuchElementFoundException("해당 구독 ID를 찾을 수 없습니다.");
         }
         if(subscribe.get().getMember().getMemberId() != memberId){
             throw new IllegalStateException("해당 구독을 맺지 않았습니다.");

@@ -137,7 +137,8 @@ public class Member {
         return 1L;
     }
 
-    public void encodePassword(String encodePassword) {
+    public Long encodePassword(String encodePassword) {
         this.password = encodePassword;
+        return 1L;
     }
 }

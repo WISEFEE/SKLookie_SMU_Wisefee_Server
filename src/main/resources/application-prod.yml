@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3307/wisefee-database?characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: 1111
+
+  jpa:
+    database-platform: org.hibernate.dialect.MariaDB103Dialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: false #To beautify or pretty print the SQL
+        show_sql: false #show sql
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  redis:
+    host: localhost
+    port: 6389
+
+logging:
+  level:
+    root: warn
+
+jwt:
+  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
+
+upload:
+  directory: storage/upload
+
+push:
+  notification:
+    enabled: false

@@ -54,22 +54,22 @@ public class OrderDetailsDto {
 
     public static OrderDetailsDto fromOrder(Order order) {
         List<ProductInfo> products = order.getOrderProducts().stream()
-                .map(product -> {
-                    List<ProductOptionInfo> productOptions = product.getProduct().getProductOptions().stream()
-                            .map(option -> {
-                                List<String> productOptionChoiceNames = option.getProductOptChoices().stream()
-                                        .map(ProductOptChoice::getProductOptionChoiceName)
+                .map(orderProduct -> {
+                    List<ProductOptionInfo> productOptions = orderProduct.getOrderProductOptions().stream()
+                            .map(orderProductOption -> {
+                                List<String> productOptionChoiceNames = orderProductOption.getOrderProductOptChoice().stream()
+                                        .map(orderProductOptChoice -> orderProductOptChoice.getProductOptChoice().getProductOptionChoiceName())
                                         .collect(Collectors.toList());
-                                return new ProductOptionInfo(option.getProductOptionName(), productOptionChoiceNames);
+                                return new ProductOptionInfo(orderProductOption.getProductOption().getProductOptionName(), productOptionChoiceNames);
                             })
                             .collect(Collectors.toList());
 
-                    return new ProductInfo(product.getProduct().getProductName(), productOptions);
+                    return new ProductInfo(orderProduct.getProduct().getProductName(), productOptions);
                 })
                 .collect(Collectors.toList());
 
-        List<String> orderOptionNames = order.getOrderOptions().stream()
-                .map(OrderOption::getOrderOptionName)
+        List<String> orderOptionNames = order.getOrdOrderOptions().stream()
+                .map(ordOrderOption -> ordOrderOption.getOrderOption().getOrderOptionName())
                 .collect(Collectors.toList());
 
         return new OrderDetailsDto(

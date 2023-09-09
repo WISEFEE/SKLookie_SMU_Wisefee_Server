@@ -4,7 +4,7 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-wisefee_service_key.json
+firebase/wisefee_service_key.json
 
 ### STS ###
 .apt_generated
@@ -46,3 +46,7 @@ storage
 ### Mac OS ###
 src/.DS_Store
 .DS_Store
+
+### log ###
+log/*
+!log/_

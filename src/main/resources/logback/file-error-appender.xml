@@ -1,0 +1,25 @@
+<included>
+    <appender name="FILE-ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--log 파일 저장 path-->
+        <file>./log/error/error-${BY_DATE}.log</file>
+        <!--Error 만 저장-->
+        <filter class = "ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern> ./backup/error/error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!--        log 파일의 용량이 100MB를 넘어가면 새로운 log 파일 생성
+                        최대 30일동안 log 파일들 보존
+                        총 로그파일 3 GB 이상 초과할 시 Rolling 시작 (오래된 log 부터 덮어씀)-->
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+</included>

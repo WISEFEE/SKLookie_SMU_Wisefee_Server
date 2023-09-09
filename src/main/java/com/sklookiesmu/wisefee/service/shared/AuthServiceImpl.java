@@ -6,8 +6,7 @@ import com.sklookiesmu.wisefee.common.auth.JwtTokenProvider;
 import com.sklookiesmu.wisefee.common.auth.custom.CustomUserDetail;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
 import com.sklookiesmu.wisefee.common.constant.OAuthTokenStatus;
-import com.sklookiesmu.wisefee.common.exception.AuthForbbidenException;
-import com.sklookiesmu.wisefee.common.exception.NotFoundException;
+import com.sklookiesmu.wisefee.common.exception.AuthForbiddenException;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.dto.shared.firebase.FCMToken;
 import com.sklookiesmu.wisefee.dto.shared.jwt.TokenInfoDto;
@@ -66,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
         String authType = userDetail.getAuthType();
 
         if(!authType.equalsIgnoreCase(loginAuthType)){
-            throw new AuthForbbidenException(loginAuthType + " 로그인으로 유효한 계정 타입이 아닙니다.");
+            throw new AuthForbiddenException(loginAuthType + " 로그인으로 유효한 계정 타입이 아닙니다.");
         }
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
@@ -129,7 +128,7 @@ public class AuthServiceImpl implements AuthService {
             FCMToken save = authRepositoryWithRedis.save(updateFCMToken);
             authRepositoryWithRedis.deleteById(jwt);
         } else {
-            throw new RuntimeException("토큰이 존재하지 않습니다. 토큰을 새로 발급받으시기 바랍니다.");
+            throw new AuthForbiddenException("토큰 정보가 서버에 존재하지 않습니다. 토큰을 새로 발급받으시기 바랍니다.");
         }
 
 
@@ -174,11 +173,11 @@ public class AuthServiceImpl implements AuthService {
             String jsonResponse = response.body().string();
             String email = extractEmail(jsonResponse);
             if(email == null){
-                throw new RuntimeException("OAuth 서버에서 인증 정보를 가져오는데 문제 발생");
+                throw new AuthForbiddenException("OAuth 서버에서 인증 정보를 가져오는데 문제 발생");
             }
             return email;
         } else {
-            throw new AuthForbbidenException("사용자 토큰이 유효하지 않습니다.");
+            throw new AuthForbiddenException("사용자 토큰이 유효하지 않습니다.");
         }
 
     }
@@ -223,7 +222,7 @@ public class AuthServiceImpl implements AuthService {
             String jsonResponse = response.body().string();
             String email = extractEmail(jsonResponse);
             if(email == null){
-                throw new RuntimeException("OAuth 서버에서 인증 정보를 가져오는데 문제 발생");
+                throw new AuthForbiddenException("OAuth 서버에서 인증 정보를 가져오는데 문제 발생");
             }
             else{
                 Optional<Member> member = memberRepository.findByEmail(email);
