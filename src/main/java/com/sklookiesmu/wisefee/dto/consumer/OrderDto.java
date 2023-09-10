@@ -38,9 +38,6 @@ public class OrderDto {
     @Builder
     public static class OrderResponseDto{
 
-        @ApiModelProperty(value = "텀블러 반납 상태", required = true, example = "Y")
-        private TumblrStatus tumblrStatus;
-
         @ApiModelProperty(value = "주문 상태", required = true, example = "Y")
         private ProductStatus productStatus;
 
@@ -58,7 +55,6 @@ public class OrderDto {
 
         public static OrderResponseDto orderToDto(Order order){
             return OrderResponseDto.builder()
-                    .tumblrStatus(order.getTumblrStatus())
                     .productStatus(order.getProductStatus())
                     .createdAt(order.getCreatedAt())
                     .subscribeId(order.getSubscribe().getSubId())

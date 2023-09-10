@@ -20,10 +20,6 @@ public class Order {
     @Column(name = "ORDER_ID")
     private Long orderId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "TUMBLR_STATUS")
-    private TumblrStatus tumblrStatus;
-
     @Column(name = "PRODUCT_RECEIVE_TIME")
     private LocalDateTime productReceiveTime;
 

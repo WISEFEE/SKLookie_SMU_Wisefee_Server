@@ -33,7 +33,7 @@ public class ConsumerOrderController {
 
 
     @ApiOperation(value = "CONS-C-02 :: 주문하기",
-                notes = "본 API는 카페 음료를 주문하는 기능입니다.\n\n" +
+                notes = "본 API는 카페 음료를 주문하는 기능입니다. 주문 시 구독 번호를 함께 넘겨주어야 하며, 구독권 조건에 따라 최소인원/최대인원의 조건에 따라 음료 개수를 맞추어 주문해야 합니다.\n\n" +
                         "입력 데이터:\n" +
                         "```json\n" +
                         "{\n" +
@@ -43,8 +43,9 @@ public class ConsumerOrderController {
                         "  \"제품 옵션 선택지 ID\": \"orderProductOptionId\",         // 주문할 제품의 옵션 선택 ID를 입력합니다. ex). 벤티\n" +
                         "}\n" +
                         "```\n\n<hr>"+
-                        "- orderOption는 주문 옵션을 입력합니다. - 빨대 추가 여부, 고무컵홀더 사용여부 등등..\n\n"+
-                        "- orderProduct는 주문할 제품을 입력합니다.\n"+
+                        "- orderOption는 주문 옵션을 입력합니다. - 빨대 추가 여부, 고무컵홀더 사용여부 등등.., 만약 주문 옵션을 선택하지 않는다면 빈 리스트 []을 넘겨주세요\n\n"+
+                        "- orderProduct는 주문할 제품을 입력합니다. - 만약 상품 옵션을 선택하지 않는다면 빈 리스트 []을 넘겨주세요\n" +
+                        "- 만약 같은 상품을 3개 주문하려면 orderProduct 리스트에 똑같은 Element를 넣어서 보내면 됩니다."+
                         "   - 아이스 아메리카노(PRODUCT : ID=13)\n" +
                         "       - 사이즈 선택(PRODUCT_OPTION : ID=1)\n" +
                         "           - 벤티(+1000)  (PRODUCT_OPT_CHOICE : ID=101)\n" +

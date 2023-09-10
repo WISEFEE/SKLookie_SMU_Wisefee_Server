@@ -11,8 +11,6 @@ services:
     environment:
       MYSQL_DATABASE: "wisefee-database"
       MYSQL_ROOT_PASSWORD: "1111"
-      REDIS_HOST: "wisefee-redis"  # Redis 호스트 이름 (컨테이너 이름)
-      REDIS_PORT: 6391  # Redis 기본 포트
     ports:
       - 3309:3306
     volumes:
@@ -29,14 +27,16 @@ services:
       - 8082:8080
     container_name: wisefee-app-dev-deploy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mariadb://wisefee-database:3306/wisefee-database?characterEncoding=UTF-8&serverTimezone=UTC
+      SPRING_DATASOURCE_URL: jdbc:mariadb://wisefee-database-dev-deploy:3306/wisefee-database?characterEncoding=UTF-8&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 1111
+      SPRING_REDIS_HOST: wisefee-redis-dev-deploy  # Redis 호스트 이름 (컨테이너 이름)
+      SPRING_REDIS_PORT: 6391  # Redis 기본 포트
     volumes:
       - .\volumes\storage\upload:/app/wisefee/storage/upload
+      - .\volumes\log:/app/wisefee/log
     networks:
       - wisefee-network-dev-deploy
-      -
   wisefee-redis: # container name
     image: redis:6.2.6-alpine
     ports: # 바인딩할 포트:내부 포트
