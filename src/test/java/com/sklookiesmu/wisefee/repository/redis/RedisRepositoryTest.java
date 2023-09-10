@@ -1,14 +1,13 @@
 package com.sklookiesmu.wisefee.repository.redis;
 
 import com.sklookiesmu.wisefee.dto.shared.firebase.FCMToken;
-import com.sklookiesmu.wisefee.service.shared.FCMTokenService;
+import com.sklookiesmu.wisefee.service.shared.interfaces.FCMTokenService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @SpringBootTest
 public class RedisRepositoryTest {

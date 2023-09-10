@@ -2,6 +2,7 @@ package com.sklookiesmu.wisefee.service.shared;
 
 import com.sklookiesmu.wisefee.dto.shared.firebase.FCMToken;
 import com.sklookiesmu.wisefee.repository.redis.AuthRepositoryWithRedis;
+import com.sklookiesmu.wisefee.service.shared.interfaces.FCMTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

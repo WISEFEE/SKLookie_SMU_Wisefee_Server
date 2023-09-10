@@ -1,5 +1,6 @@
-package com.sklookiesmu.wisefee.service.shared;
+package com.sklookiesmu.wisefee.service.shared.interfaces;
 
+import com.sklookiesmu.wisefee.common.enums.member.AuthType;
 import com.sklookiesmu.wisefee.dto.shared.jwt.TokenInfoDto;
 import com.sklookiesmu.wisefee.dto.shared.member.OAuthGoogleTokenVerifyResponseDto;
 import org.springframework.security.core.Authentication;
@@ -14,10 +15,10 @@ public interface AuthService {
      * @param [email 이메일]
      * @param [password 비밀번호]
      * @param [firebaseToken FCM Token]
-     * @param [loginAccountType 로그인 타입]
+     * @param [loginAuthType 로그인 타입]
      * @return [TokenInfo]
      */
-    public abstract TokenInfoDto login(String email, String password, String firebaseToken, String loginAccountType);
+    public abstract TokenInfoDto login(String email, String password, String firebaseToken, AuthType loginAuthType);
 
 
     /**

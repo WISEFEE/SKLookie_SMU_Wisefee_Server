@@ -1,4 +1,4 @@
-package com.sklookiesmu.wisefee.service.shared;
+package com.sklookiesmu.wisefee.service.shared.interfaces;
 
 import com.sklookiesmu.wisefee.domain.Member;
 
@@ -72,5 +72,12 @@ public interface MemberService {
      * @return [성공 시 회원 PK 반환]
      */
     public abstract Long joinGoogle(Member member, String accessToken) throws IOException;
+
+    /**
+     * [로그인 아이디 검증]
+     * 현재 로그인한 회원의 아이디와 요청한 아이디가 일치한지 검증한다.
+     * @param id
+     */
+    public void validateCurrentUser(Long id);
 
 }

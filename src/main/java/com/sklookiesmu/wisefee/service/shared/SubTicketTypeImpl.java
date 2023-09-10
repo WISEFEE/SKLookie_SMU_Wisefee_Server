@@ -2,6 +2,7 @@ package com.sklookiesmu.wisefee.service.shared;
 
 import com.sklookiesmu.wisefee.domain.SubTicketType;
 import com.sklookiesmu.wisefee.repository.SubTicketTypeRepository;
+import com.sklookiesmu.wisefee.service.shared.interfaces.SubTicketTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

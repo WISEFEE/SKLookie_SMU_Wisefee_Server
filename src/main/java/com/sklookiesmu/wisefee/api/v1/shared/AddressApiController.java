@@ -1,12 +1,10 @@
 package com.sklookiesmu.wisefee.api.v1.shared;
 
-import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
 import com.sklookiesmu.wisefee.domain.Address;
-import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.dto.shared.address.AddressRequestDto;
 import com.sklookiesmu.wisefee.dto.shared.address.AddressResponseDto;
-import com.sklookiesmu.wisefee.service.shared.AddressService;
+import com.sklookiesmu.wisefee.service.shared.interfaces.AddressService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

@@ -1,16 +1,10 @@
 package com.sklookiesmu.wisefee.api.v1.shared;
 
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
-import com.sklookiesmu.wisefee.domain.Address;
 import com.sklookiesmu.wisefee.domain.SubTicketType;
-import com.sklookiesmu.wisefee.dto.consumer.SubTicketTypeDto;
-import com.sklookiesmu.wisefee.dto.shared.address.AddressRequestDto;
-import com.sklookiesmu.wisefee.dto.shared.address.AddressResponseDto;
-import com.sklookiesmu.wisefee.dto.shared.member.MemberResponseDto;
 import com.sklookiesmu.wisefee.dto.shared.subTicket.SubTicketTypeRequestDto;
 import com.sklookiesmu.wisefee.dto.shared.subTicket.SubTicketTypeResponseDto;
-import com.sklookiesmu.wisefee.service.shared.MemberService;
-import com.sklookiesmu.wisefee.service.shared.SubTicketTypeService;
+import com.sklookiesmu.wisefee.service.shared.interfaces.SubTicketTypeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -21,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityManager;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;

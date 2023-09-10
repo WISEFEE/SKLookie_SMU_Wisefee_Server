@@ -11,7 +11,7 @@ import com.sklookiesmu.wisefee.repository.cafe.CafeRepository;
 import com.sklookiesmu.wisefee.repository.product.ProductOptChoiceRepository;
 import com.sklookiesmu.wisefee.repository.product.ProductRepository;
 import com.sklookiesmu.wisefee.repository.subscribe.SubscribeJpaRepository;
-import com.sklookiesmu.wisefee.repository.subscribe.SubscribeRepository;
+import com.sklookiesmu.wisefee.service.shared.interfaces.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

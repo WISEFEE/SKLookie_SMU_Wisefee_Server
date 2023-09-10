@@ -2,6 +2,7 @@ package com.sklookiesmu.wisefee.common.auth;
 
 import com.sklookiesmu.wisefee.common.auth.custom.CustomUserDetail;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
+import com.sklookiesmu.wisefee.common.enums.member.AuthType;
 import com.sklookiesmu.wisefee.dto.shared.firebase.FCMToken;
 import com.sklookiesmu.wisefee.dto.shared.jwt.TokenInfoDto;
 import com.sklookiesmu.wisefee.repository.redis.AuthRepositoryWithRedis;
@@ -57,7 +58,7 @@ public class JwtTokenProvider {
         CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
         Long userId = userDetails.getMemberId();
         String nickname = userDetails.getNickname();
-        String authType = userDetails.getAuthType();
+        AuthType authType = userDetails.getAuthType();
 
         long now = (new Date()).getTime();
 
@@ -124,7 +125,7 @@ public class JwtTokenProvider {
                 authorities,
                 (String)claims.get("nickname"),
                 Long.valueOf((Integer)claims.get("userId")),
-                (String)claims.get("authType"));
+                AuthType.valueOf((String) claims.get("authType")));
         return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
     }
 

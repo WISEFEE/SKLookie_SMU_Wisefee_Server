@@ -6,6 +6,7 @@ import com.sklookiesmu.wisefee.common.auth.JwtTokenProvider;
 import com.sklookiesmu.wisefee.common.auth.custom.CustomUserDetail;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
 import com.sklookiesmu.wisefee.common.constant.OAuthTokenStatus;
+import com.sklookiesmu.wisefee.common.enums.member.AuthType;
 import com.sklookiesmu.wisefee.common.exception.AuthForbiddenException;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.dto.shared.firebase.FCMToken;
@@ -13,6 +14,7 @@ import com.sklookiesmu.wisefee.dto.shared.jwt.TokenInfoDto;
 import com.sklookiesmu.wisefee.dto.shared.member.OAuthGoogleTokenVerifyResponseDto;
 import com.sklookiesmu.wisefee.repository.MemberRepository;
 import com.sklookiesmu.wisefee.repository.redis.AuthRepositoryWithRedis;
+import com.sklookiesmu.wisefee.service.shared.interfaces.AuthService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import okhttp3.OkHttpClient;
@@ -49,11 +51,11 @@ public class AuthServiceImpl implements AuthService {
      * @param [email 이메일]
      * @param [password 비밀번호]
      * @param [firebaseToken FCM Token]
-     * @param [loginAccountType 로그인 타입]
+     * @param [loginAuthType 로그인 타입]
      * @return [TokenInfo]
      */
     @Transactional
-    public TokenInfoDto login(String email, String password, String firebaseToken, String loginAuthType) {
+    public TokenInfoDto login(String email, String password, String firebaseToken, AuthType loginAuthType) {
         // 1. Login Email/PW 를 기반으로 Authentication 객체 생성
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
 
@@ -62,9 +64,8 @@ public class AuthServiceImpl implements AuthService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         CustomUserDetail userDetail = (CustomUserDetail)authentication.getPrincipal();
-        String authType = userDetail.getAuthType();
 
-        if(!authType.equalsIgnoreCase(loginAuthType)){
+        if(userDetail.getAuthType() != loginAuthType){
             throw new AuthForbiddenException(loginAuthType + " 로그인으로 유효한 계정 타입이 아닙니다.");
         }
 
@@ -227,7 +228,7 @@ public class AuthServiceImpl implements AuthService {
             else{
                 Optional<Member> member = memberRepository.findByEmail(email);
                 if(member.isPresent()){
-                    if(member.get().getAuthType().equalsIgnoreCase(AuthConstant.AUTH_TYPE_GOOGLE)){
+                    if(member.get().getAuthType().name().equalsIgnoreCase(AuthConstant.AUTH_TYPE_GOOGLE.name())){
                         //CASE2 : 이미 구글로 가입된 토큰
                         result.setCode(OAuthTokenStatus.ALREADY.getValue());
                         result.setDesc(OAuthTokenStatus.ALREADY.getMessage());

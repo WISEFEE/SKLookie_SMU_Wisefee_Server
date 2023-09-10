@@ -1,4 +1,4 @@
-package com.sklookiesmu.wisefee.service.shared;
+package com.sklookiesmu.wisefee.service.shared.interfaces;
 
 import com.sklookiesmu.wisefee.dto.shared.firebase.FCMToken;
 

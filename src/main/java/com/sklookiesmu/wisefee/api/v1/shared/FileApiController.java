@@ -3,7 +3,7 @@ package com.sklookiesmu.wisefee.api.v1.shared;
 import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
 import com.sklookiesmu.wisefee.dto.shared.file.FileInfoDto;
-import com.sklookiesmu.wisefee.service.shared.FileService;
+import com.sklookiesmu.wisefee.service.shared.interfaces.FileService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

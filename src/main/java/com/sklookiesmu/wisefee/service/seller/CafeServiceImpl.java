@@ -9,6 +9,7 @@ import com.sklookiesmu.wisefee.repository.product.ProductOptChoiceRepository;
 import com.sklookiesmu.wisefee.repository.product.ProductOptionRepository;
 import com.sklookiesmu.wisefee.repository.product.ProductRepository;
 import com.sklookiesmu.wisefee.repository.subscribe.SubscribeRepository;
+import com.sklookiesmu.wisefee.service.shared.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ public class CafeServiceImpl implements CafeService{
     private final OrderOptionRepository orderOptionRepository;
     private final ProductRepository productRepository;
     private final SubscribeRepository subscribeRepository;
+    private final MemberServiceImpl memberService;
 
     @Override
     @Transactional
@@ -41,8 +43,7 @@ public class CafeServiceImpl implements CafeService{
             throw new RuntimeException("현재 인증된 회원 정보를 가져올 수 없습니다.");
         }
 
-        Member member = new Member();
-        member.setMemberId(pk);
+        Member member = memberService.getMember(pk);
         cafe.setMember(member);
 
         cafeRepository.create(cafe);

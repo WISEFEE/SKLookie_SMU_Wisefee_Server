@@ -7,7 +7,7 @@ import com.sklookiesmu.wisefee.dto.seller.SubMemberDetailsDto;
 import com.sklookiesmu.wisefee.dto.seller.SubMemberDto;
 import com.sklookiesmu.wisefee.service.seller.CafeService;
 import com.sklookiesmu.wisefee.service.seller.OrderService;
-import com.sklookiesmu.wisefee.service.shared.MemberService;
+import com.sklookiesmu.wisefee.service.shared.interfaces.MemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

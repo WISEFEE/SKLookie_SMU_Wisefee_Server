@@ -1,17 +1,15 @@
 package com.sklookiesmu.wisefee.api.v1.shared;
 
 import com.sklookiesmu.wisefee.common.auth.JwtTokenProvider;
-import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
 import com.sklookiesmu.wisefee.dto.shared.jwt.TokenInfoDto;
 import com.sklookiesmu.wisefee.dto.shared.member.LoginOAuthGoogleRequestDto;
 import com.sklookiesmu.wisefee.dto.shared.member.LoginRequestDto;
 import com.sklookiesmu.wisefee.dto.shared.member.OAuthGoogleTokenVerifyRequestDto;
 import com.sklookiesmu.wisefee.dto.shared.member.OAuthGoogleTokenVerifyResponseDto;
-import com.sklookiesmu.wisefee.service.shared.AuthService;
+import com.sklookiesmu.wisefee.service.shared.interfaces.AuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

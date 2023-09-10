@@ -7,6 +7,7 @@ import com.sklookiesmu.wisefee.common.file.FileUtil;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.dto.shared.file.FileInfoDto;
 import com.sklookiesmu.wisefee.repository.FileRepository;
+import com.sklookiesmu.wisefee.service.shared.interfaces.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
     private final FileRepository fileRepository;
+    private final MemberServiceImpl memberService;
     @Value("${upload.directory}")
     private String uploadDirectory;
 
@@ -91,8 +93,7 @@ public class FileServiceImpl implements FileService {
         file.setFileInfo(FileConstant.FILE_INFO_NO_USE); //정보
         file.setDeleted(false);
 
-        Member member = new Member();
-        member.setMemberId(memberPK);
+        Member member = memberService.getMember(memberPK);
         file.setMember(member);
 
         this.fileRepository.create(file);

@@ -47,6 +47,7 @@ dependencies {
 	// FireBase 추가
 	implementation 'com.google.firebase:firebase-admin:8.0.0'
 	implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
+	testImplementation 'org.projectlombok:lombok:1.18.26'
 
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:2.7.4'
 	compileOnly 'org.projectlombok:lombok'
@@ -77,6 +78,11 @@ dependencies {
 
 	// error
 	implementation 'org.apache.commons:commons-lang3'
+
+	// map struct
+	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+
 }
 
 //querydsl 추가

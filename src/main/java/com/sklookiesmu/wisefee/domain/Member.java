@@ -1,6 +1,8 @@
 package com.sklookiesmu.wisefee.domain;
-import lombok.Getter;
-import lombok.Setter;
+import com.sklookiesmu.wisefee.common.enums.member.AccountType;
+import com.sklookiesmu.wisefee.common.enums.member.AuthType;
+import com.sklookiesmu.wisefee.common.enums.member.MemberStatus;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -9,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor
 @Table(name = "MEMBER")
 public class Member {
 
@@ -36,23 +38,26 @@ public class Member {
     @Column(name = "PASSWORD", nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "ACCOUNT_TYPE", nullable = false)
-    private String accountType;
+    private AccountType accountType;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "AUTH_TYPE", nullable = false)
-    private String authType;
+    private AuthType authType;
 
     @Column(name = "IS_AUTH_EMAIL", nullable = false)
-    private String isAuthEmail;
+    private Boolean isAuthEmail;
 
     @Column(name = "IS_ALLOW_PUSH_MSG", nullable = false)
-    private String isAllowPushMsg;
+    private Boolean isAllowPushMsg;
 
     @Column(name = "PUSH_MSG_TOKEN")
     private String pushMsgToken;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "MEMBER_STATUS")
-    private String memberStatus;
+    private MemberStatus memberStatus;
 
     @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
@@ -62,6 +67,22 @@ public class Member {
 
     @Column(name = "DELETED_AT")
     private LocalDateTime deletedAt;
+
+    @Builder
+    public Member(String nickname, String email, String phone, String phoneOffice, String birth, String password, AccountType accountType, AuthType authType, Boolean isAuthEmail, Boolean isAllowPushMsg, String pushMsgToken, MemberStatus memberStatus) {
+        this.nickname = nickname;
+        this.email = email;
+        this.phone = phone;
+        this.phoneOffice = phoneOffice;
+        this.birth = birth;
+        this.password = password;
+        this.accountType = accountType;
+        this.authType = authType;
+        this.isAuthEmail = isAuthEmail;
+        this.isAllowPushMsg = isAllowPushMsg;
+        this.pushMsgToken = pushMsgToken;
+        this.memberStatus = memberStatus;
+    }
 
     /**
      * 생성일, 수정일 값 세팅
@@ -77,50 +98,22 @@ public class Member {
         this.updatedAt = LocalDateTime.now();
     }
 
-    @Override
-    public String toString() {
-        return "Member{" +
-                "memberId=" + memberId +
-                ", nickname='" + nickname + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", phoneOffice='" + phoneOffice + '\'' +
-                ", birth='" + birth + '\'' +
-                ", password='" + password + '\'' +
-                ", accountType='" + accountType + '\'' +
-                ", authType='" + authType + '\'' +
-                ", isAuthEmail='" + isAuthEmail + '\'' +
-                ", isAllowPushMsg='" + isAllowPushMsg + '\'' +
-                ", pushMsgToken='" + pushMsgToken + '\'' +
-                ", memberStatus='" + memberStatus + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", deletedAt=" + deletedAt +
-                ", cafes=" + cafes +
-                ", notifications=" + notifications +
-                ", files=" + files +
-                ", cart=" + cart +
-                ", address=" + address +
-                ", subscribes=" + subscribes +
-                '}';
-    }
-
     /**
      * 연관관계 매핑
      */
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<Cafe> cafes = new ArrayList<>();
+    private final List<Cafe> cafes = new ArrayList<>();
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Notification> notifications = new ArrayList<>();
+    private final List<Notification> notifications = new ArrayList<>();
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<File> files = new ArrayList<>();
+    private final List<File> files = new ArrayList<>();
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Cart cart;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ADDR_ID")
     private Address address;
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<Subscribe> subscribes = new ArrayList<>();
+    private final List<Subscribe> subscribes = new ArrayList<>();
 
 
     /**
@@ -131,14 +124,28 @@ public class Member {
         this.phone = member.phone;
         this.phoneOffice = member.phoneOffice;
         this.birth = member.birth;
-//        this.accountType = member.accountType;
         this.isAuthEmail = member.isAuthEmail;
         this.isAllowPushMsg = member.isAllowPushMsg;
-        return 1L;
+        return memberId;
     }
 
     public Long encodePassword(String encodePassword) {
         this.password = encodePassword;
-        return 1L;
+        return memberId;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
+    public void setDefaultAuthType(AuthType authType) {
+        this.authType = authType;
+    }
+
+    public void joinOAuth(String email, String password, boolean isAuthEmail, AuthType authType) {
+        this.email = email;
+        this.password = password;
+        this.isAuthEmail = isAuthEmail;
+        this.authType = authType;
     }
 }

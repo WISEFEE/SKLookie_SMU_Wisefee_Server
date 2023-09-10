@@ -1,5 +1,7 @@
 package com.sklookiesmu.wisefee.common.constant;
 
+import com.sklookiesmu.wisefee.common.enums.member.AuthType;
+
 /**
  * 인증 관련 Constant
  */
@@ -18,12 +20,12 @@ public class AuthConstant {
     /**
      * Member Account Type : 일반 로그인
      */
-    public static final String AUTH_TYPE_COMMON = "Common";
+    public static final AuthType AUTH_TYPE_COMMON = AuthType.COMMON;
 
     /**
      * Member Account Type : 소셜 로그인 (구글)
      */
-    public static final String AUTH_TYPE_GOOGLE = "Google";
+    public static final AuthType AUTH_TYPE_GOOGLE = AuthType.GOOGLE;
 
 
 
