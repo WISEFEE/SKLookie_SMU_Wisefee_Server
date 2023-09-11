@@ -19,7 +19,7 @@ services:
       - wisefee-network-dev-deploy
 
   wisefee-app:
-    image: kang3171611/testserver-wisefee-app:latest
+    image: kang3171611/testserver-wisefee-app1:latest
     restart: always        #컨테이너 재실행
     depends_on: #database service가 실행된 이후에 실행
       - wisefee-database
