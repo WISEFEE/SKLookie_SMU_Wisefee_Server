@@ -21,7 +21,7 @@ public class ProductStatusComponent {
     }
 
     public void preparingOrder(Long orderId) {
-        orderService.updateOrderStatus(orderId, ProductStatus.ALLSET);
+        orderService.updateOrderStatus(orderId, ProductStatus.PREPARING);
     }
 
     public void completeOrder(Long orderId) {
