@@ -21,11 +21,19 @@ public class ProductStatusComponent {
     }
 
     public void preparingOrder(Long orderId) {
-        orderService.updateOrderStatus(orderId, ProductStatus.PREPARING);
+        orderService.updateOrderStatus(orderId, ProductStatus.ALLSET);
     }
 
     public void completeOrder(Long orderId) {
         orderService.updateOrderStatus(orderId, ProductStatus.ALLSET);
+    }
+
+    public void receiveOrder(Long orderId) {
+        orderService.updateOrderStatus(orderId, ProductStatus.RECEIVE);
+    }
+
+    public void doneOrder(Long orderId) {
+        orderService.updateOrderStatus(orderId, ProductStatus.DONE);
     }
 
 }

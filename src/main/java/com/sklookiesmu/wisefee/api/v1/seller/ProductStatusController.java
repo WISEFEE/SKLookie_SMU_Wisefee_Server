@@ -106,4 +106,48 @@ public class ProductStatusController {
 
         fcmNotificationService.sendMessageTo(requestDto);
     }
+
+    @ApiOperation(
+            value = "SELL-D-05 :: 수령 완료",
+            notes = "주문 상태를 수령 완료로 합니다."
+    )
+    @PostMapping("/{orderId}/complete")
+    @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
+    public void receiveOrder(@PathVariable Long orderId) throws IOException {
+        orderStatusComponent.receiveOrder(orderId);
+
+        FCMNotificationRequestDto requestDto = new FCMNotificationRequestDto();
+
+        Map<String, String> data = new HashMap<>();
+
+        data.put("title", "수령 완료");
+        data.put("body", "수령이 완료되었습니다!");
+        requestDto.setData(data);
+        requestDto.setTo(deviceToken);
+        requestDto.setPriority("high");
+
+        fcmNotificationService.sendMessageTo(requestDto);
+    }
+
+    @ApiOperation(
+            value = "SELL-D-06 :: 완료(텀블러 반납)",
+            notes = "주문 상태를 완료(텀블러 반납)로 합니다."
+    )
+    @PostMapping("/{orderId}/complete")
+    @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
+    public void doneOrder(@PathVariable Long orderId) throws IOException {
+        orderStatusComponent.doneOrder(orderId);
+
+        FCMNotificationRequestDto requestDto = new FCMNotificationRequestDto();
+
+        Map<String, String> data = new HashMap<>();
+
+        data.put("title", "텀블러 반납 완료");
+        data.put("body", "텀블러 반납이 완료되었습니다!");
+        requestDto.setData(data);
+        requestDto.setTo(deviceToken);
+        requestDto.setPriority("high");
+
+        fcmNotificationService.sendMessageTo(requestDto);
+    }
 }
