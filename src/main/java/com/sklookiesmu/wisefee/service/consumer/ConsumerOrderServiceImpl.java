@@ -186,9 +186,7 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
 
                 }).collect(Collectors.toList());
 
-        /*
-         * 금액 계산 로직
-         */
+        // 금액 계산 로직
         double totalPrice = 0;
 
         for (OrderProduct orderProduct : orderProducts) {
@@ -207,7 +205,6 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
                     .sum();
 
             log.info("제품옵션추가된가격 : " + totalPrice);
-
         }
 
 
@@ -226,8 +223,10 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
         log.info("할인+보증금 총금액: " + (discountPayment(totalPrice, subscribe)+subTicketDeposit));
         finalPayment.setCreatedAt(LocalDateTime.now());
 
-
         Order.createOrder(order, orderProducts, orderOptions);
+
+        // TODO : 결제수단 생성
+        finalPayment.setPaymentMethod(orderRequestDto.getPaymentMethod().getMethod());
 
         return order.getOrderId();
     }
@@ -252,7 +251,7 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
     /**
      * 결제수단 생성
      */
-    @Transactional
+    /*@Transactional
     @Override
     public Long createPaymentMethod(Long cafeId, Long orderId, PaymentDto.PaymentRequestDto paymentRequestDto) {
         Cafe cafe = cafeJpaRepository.findById(cafeId)
@@ -272,7 +271,7 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
         }
 
         return payment.getPaymentId();
-    }
+    } */
 
     /**
      * 주문 내역 금액 조회
