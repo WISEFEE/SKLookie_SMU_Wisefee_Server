@@ -1,5 +1,6 @@
 package com.sklookiesmu.wisefee.dto.consumer;
 
+import com.sklookiesmu.wisefee.common.constant.PaymentMethod;
 import com.sklookiesmu.wisefee.common.constant.ProductStatus;
 import com.sklookiesmu.wisefee.domain.*;
 import io.swagger.annotations.ApiModelProperty;
@@ -22,6 +23,10 @@ public class OrderDto {
         @ApiModelProperty(value = "구독권 ID", required = true)
         @NotNull(message = "구독권 ID는 필수 입력값입니다.")
         private Long subscribeId;
+
+        @ApiModelProperty(value = "결제수단", required = true)
+        @NotNull(message = "결제수단은 필수 입력값입니다.")
+        private PaymentMethod paymentMethod;
 
         @ApiModelProperty(value = "주문 상품", required = true)
         @NotNull(message = "주문 상품은 필수 입력값입니다.")

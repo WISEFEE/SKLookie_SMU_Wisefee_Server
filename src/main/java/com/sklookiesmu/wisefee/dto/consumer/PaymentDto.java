@@ -41,7 +41,7 @@ public class PaymentDto {
         }
     }
 
-    @Getter
+    /*@Getter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
@@ -56,12 +56,5 @@ public class PaymentDto {
         private int paymentPrice;
 
 
-       /* public Payment toEntity(Payment payment){
-            return Payment.builder()
-                    .paymentInfo(payment.getPaymentInfo())
-                    .paymentPrice(payment.getPaymentPrice())
-                    .paymentMethod(paymentMethod)
-                    .build();
-        }*/
-    }
+    }*/
 }
