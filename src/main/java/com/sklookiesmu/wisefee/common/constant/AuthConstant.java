@@ -8,16 +8,6 @@ import com.sklookiesmu.wisefee.common.enums.member.AuthType;
 public class AuthConstant {
 
     /**
-     * Member AUTH Type : 손님
-     */
-    public static final String ACCOUNT_TYPE_CONSUMER = "CONSUMER";
-
-    /**
-     * Member AUTH Type : 매장
-     */
-    public static final String ACCOUNT_TYPE_SELLER = "SELLER";
-
-    /**
      * Member Account Type : 일반 로그인
      */
     public static final AuthType AUTH_TYPE_COMMON = AuthType.COMMON;

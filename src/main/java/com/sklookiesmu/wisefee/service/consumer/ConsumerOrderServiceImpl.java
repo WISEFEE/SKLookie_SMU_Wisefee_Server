@@ -3,6 +3,7 @@ package com.sklookiesmu.wisefee.service.consumer;
 import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
 import com.sklookiesmu.wisefee.common.constant.ProductStatus;
 
+import com.sklookiesmu.wisefee.common.exception.AuthForbiddenException;
 import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
 
 import com.sklookiesmu.wisefee.common.exception.PreconditionFailException;
@@ -75,6 +76,10 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
 
         Subscribe subscribe = subscribeJpaRepository.findByIdAndCafeId(orderRequestDto.getSubscribeId(), cafeId)
                 .orElseThrow(()-> new NoSuchElementFoundException("존재하지 않는 구독권입니다"));
+
+        if(subscribe.getMember().getMemberId() != SecurityUtil.getCurrentMemberPk()){
+            throw new AuthForbiddenException("구독권의 소유자가 일치하지 않습니다.");
+        }
 
         if (subscribe.getExpiredAt().isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("만료된 구독권입니다.");
