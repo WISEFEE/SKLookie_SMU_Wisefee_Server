@@ -56,6 +56,9 @@ public class CartApiController {
             @ApiParam(value = "회원 ID")
             @PathVariable("memberId") Long memberId
     ) {
+        if(!(memberId.equals(SecurityUtil.getCurrentMemberPk())))
+            throw new AlreadyExistElementException("invalid ID : The provided ID does not match your current logged-in ID"+memberId);
+
         Long result = cartService.calculateCart(memberId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
@@ -73,6 +76,9 @@ public class CartApiController {
             @ApiParam(value = "적용할 구독 아이디")
             @RequestParam("subscribeId") Long subscribeId
     ) {
+        if(!(memberId.equals(SecurityUtil.getCurrentMemberPk())))
+            throw new AlreadyExistElementException("invalid ID : The provided ID does not match your current logged-in ID"+memberId);
+
         Long result = cartService.calculateCartWithSubTicket(memberId, subscribeId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }

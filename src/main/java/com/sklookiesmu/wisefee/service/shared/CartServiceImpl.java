@@ -67,10 +67,6 @@ public class CartServiceImpl implements CartService {
 
 
         Cart cart = cartRepository.findCartByMemberId(memberId);
-        if (cart == null) {
-            Long newCartId = addCart(memberId);
-            cart = cartRepository.findCartByCartId(newCartId);
-        }
 
         List<CartProduct> cartProducts = cartRepository.findCartProductByCartId(cart.getCartId());
         if (cartProducts.size() != 0 &&

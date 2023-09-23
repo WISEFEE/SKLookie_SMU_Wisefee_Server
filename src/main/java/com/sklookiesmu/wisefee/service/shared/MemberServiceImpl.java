@@ -2,11 +2,13 @@ package com.sklookiesmu.wisefee.service.shared;
 
 import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
+import com.sklookiesmu.wisefee.common.enums.member.AccountType;
 import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
 import com.sklookiesmu.wisefee.common.exception.AlreadyExistElementException;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.repository.MemberRepository;
 import com.sklookiesmu.wisefee.service.shared.interfaces.AuthService;
+import com.sklookiesmu.wisefee.service.shared.interfaces.CartService;
 import com.sklookiesmu.wisefee.service.shared.interfaces.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,6 +26,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder encoder;
     private final AuthService authService;
+    private final CartService cartService;
 
     @Transactional
     public Long join(Member member){
@@ -35,6 +38,9 @@ public class MemberServiceImpl implements MemberService {
         member.encodePassword(encoder.encode(member.getPassword()));
         memberRepository.save(member);
 
+        if (member.getAccountType().equals(AccountType.CONSUMER)) {
+            cartService.addCart(member.getMemberId());
+        }
         return member.getMemberId();
     }
 
@@ -90,6 +96,9 @@ public class MemberServiceImpl implements MemberService {
 
         memberRepository.save(member);
 
+        if (member.getAccountType().equals(AccountType.CONSUMER)) {
+            cartService.addCart(member.getMemberId());
+        }
         return member.getMemberId();
     }
 
