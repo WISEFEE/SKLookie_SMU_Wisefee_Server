@@ -47,7 +47,7 @@ public interface ConsumerOrderService {
      * 결제수단을 생성한다.
      * @param orderId
      */
-    Long createPaymentMethod(Long cafeId, Long orderId, PaymentDto.PaymentRequestDto paymentRequestDto);
+    //Long createPaymentMethod(Long cafeId, Long orderId, PaymentDto.PaymentRequestDto paymentRequestDto);
 
 
 
