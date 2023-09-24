@@ -1,10 +1,7 @@
 package com.sklookiesmu.wisefee.service.consumer;
 
 import com.sklookiesmu.wisefee.domain.Order;
-import com.sklookiesmu.wisefee.dto.consumer.CafeDto;
-import com.sklookiesmu.wisefee.dto.consumer.OrderDto;
-import com.sklookiesmu.wisefee.dto.consumer.OrdersDto;
-import com.sklookiesmu.wisefee.dto.consumer.SubscribeDto;
+import com.sklookiesmu.wisefee.dto.consumer.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
@@ -21,7 +18,15 @@ public interface ConsumerMyPageService {
      * 주문 내역을 조회하도록 한다.
      * @return [주문 내역 반환]
      */
-    OrdersDto getAllOrderHistory(Long memberId);
+    OrdersInfoDto getAllOrderHistory(Long memberId);
+
+
+    /**
+     * [결재한 주문 내역 조회]
+     * 현재 고객이 결재한 주문한 내역을 조회한다.
+     * @return [주문 내역 정보 DTO 반환]
+     */
+    OrdersInfoDto getPaidOrdersHistory(Long memberId);
 
     /**
      * TODO [알람 범위 설정]

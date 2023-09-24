@@ -238,15 +238,11 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
 
     /**
      * 주문내역 조회
-     * @param cafeId
      * @param orderId
      * @return OrderResponseDto
      */
     @Override
-    public OrderDto.OrderResponseDto getOrderHistory(Long cafeId, Long orderId) {
-        Cafe cafe = cafeJpaRepository.findById(cafeId)
-                .orElseThrow(()->new NoSuchElementFoundException("존재하지 않는 카페입니다."));
-
+    public OrderDto.OrderResponseDto getOrderHistory(Long orderId) {
         Order order = orderJpaRepository.findById(orderId)
                 .orElseThrow(()->new NoSuchElementFoundException("존재하지 않는 주문입니다."));
         return OrderDto.OrderResponseDto.orderToDto(order);
@@ -282,10 +278,7 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
      * 주문 내역 금액 조회
      */
     @Override
-    public PaymentDto.PaymentResponseDto getPayment(Long cafeId, Long orderId){
-
-        Cafe cafe = cafeJpaRepository.findById(cafeId)
-                .orElseThrow(()->new NoSuchElementFoundException("존재하지 않는 카페입니다."));
+    public PaymentDto.PaymentResponseDto getPayment(Long orderId){
 
         Order order = orderJpaRepository.findById(orderId)
                 .orElseThrow(() -> new NoSuchElementFoundException("존재하지 않는 주문내역입니다."));

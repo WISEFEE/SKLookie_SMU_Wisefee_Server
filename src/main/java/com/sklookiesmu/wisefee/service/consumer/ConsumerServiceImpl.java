@@ -81,6 +81,24 @@ public class ConsumerServiceImpl implements ConsumerService {
         return SubscribeDto.SubscribeListResponseDto.of(list);
     }
 
+
+    /**
+     * 진행중인 정기구독 내역 조회
+     * @param memberId
+     * @return SubScribeResponseDto
+     */
+    @Override
+    public SubscribeDto.SubscribeListResponseDto getSubscribeCurrent(Long memberId) {
+
+        // 유저 검증 필요
+        memberRepository.findById(memberId).orElseThrow(() -> new NoSuchElementFoundException("member not found"));
+        LocalDateTime current = LocalDateTime.now();
+
+        List<Subscribe> list =subscribeRepository.findAllByMemberIdNonExpired(memberId, current);
+
+        return SubscribeDto.SubscribeListResponseDto.of(list);
+    }
+
     /**
      * 정기구독 해지
      */
