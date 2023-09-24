@@ -28,4 +28,12 @@ public class ProductStatusComponent {
         orderService.updateOrderStatus(orderId, ProductStatus.ALLSET);
     }
 
+    public void receiveOrder(Long orderId) {
+        orderService.updateOrderStatus(orderId, ProductStatus.RECEIVE);
+    }
+
+    public void doneOrder(Long orderId) {
+        orderService.updateOrderStatus(orderId, ProductStatus.DONE);
+    }
+
 }
