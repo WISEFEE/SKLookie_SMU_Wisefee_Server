@@ -63,7 +63,6 @@ services:
       - wisefee-network-inner
 
 
-
   wisefee-redis: # container name
     image: redis:6.2.6-alpine
     expose:
@@ -77,5 +76,15 @@ services:
     networks:
       - wisefee-network-inner
 
-
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: wisefee-phpmyadmin
+    environment:
+      PMA_HOST: wisefee-database-dev-deploy
+      PMA_USER: root
+      PMA_PASSWORD: 1111
+    ports:
+      - '8081:9090'
+    networks:
+      - wisefee-network-inner
 
