@@ -84,7 +84,7 @@ services:
       PMA_USER: root
       PMA_PASSWORD: 1111
     ports:
-      - '8081:9090'
+      - '9090:9090'
     networks:
       - wisefee-network-inner
 
