@@ -19,3 +19,10 @@ services:
       - ./volumes/redis/data:/data
       - ./volumes/redis/conf:/usr/local/etc/redis/redis.conf
     restart: always
+  wisefee-phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: wisefee-phpmyadmin
+    environment:
+      PMA_HOST: wisefee-database
+    ports:
+      - '9090:80'

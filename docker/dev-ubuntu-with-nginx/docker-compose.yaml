@@ -21,6 +21,7 @@ services:
       - wisefee-database
       - wisefee-redis
       - wisefee-app
+      - wisefee-phpmyadmin
     networks:
       - wisefee-network-outer
 
@@ -76,15 +77,16 @@ services:
     networks:
       - wisefee-network-inner
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+  wisefee-phpmyadmin:
+    image: phpmyadmin:latest
     container_name: wisefee-phpmyadmin
     environment:
       PMA_HOST: wisefee-database-dev-deploy
-      PMA_USER: root
-      PMA_PASSWORD: 1111
     ports:
-      - '9090:9090'
+      - '9090:80'
+    expose:
+      - 9090
     networks:
       - wisefee-network-inner
+      - wisefee-network-outer
 
