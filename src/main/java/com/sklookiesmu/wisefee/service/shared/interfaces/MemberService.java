@@ -15,7 +15,7 @@ public interface MemberService {
      * @return [성공 시 회원 PK 반환]
      * @throws [예외 타입1] [예외 설명]
      */
-    public abstract Long join(Member member);
+    Long join(Member member);
 
 
     /**
@@ -25,7 +25,7 @@ public interface MemberService {
      * @param [order 정렬 순서(asc/desc)]
      * @return [회원 전체 리스트 반환]
      */
-    public abstract List<Member> getMembers(String order);
+    List<Member> getMembers(String order);
 
 
     /**
@@ -34,7 +34,7 @@ public interface MemberService {
      * @param [id 회원 엔티티 PK]
      * @return [회원 반환]
      */
-    public abstract Member getMember(Long id);
+    Member getMember(Long id);
 
     /**
      * [Member 엔티티 수정]
@@ -43,7 +43,7 @@ public interface MemberService {
      * @param [Member Member 엔티티(수정사항 반영된 상태)]
      * @return [id (실행결과)]
      */
-    public abstract Long updateMember(Long id, Member updateMember);
+    Long updateMember(Long id, Member updateMember);
 
     /**
      * [Member 엔티티 비밀번호 수정]
@@ -52,7 +52,7 @@ public interface MemberService {
      * @param [Member Member 엔티티(수정사항 반영된 상태)]
      * @return [id (실행결과)]
      */
-    public abstract Long updatePasswordAsMember(Long id, Member updateMember);
+    Long updatePasswordAsMember(Long id, Member updateMember);
 
     /**
      * [멤버 조회]
@@ -62,7 +62,7 @@ public interface MemberService {
      * @param email
      * @return
      */
-    public abstract Member getMemberByEmail(String email);
+    Member getMemberByEmail(String email);
 
 
     /**
@@ -71,13 +71,13 @@ public interface MemberService {
      * @param [member 회원 엔티티 모델(id=null)]
      * @return [성공 시 회원 PK 반환]
      */
-    public abstract Long joinGoogle(Member member, String accessToken) throws IOException;
+    Long joinGoogle(Member member, String accessToken) throws IOException;
 
     /**
      * [로그인 아이디 검증]
      * 현재 로그인한 회원의 아이디와 요청한 아이디가 일치한지 검증한다.
      * @param id
      */
-    public void validateCurrentUser(Long id);
+    void validateCurrentUser(Long id);
 
 }

@@ -1,6 +1,6 @@
 package com.sklookiesmu.wisefee.common.auth.custom;
 
-import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
+import com.sklookiesmu.wisefee.common.exception.global.NoSuchElementFoundException;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +8,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;

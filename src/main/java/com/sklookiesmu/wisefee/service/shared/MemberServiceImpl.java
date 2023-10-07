@@ -3,8 +3,9 @@ package com.sklookiesmu.wisefee.service.shared;
 import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
 import com.sklookiesmu.wisefee.common.enums.member.AccountType;
-import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
-import com.sklookiesmu.wisefee.common.exception.AlreadyExistElementException;
+import com.sklookiesmu.wisefee.common.exception.global.NoSuchElementFoundException;
+import com.sklookiesmu.wisefee.common.exception.global.AlreadyExistElementException;
+import com.sklookiesmu.wisefee.common.exception.global.OAuthLoginException;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.repository.MemberRepository;
 import com.sklookiesmu.wisefee.service.shared.interfaces.AuthService;
@@ -84,11 +85,16 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Transactional
-    public Long joinGoogle(Member member, String accessToken) throws IOException {
-        String email = authService.getEmailByGoogleToken(accessToken);
+    public Long joinGoogle(Member member, String accessToken) {
+        String email = "";
+        try {
+            email = authService.getEmailByGoogleToken(accessToken);
+        } catch (IOException e) {
+            throw new OAuthLoginException("유효한 구글 토큰이 아닙니다.");
+        }
 
         if(memberRepository.existsByEmail(email)) {
-            throw new AlreadyExistElementException("이미 존재하는 계정입니다." + member.getEmail());
+            throw new AlreadyExistElementException("이미 존재하는 이메일입니다.");
         }
 
         member.joinOAuth(email, AuthConstant.OAUTH_PASSWORD, true, AuthConstant.AUTH_TYPE_GOOGLE);

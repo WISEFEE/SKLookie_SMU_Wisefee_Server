@@ -1,7 +1,7 @@
 package com.sklookiesmu.wisefee.api.v1.seller;
 
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
-import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
+import com.sklookiesmu.wisefee.common.exception.global.NoSuchElementFoundException;
 import com.sklookiesmu.wisefee.domain.*;
 import com.sklookiesmu.wisefee.dto.seller.SubMemberDetailsDto;
 import com.sklookiesmu.wisefee.dto.seller.SubMemberDto;

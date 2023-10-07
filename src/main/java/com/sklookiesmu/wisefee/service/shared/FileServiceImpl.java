@@ -1,8 +1,8 @@
 package com.sklookiesmu.wisefee.service.shared;
 
 import com.sklookiesmu.wisefee.common.constant.FileConstant;
-import com.sklookiesmu.wisefee.common.exception.FileDownloadException;
-import com.sklookiesmu.wisefee.common.exception.FileUploadException;
+import com.sklookiesmu.wisefee.common.exception.common.FileDownloadException;
+import com.sklookiesmu.wisefee.common.exception.common.FileUploadException;
 import com.sklookiesmu.wisefee.common.file.FileUtil;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.dto.shared.file.FileInfoDto;
@@ -67,7 +67,7 @@ public class FileServiceImpl implements FileService {
         try {
             Files.copy(file.getInputStream(), filePath);
         } catch (IOException e) {
-            throw new FileUploadException("File upload exception");
+            throw new FileUploadException("파일 업로드 중 오류가 발생했습니다.");
         }
 
         return new FileInfoDto(file.getContentType(),
@@ -122,7 +122,7 @@ public class FileServiceImpl implements FileService {
             byte[] imageBytes = Files.readAllBytes(path);
             return imageBytes;
         } catch (IOException e) {
-            throw new FileDownloadException("File download fail." + e.getMessage());
+            throw new FileDownloadException("파일 다운로드 중 오류가 발생했습니다.");
         }
     }
 

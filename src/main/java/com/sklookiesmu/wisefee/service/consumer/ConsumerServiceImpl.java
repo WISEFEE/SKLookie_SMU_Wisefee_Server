@@ -1,7 +1,9 @@
 package com.sklookiesmu.wisefee.service.consumer;
 
 
-import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
+import com.sklookiesmu.wisefee.common.exception.global.AlreadyExistElementException;
+import com.sklookiesmu.wisefee.common.exception.global.NoSuchElementFoundException;
+import com.sklookiesmu.wisefee.common.exception.global.PreconditionFailException;
 import com.sklookiesmu.wisefee.domain.*;
 import com.sklookiesmu.wisefee.dto.consumer.SubscribeDto;
 import com.sklookiesmu.wisefee.repository.MemberRepository;
@@ -42,17 +44,17 @@ public class ConsumerServiceImpl implements ConsumerService {
 
         Subscribe subscribe = subscribeRepository.findByCafeIdAndMemberId(cafeId, memberId);
         if (subscribe != null && subscribe.getExpiredAt().isAfter(LocalDateTime.now())) {
-            throw new IllegalArgumentException("이미 구독하셨습니다.");
+            throw new AlreadyExistElementException("이미 구독하셨습니다.");
         }
 
         SubTicketType subTicketType = subTicketTypeRepository.findById(subTicketTypeId)
                 .orElseThrow(()->new NoSuchElementFoundException("존재하지 않는 구독권 종류입니다."));
 
         if (request.getSubPeople() < subTicketType.getSubTicketMinUserCount()) {
-            throw new IllegalArgumentException("구독 인원은 최소 "+ subTicketType.getSubTicketMinUserCount()+ "명입니다.");
+            throw new PreconditionFailException("구독 인원은 최소 "+ subTicketType.getSubTicketMinUserCount()+ "명입니다.");
         }
         if (request.getSubPeople() > subTicketType.getSubTicketMaxUserCount()){
-            throw new IllegalArgumentException("구독 인원은 최대 "+ subTicketType.getSubTicketMaxUserCount()+ "명입니다.");
+            throw new PreconditionFailException("구독 인원은 최대 "+ subTicketType.getSubTicketMaxUserCount()+ "명입니다.");
         }
 
         Payment payment = new Payment();

@@ -1,6 +1,7 @@
 package com.sklookiesmu.wisefee.common.auth;
 
 import com.sklookiesmu.wisefee.common.auth.custom.CustomUserDetail;
+import com.sklookiesmu.wisefee.common.exception.global.AuthForbiddenException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -14,7 +15,7 @@ public class SecurityUtil {
     public static String getCurrentMemberEmail() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getName() == null) {
-            throw new RuntimeException("No authentication information.");
+            throw new AuthForbiddenException("인증정보를 확인할 수 없습니다.");
         }
         return authentication.getName();
     }
@@ -28,7 +29,7 @@ public class SecurityUtil {
     public static Long getCurrentMemberPk() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getName() == null) {
-            throw new RuntimeException("No authentication information.");
+            throw new AuthForbiddenException("인증정보를 확인할 수 없습니다.");
         }
         CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
         Long userPk = userDetails.getMemberId();

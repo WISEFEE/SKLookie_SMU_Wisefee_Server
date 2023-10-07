@@ -2,6 +2,7 @@ package com.sklookiesmu.wisefee.api.v1.seller;
 
 import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
+import com.sklookiesmu.wisefee.common.exception.global.AuthForbiddenException;
 import com.sklookiesmu.wisefee.domain.*;
 import com.sklookiesmu.wisefee.dto.seller.*;
 import com.sklookiesmu.wisefee.service.seller.CafeOrderService;
@@ -40,7 +41,7 @@ public class CafeApiController {
         Long pk = SecurityUtil.getCurrentMemberPk();
 
         if (pk == null) {
-            throw new RuntimeException("현재 인증된 회원 정보를 가져올 수 없습니다.");
+            throw new AuthForbiddenException("인증되지 않은 회원입니다.");
         }
 
         Cafe cafe = new Cafe();

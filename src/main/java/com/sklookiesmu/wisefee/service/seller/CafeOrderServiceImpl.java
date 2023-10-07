@@ -1,5 +1,6 @@
 package com.sklookiesmu.wisefee.service.seller;
 
+import com.sklookiesmu.wisefee.common.exception.global.NoSuchElementFoundException;
 import com.sklookiesmu.wisefee.domain.Cafe;
 import com.sklookiesmu.wisefee.domain.OrderOption;
 import com.sklookiesmu.wisefee.dto.seller.CreateOrderOptionRequestDto;
@@ -27,7 +28,7 @@ public class CafeOrderServiceImpl implements CafeOrderService {
         Cafe cafe = cafeRepository.findById(cafeId);
 
         if (cafe == null) {
-            throw new IllegalArgumentException("존재하지 않는 매장입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 매장입니다.");
         }
 
         OrderOption orderOption = new OrderOption();
@@ -46,16 +47,16 @@ public class CafeOrderServiceImpl implements CafeOrderService {
         Cafe cafe = cafeRepository.findById(cafeId);
 
         if (cafe == null) {
-            throw new IllegalArgumentException("존재하지 않는 매장입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 매장입니다.");
         }
 
         OrderOption orderOption = orderOptionRepository.findById(orderOptionId);
 
         if (orderOption == null) {
-            throw new IllegalArgumentException("존재하지 않는 주문 옵션입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 주문 옵션입니다.");
         }
         if (!orderOption.getCafe().getCafeId().equals(cafeId)) {
-            throw new IllegalArgumentException("해당 매장에 속하지 않는 주문 옵션입니다.");
+            throw new NoSuchElementFoundException("해당 매장에 속하지 않는 주문 옵션입니다.");
         }
 
         String newOrderOptionName = requestDto.getOrderOptionName();
@@ -77,17 +78,17 @@ public class CafeOrderServiceImpl implements CafeOrderService {
         Cafe cafe = cafeRepository.findById(cafeId);
 
         if (cafe == null) {
-            throw new IllegalArgumentException("존재하지 않는 매장입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 매장입니다.");
         }
 
         OrderOption orderOption = orderOptionRepository.findById(orderOptionId);
 
         if (orderOption == null) {
-            throw new IllegalArgumentException("존재하지 않는 주문 옵션입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 주문 옵션입니다.");
         }
 
         if (!orderOption.getCafe().getCafeId().equals(cafeId)) {
-            throw new IllegalArgumentException("해당 매장에 속하지 않는 주문 옵션입니다.");
+            throw new NoSuchElementFoundException("해당 매장에 속하지 않는 주문 옵션입니다.");
         }
 
         // 주문 옵션 소프트 삭제
@@ -106,7 +107,7 @@ public class CafeOrderServiceImpl implements CafeOrderService {
         Cafe cafe = cafeRepository.findById(cafeId);
 
         if (cafe == null) {
-            throw new IllegalArgumentException("존재하지 않는 매장입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 매장입니다.");
         }
 
         return orderOptionRepository.findByCafe(cafe);

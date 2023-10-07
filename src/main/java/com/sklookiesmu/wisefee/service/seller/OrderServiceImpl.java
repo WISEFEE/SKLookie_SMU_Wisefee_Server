@@ -1,5 +1,6 @@
 package com.sklookiesmu.wisefee.service.seller;
 
+import com.sklookiesmu.wisefee.common.exception.global.NoSuchElementFoundException;
 import com.sklookiesmu.wisefee.domain.Order;
 import com.sklookiesmu.wisefee.common.constant.ProductStatus;
 import com.sklookiesmu.wisefee.repository.order.OrderRepository;
@@ -22,7 +23,7 @@ public class OrderServiceImpl implements OrderService {
     public void updateOrderStatus(Long orderId, ProductStatus newStatus) {
         Order order = orderRepository.findById(orderId);
         if (order == null) {
-            throw new IllegalArgumentException("존재하지 않는 주문입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 주문입니다.");
         }
 
         order.setProductStatus(newStatus);
