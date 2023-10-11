@@ -3,6 +3,7 @@ package com.sklookiesmu.wisefee.common.auth;
 import com.sklookiesmu.wisefee.common.auth.custom.CustomUserDetail;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
 import com.sklookiesmu.wisefee.common.enums.member.AuthType;
+import com.sklookiesmu.wisefee.common.exception.global.AuthForbiddenException;
 import com.sklookiesmu.wisefee.dto.shared.firebase.FCMToken;
 import com.sklookiesmu.wisefee.dto.shared.jwt.TokenInfoDto;
 import com.sklookiesmu.wisefee.repository.redis.AuthRepositoryWithRedis;
@@ -102,13 +103,13 @@ public class JwtTokenProvider {
         Claims claims = parseClaims(accessToken);
 
         if (claims.get("auth") == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+            throw new AuthForbiddenException("권한 정보가 없는 토큰입니다.");
         }
         System.out.println(accessToken);
         // TODO : R0822_Get Redis, Redis에 유저정보가 없으면 Error 반환
         Optional<FCMToken> authInfo = authRepositoryWithRedis.findById(accessToken);
         if (authInfo.isEmpty()) {
-            throw new RuntimeException("서버에 인증 정보가 존재하지 않습니다.");
+            throw new AuthForbiddenException("서버에 인증 정보가 존재하지 않습니다.");
         }
 
 

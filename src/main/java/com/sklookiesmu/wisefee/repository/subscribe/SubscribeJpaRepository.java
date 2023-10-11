@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,11 @@ public interface SubscribeJpaRepository extends JpaRepository<Subscribe, Long> {
 
     @Query(value = "select s from Subscribe s where s.member.memberId = :memberId")
     List<Subscribe> findAllByMemberId(@Param(value = "memberId") Long memberId);
+
+
+    @Query(value = "select s from Subscribe s where s.member.memberId = :memberId and s.expiredAt > :currentDateTime")
+    List<Subscribe> findAllByMemberIdNonExpired(@Param(value = "memberId") Long memberId, @Param("currentDateTime") LocalDateTime currentDateTime);
+
     @Query(value = "select s from Subscribe s where s.member.memberId = :memberId and s.subId = :subId")
     Optional<Subscribe> findByMemberIdAndSubscribeId(@Param(value = "memberId") Long memberId,
                                                      @Param(value = "subId") Long subId);

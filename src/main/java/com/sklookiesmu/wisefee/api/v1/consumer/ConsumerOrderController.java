@@ -1,12 +1,13 @@
 package com.sklookiesmu.wisefee.api.v1.consumer;
 
+import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
-import com.sklookiesmu.wisefee.dto.consumer.OrderDto;
-import com.sklookiesmu.wisefee.dto.consumer.OrderOptionDto;
-import com.sklookiesmu.wisefee.dto.consumer.PaymentDto;
+import com.sklookiesmu.wisefee.dto.consumer.*;
+import com.sklookiesmu.wisefee.service.consumer.ConsumerMyPageService;
 import com.sklookiesmu.wisefee.service.consumer.ConsumerOrderServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,13 +25,8 @@ import javax.validation.Valid;
 public class ConsumerOrderController {
 
     private final ConsumerOrderServiceImpl consumerOrderService;
-    @ApiOperation(value = "CONS-C-01 :: 주문 옵션 정보 조회")
-    @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
-    @GetMapping("/{cafeId}/orderOption")
-    public ResponseEntity<OrderOptionDto.OrderOptionListResponseDto> getOrderOption(@PathVariable("cafeId") Long cafeId){
-        return ResponseEntity.status(HttpStatus.OK).body(consumerOrderService.getOrderOptionInfo(cafeId));
-    }
 
+    private final ConsumerMyPageService consumerMyPageService;
 
     @ApiOperation(value = "CONS-C-02 :: 주문하기",
                 notes = "본 API는 카페 음료를 주문하는 기능입니다. 주문 시 구독 번호를 함께 넘겨주어야 하며, 구독권 조건에 따라 최소인원/최대인원의 조건에 따라 음료 개수를 맞추어 주문해야 합니다.\n\n" +
@@ -53,28 +49,26 @@ public class ConsumerOrderController {
                         "       - 휘핑크림 추가 (PRODUCT_OPTION : ID=2)\n" +
                         "           - 추가 (+500)  (PRODUCT_OPT_CHOICE : ID=103)")
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
-    @PostMapping("/{cafeId}/order")
+    @PostMapping("/order/{cafeId}")
     public ResponseEntity<Long> createOrder(@PathVariable("cafeId") Long cafeId,
                                             @Valid @RequestBody OrderDto.OrderRequestDto orderRequest){
         return ResponseEntity.status(HttpStatus.OK).body(consumerOrderService.createOrder(cafeId, orderRequest));
     }
 
-    @ApiOperation(value = "CONS-C-03 :: 주문내역 조회하기",
+    @ApiOperation(value = "CONS-C-03 :: 특정 주문번호의 주문내역 조회하기",
                     notes = "카페 PK와 주문 PK를 입력 시 고객이 주문한 내역을 조회할 수 있습니다.")
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
-    @GetMapping("/{cafeId}/order/{orderId}")
-    public ResponseEntity<OrderDto.OrderResponseDto> getOrderHistory(@PathVariable("cafeId") Long cafeId,
-                                                                     @PathVariable("orderId") Long orderId){
-        return ResponseEntity.status(HttpStatus.OK).body(consumerOrderService.getOrderHistory(cafeId, orderId));
+    @GetMapping("/order/{orderId}")
+    public ResponseEntity<OrderDto.OrderResponseDto> getOrderHistory(@PathVariable("orderId") Long orderId){
+        return ResponseEntity.status(HttpStatus.OK).body(consumerOrderService.getOrderHistory(orderId));
     }
 
-    @ApiOperation(value = "CONS-C-04 :: 주문 금액 조회하기",
-            notes = "주문한 내역의 금액을 조회합니다.")
+    @ApiOperation(value = "CONS-C-04 :: 결제 내역 조회하기",
+            notes = "주문의 결제 내역을 조회합니다.")
     @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
-    @GetMapping("/{cafeId}/order/{orderId}/payment")
-    public ResponseEntity<PaymentDto.PaymentResponseDto> getPayment(@PathVariable("cafeId") Long cafeId,
-                                                                    @PathVariable("orderId") Long orderId) {
-        return ResponseEntity.status(HttpStatus.OK).body(consumerOrderService.getPayment(cafeId, orderId));
+    @GetMapping("/order/{orderId}/payment")
+    public ResponseEntity<PaymentDto.PaymentResponseDto> getPayment(@PathVariable("orderId") Long orderId) {
+        return ResponseEntity.status(HttpStatus.OK).body(consumerOrderService.getPayment(orderId));
     }
 
      /* @ApiOperation(value = "CONS-C-05 :: 주문 금액 생성하기",
@@ -86,4 +80,23 @@ public class ConsumerOrderController {
                                               @Valid @RequestBody PaymentDto.PaymentRequestDto paymentRequestDto) {
         return ResponseEntity.status(HttpStatus.OK).body(consumerOrderService.createPaymentMethod(cafeId, orderId, paymentRequestDto));
     }*/
+
+    @ApiOperation(value = "CONS-C-06 :: 주문 히스토리 조회하기",
+            notes = "지금까지의 주문 내역 전체 히스토리를 조회합니다. <br>" +
+                    "현재 진행중인 주문만 조회하려면 onProgress=true로 Query Parameter를 넘겨주세요.")
+    @PreAuthorize(AuthConstant.AUTH_ROLE_CONSUMER)
+    @GetMapping("/order")
+    public ResponseEntity<OrdersInfoDto> getAllOrderHistory(@ApiParam(value = "진행중인 내역만 조회", required = false, defaultValue = "false")
+                                                            @RequestParam(name= "onProgress", defaultValue = "false")
+                                                            boolean onProgress) {
+        Long memberId = SecurityUtil.getCurrentMemberPk();
+        if(onProgress == true){
+            return ResponseEntity.status(HttpStatus.OK).body(consumerMyPageService.getPaidOrdersHistory(memberId));
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.OK).body(consumerMyPageService.getAllOrderHistory(memberId));
+        }
+
+    }
+
 }

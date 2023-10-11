@@ -7,7 +7,7 @@ import com.sklookiesmu.wisefee.common.auth.custom.CustomUserDetail;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
 import com.sklookiesmu.wisefee.common.constant.OAuthTokenStatus;
 import com.sklookiesmu.wisefee.common.enums.member.AuthType;
-import com.sklookiesmu.wisefee.common.exception.AuthForbiddenException;
+import com.sklookiesmu.wisefee.common.exception.global.AuthForbiddenException;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.dto.shared.firebase.FCMToken;
 import com.sklookiesmu.wisefee.dto.shared.jwt.TokenInfoDto;

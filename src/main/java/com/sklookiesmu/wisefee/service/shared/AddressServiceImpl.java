@@ -1,6 +1,6 @@
 package com.sklookiesmu.wisefee.service.shared;
 
-import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
+import com.sklookiesmu.wisefee.common.exception.global.NoSuchElementFoundException;
 import com.sklookiesmu.wisefee.domain.Address;
 import com.sklookiesmu.wisefee.repository.AddressRepository;
 import com.sklookiesmu.wisefee.service.shared.interfaces.AddressService;

@@ -3,10 +3,11 @@ package com.sklookiesmu.wisefee.service.consumer;
 import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
 import com.sklookiesmu.wisefee.common.constant.ProductStatus;
 
-import com.sklookiesmu.wisefee.common.exception.AuthForbiddenException;
-import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
+import com.sklookiesmu.wisefee.common.exception.global.AuthForbiddenException;
+import com.sklookiesmu.wisefee.common.exception.global.NoSuchElementFoundException;
 
-import com.sklookiesmu.wisefee.common.exception.PreconditionFailException;
+import com.sklookiesmu.wisefee.common.exception.consumer.SubscribeExpireException;
+import com.sklookiesmu.wisefee.common.exception.global.PreconditionFailException;
 import com.sklookiesmu.wisefee.domain.*;
 import com.sklookiesmu.wisefee.dto.consumer.OrderDto;
 import com.sklookiesmu.wisefee.dto.consumer.OrderOptionDto;
@@ -82,7 +83,7 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
         }
 
         if (subscribe.getExpiredAt().isBefore(LocalDateTime.now())) {
-            throw new IllegalArgumentException("만료된 구독권입니다.");
+            throw new SubscribeExpireException("만료된 구독권입니다.");
         }
 
         Order order = new Order();
@@ -167,11 +168,11 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
         log.info("주문제품 개수 : " + orderProducts.size());
 
         if (orderProducts.size() < minPeople) {
-            throw new IllegalArgumentException("최소 " + minPeople +  "개 이상 주문해야합니다.");
+            throw new PreconditionFailException("최소 " + minPeople +  "개 이상 주문해야합니다.");
         }
 
         if (orderProducts.size() > maxPeople) {
-            throw new IllegalArgumentException("최대 " + maxPeople +  "개 이하 주문해야합니다.");
+            throw new PreconditionFailException("최대 " + maxPeople +  "개 이하 주문해야합니다.");
         }
 
         // 주문 옵션 설정
@@ -181,7 +182,7 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
                             .orElseThrow(() -> new NoSuchElementFoundException("존재하지 않는 주문 옵션입니다"));
 
                     if (!Objects.equals(orderOption.getCafe().getCafeId(), cafeId)) {
-                        throw new IllegalArgumentException("해당 카페에 존재하지 않는 주문 옵션입니다");
+                        throw new NoSuchElementFoundException("해당 카페에 존재하지 않는 주문 옵션입니다");
                     }
 
                     OrdOrderOption ordOrderOption = OrdOrderOption.createOrdOrderOption(orderOption);
@@ -238,15 +239,11 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
 
     /**
      * 주문내역 조회
-     * @param cafeId
      * @param orderId
      * @return OrderResponseDto
      */
     @Override
-    public OrderDto.OrderResponseDto getOrderHistory(Long cafeId, Long orderId) {
-        Cafe cafe = cafeJpaRepository.findById(cafeId)
-                .orElseThrow(()->new NoSuchElementFoundException("존재하지 않는 카페입니다."));
-
+    public OrderDto.OrderResponseDto getOrderHistory(Long orderId) {
         Order order = orderJpaRepository.findById(orderId)
                 .orElseThrow(()->new NoSuchElementFoundException("존재하지 않는 주문입니다."));
         return OrderDto.OrderResponseDto.orderToDto(order);
@@ -282,10 +279,7 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
      * 주문 내역 금액 조회
      */
     @Override
-    public PaymentDto.PaymentResponseDto getPayment(Long cafeId, Long orderId){
-
-        Cafe cafe = cafeJpaRepository.findById(cafeId)
-                .orElseThrow(()->new NoSuchElementFoundException("존재하지 않는 카페입니다."));
+    public PaymentDto.PaymentResponseDto getPayment(Long orderId){
 
         Order order = orderJpaRepository.findById(orderId)
                 .orElseThrow(() -> new NoSuchElementFoundException("존재하지 않는 주문내역입니다."));

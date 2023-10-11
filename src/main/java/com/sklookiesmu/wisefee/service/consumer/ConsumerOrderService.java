@@ -27,12 +27,11 @@ public interface ConsumerOrderService {
 
     /**
      * [주문 내역 조회]
-     * 특정 매장에서 주문한 내역을 조회한다.
-     * @param cafeId
+     * 특정 주문번호의 주문한 내역을 조회한다.
      * @param orderId
      * @return [주문 내역 정보 DTO 반환]
      */
-    OrderDto.OrderResponseDto getOrderHistory(Long cafeId, Long orderId);
+    OrderDto.OrderResponseDto getOrderHistory(Long orderId);
 
 
     /**
@@ -40,7 +39,7 @@ public interface ConsumerOrderService {
      * 주문 내역 금액을 조회한다.
      * @param request
      */
-    PaymentDto.PaymentResponseDto getPayment(Long cafeId, Long orderId);
+    PaymentDto.PaymentResponseDto getPayment(Long orderId);
 
     /**
      * [결제 수단 생성]

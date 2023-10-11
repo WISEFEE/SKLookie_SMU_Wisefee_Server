@@ -1,16 +1,18 @@
 package com.sklookiesmu.wisefee.common.error;
 
-import com.sklookiesmu.wisefee.common.exception.*;
-import org.springframework.http.HttpHeaders;
+import com.google.api.Http;
+import com.sklookiesmu.wisefee.common.exception.common.FileDownloadException;
+import com.sklookiesmu.wisefee.common.exception.common.FileUploadException;
+import com.sklookiesmu.wisefee.common.exception.consumer.SubscribeExpireException;
+import com.sklookiesmu.wisefee.common.exception.global.AlreadyExistElementException;
+import com.sklookiesmu.wisefee.common.exception.global.AuthForbiddenException;
+import com.sklookiesmu.wisefee.common.exception.global.NoSuchElementFoundException;
+import com.sklookiesmu.wisefee.common.exception.global.PreconditionFailException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
-
-import java.time.LocalDateTime;
 
 public interface GlobalExceptionHandlerInterface {
 
@@ -20,7 +22,7 @@ public interface GlobalExceptionHandlerInterface {
      */
     @ExceptionHandler(NoSuchElementFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<Object> handleNoSuchElementFoundException(NoSuchElementFoundException noSuchElementFoundException, WebRequest request);
+    ResponseEntity<Object> handleNoSuchElementFoundException(NoSuchElementFoundException noSuchElementFoundException, WebRequest request);
 
     /**
      * [AlreadyExistElementException 409]
@@ -28,7 +30,7 @@ public interface GlobalExceptionHandlerInterface {
      */
     @ExceptionHandler(AlreadyExistElementException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ResponseEntity<Object> handleAlreadyExistElementException(AlreadyExistElementException alreadyExistElementException, WebRequest request);
+    ResponseEntity<Object> handleAlreadyExistElementException(AlreadyExistElementException alreadyExistElementException, WebRequest request);
 
     /**
      * [AuthForbiddenException 403]
@@ -36,7 +38,7 @@ public interface GlobalExceptionHandlerInterface {
      */
     @ExceptionHandler(AuthForbiddenException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ResponseEntity<Object> handleAuthForbiddenException(AuthForbiddenException authForbiddenException, WebRequest request);
+    ResponseEntity<Object> handleAuthForbiddenException(AuthForbiddenException authForbiddenException, WebRequest request);
 
     /**
      * [FileDownloadException 404]
@@ -44,7 +46,7 @@ public interface GlobalExceptionHandlerInterface {
      */
     @ExceptionHandler(FileDownloadException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<Object> handleFileDownloadException(FileDownloadException fileDownloadException, WebRequest request);
+    ResponseEntity<Object> handleFileDownloadException(FileDownloadException fileDownloadException, WebRequest request);
 
     /**
      * [FileUploadException 500]
@@ -52,7 +54,7 @@ public interface GlobalExceptionHandlerInterface {
      */
     @ExceptionHandler(FileUploadException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<Object> handleFileUploadException(FileUploadException fileUploadException, WebRequest request);
+    ResponseEntity<Object> handleFileUploadException(FileUploadException fileUploadException, WebRequest request);
 
     /**
      * [PreconditionFailException 412]
@@ -60,5 +62,14 @@ public interface GlobalExceptionHandlerInterface {
      */
     @ExceptionHandler(PreconditionFailException.class)
     @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
-    public ResponseEntity<Object> handlePreconditionFailException(PreconditionFailException preconditionFailException, WebRequest request);
+    ResponseEntity<Object> handlePreconditionFailException(PreconditionFailException preconditionFailException, WebRequest request);
+
+    /**
+     * [SubscribeExpireException 404]
+     * 만료된 구독권에 접근하려는 경우
+     */
+    @ExceptionHandler(SubscribeExpireException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    ResponseEntity<Object> handleSubscribeExpireException(SubscribeExpireException subscribeExpireException, WebRequest request);
+
 }

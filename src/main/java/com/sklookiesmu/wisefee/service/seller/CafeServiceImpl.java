@@ -1,6 +1,9 @@
 package com.sklookiesmu.wisefee.service.seller;
 
 import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
+import com.sklookiesmu.wisefee.common.exception.global.AlreadyExistElementException;
+import com.sklookiesmu.wisefee.common.exception.global.AuthForbiddenException;
+import com.sklookiesmu.wisefee.common.exception.global.NoSuchElementFoundException;
 import com.sklookiesmu.wisefee.domain.*;
 import com.sklookiesmu.wisefee.dto.seller.*;
 import com.sklookiesmu.wisefee.repository.cafe.CafeRepository;
@@ -40,7 +43,7 @@ public class CafeServiceImpl implements CafeService{
 
         Long pk = SecurityUtil.getCurrentMemberPk();
         if (pk == null) {
-            throw new RuntimeException("현재 인증된 회원 정보를 가져올 수 없습니다.");
+            throw new AuthForbiddenException("현재 인증된 회원 정보를 가져올 수 없습니다.");
         }
 
         Member member = memberService.getMember(pk);
@@ -53,7 +56,7 @@ public class CafeServiceImpl implements CafeService{
     private void validateDuplicateCafe(Cafe cafe) {
         List<Cafe> findCafe = cafeRepository.findByTitle(cafe.getTitle());
         if (!findCafe.isEmpty()) {
-            throw new IllegalStateException("이미 존재하는 카페입니다.");
+            throw new AlreadyExistElementException("이미 존재하는 카페입니다.");
         }
     }
 
@@ -65,7 +68,7 @@ public class CafeServiceImpl implements CafeService{
         Cafe cafe = cafeRepository.findById(cafeId);
 
         if (cafe == null) {
-            throw new IllegalArgumentException("존재하지 않는 매장입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 매장입니다.");
         }
 
         String newTitle = requestDto.getTitle();
@@ -93,7 +96,7 @@ public class CafeServiceImpl implements CafeService{
         Cafe cafe = cafeRepository.findById(cafeId);
 
         if (cafe == null) {
-            throw new IllegalArgumentException("존재하지 않는 매장입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 매장입니다.");
         }
 
         // 매장 삭제 시 매장의 주문 옵션 삭제

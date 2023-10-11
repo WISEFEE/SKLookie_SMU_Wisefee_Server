@@ -1,4 +1,4 @@
-package com.sklookiesmu.wisefee.common.exception;
+package com.sklookiesmu.wisefee.common.exception.global;
 
 
 import org.springframework.http.HttpStatus;

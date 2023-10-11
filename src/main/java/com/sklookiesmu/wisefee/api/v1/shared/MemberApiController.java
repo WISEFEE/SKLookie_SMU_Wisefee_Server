@@ -1,6 +1,7 @@
 package com.sklookiesmu.wisefee.api.v1.shared;
 
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
+import com.sklookiesmu.wisefee.common.exception.global.OAuthLoginException;
 import com.sklookiesmu.wisefee.common.mapper.MemberMapper;
 import com.sklookiesmu.wisefee.domain.Member;
 import com.sklookiesmu.wisefee.dto.shared.member.*;
@@ -262,10 +263,14 @@ public class MemberApiController {
                     "```"
     )
     @PostMapping("/api/v1/member/google")
-    public ResponseEntity<Long> addMemberOAuthGoogle(@Valid @RequestBody OAuthGoogleMemberRequestDto member) throws IOException {
+    public ResponseEntity<Long> addMemberOAuthGoogle(@Valid @RequestBody OAuthGoogleMemberRequestDto member) {
         Member entity = memberMapper.joinFromGoogleOAuth(member);
         entity.setDefaultAuthType(AuthConstant.AUTH_TYPE_COMMON);
-        return ResponseEntity.ok(memberService.joinGoogle(entity, member.getGoogleAccessToken()));
+        try {
+            return ResponseEntity.ok(memberService.joinGoogle(entity, member.getGoogleAccessToken()));
+        } catch (IOException e) {
+            throw new OAuthLoginException("Google 로그인 중 오류가 발생했습니다.");
+        }
     }
 
 }

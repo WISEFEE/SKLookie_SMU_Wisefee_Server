@@ -21,6 +21,7 @@ services:
       - wisefee-database
       - wisefee-redis
       - wisefee-app
+      - wisefee-phpmyadmin
     networks:
       - wisefee-network-outer
 
@@ -63,7 +64,6 @@ services:
       - wisefee-network-inner
 
 
-
   wisefee-redis: # container name
     image: redis:6.2.6-alpine
     expose:
@@ -77,5 +77,16 @@ services:
     networks:
       - wisefee-network-inner
 
-
+  wisefee-phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: wisefee-phpmyadmin
+    environment:
+      PMA_HOST: wisefee-database-dev-deploy
+    ports:
+      - '9090:80'
+    expose:
+      - 9090
+    networks:
+      - wisefee-network-inner
+      - wisefee-network-outer
 

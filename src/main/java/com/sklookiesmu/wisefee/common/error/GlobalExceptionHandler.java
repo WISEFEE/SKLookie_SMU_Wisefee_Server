@@ -1,7 +1,13 @@
 package com.sklookiesmu.wisefee.common.error;
 
 
-import com.sklookiesmu.wisefee.common.exception.*;
+import com.sklookiesmu.wisefee.common.exception.common.FileDownloadException;
+import com.sklookiesmu.wisefee.common.exception.common.FileUploadException;
+import com.sklookiesmu.wisefee.common.exception.consumer.SubscribeExpireException;
+import com.sklookiesmu.wisefee.common.exception.global.AlreadyExistElementException;
+import com.sklookiesmu.wisefee.common.exception.global.AuthForbiddenException;
+import com.sklookiesmu.wisefee.common.exception.global.NoSuchElementFoundException;
+import com.sklookiesmu.wisefee.common.exception.global.PreconditionFailException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -98,7 +104,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler imple
     @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
     public ResponseEntity<Object> handlePreconditionFailException(PreconditionFailException preconditionFailException, WebRequest request) {
         log.error("Failed to doesn't match precondition", preconditionFailException);
-        return buildErrorResponse(preconditionFailException, HttpStatus.PRECONDITION_FAILED, request);
+        return buildErrorResponse(preconditionFailException, HttpStatus.INTERNAL_SERVER_ERROR, request);
+    }
+
+    // SubscribeExpireException
+    @ExceptionHandler(SubscribeExpireException.class)
+    @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
+    public ResponseEntity<Object> handleSubscribeExpireException(SubscribeExpireException subscribeExpireException, WebRequest request) {
+        log.error("Failed to doesn't match precondition", subscribeExpireException);
+        return buildErrorResponse(subscribeExpireException, HttpStatus.PRECONDITION_FAILED, request);
     }
 
     // 필요시 ExceptionHandler 추가 - 예상가는 오류 있다면 전부 ExceptionHandler 이용해 처리.

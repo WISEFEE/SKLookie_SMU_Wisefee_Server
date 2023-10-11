@@ -1,6 +1,7 @@
 package com.sklookiesmu.wisefee.service.shared;
 
-import com.sklookiesmu.wisefee.common.exception.NoSuchElementFoundException;
+import com.sklookiesmu.wisefee.common.exception.global.AlreadyExistElementException;
+import com.sklookiesmu.wisefee.common.exception.global.NoSuchElementFoundException;
 import com.sklookiesmu.wisefee.domain.*;
 import com.sklookiesmu.wisefee.dto.shared.member.CartRequestDto;
 import com.sklookiesmu.wisefee.dto.shared.member.CartResponseDto;
@@ -53,16 +54,16 @@ public class CartServiceImpl implements CartService {
     public Long addCartProduct(Long memberId, CartRequestDto.CartProductRequestDto cartRequestDto) {
         Cafe cafe = cafeRepository.findById(cartRequestDto.getCafeId());
         if (cafe == null) {
-            throw new NoSuchElementFoundException("Invalid Value : Not found cafe with " + cartRequestDto.getCafeId());
+            throw new NoSuchElementFoundException("카페가 존재하지 않습니다.");
         }
         Product product = productRepository.findById(cartRequestDto.getProductId());
 
         if (product == null) {
-            throw new RuntimeException("Invalid Value : This product is not exist. :" + cartRequestDto.getProductId());
+            throw new NoSuchElementFoundException("상품이 존재하지 않습니다.");
         }
 
         if (!Objects.equals(cafe.getCafeId(), product.getCafe().getCafeId())) {
-            throw new RuntimeException("Invalid Value : This product is not match with cafe.");
+            throw new NoSuchElementFoundException("카페에 주문하신 상품이 존재하지 않습니다.");
         }
 
 
@@ -86,7 +87,7 @@ public class CartServiceImpl implements CartService {
                 cartProductList.add(cartProduct.getCartProductChoiceOptions().get(i).getProductOptChoice().getProductOptionChoiceId());
             }
             if (cartProductDtoList.equals(cartProductList)) {
-                throw new RuntimeException("Invalid Value : Already exist CartProduct.");
+                throw new AlreadyExistElementException("이미 장바구니가 존재합니다.");
             }
         }
 
@@ -105,12 +106,11 @@ public class CartServiceImpl implements CartService {
         ) {
             ProductOptChoice productOptChoice = productOptChoiceRepository.findById(productOptionChoice.getOptionChoiceId());
             if (productOptChoice == null) {
-                throw new RuntimeException("Invalid Value : This productOptChoice is not exist. : " + productOptionChoice.getOptionChoiceId());
+                throw new NoSuchElementFoundException("선택하신 상품 옵션이 존재하지 않습니다.");
             }
 
             if (!product.getProductId().equals(productOptChoice.getProductOption().getProduct().getProductId())) {
-                throw new RuntimeException("Invalid Value : This productOptChoice is not match with productOption of productId. :"
-                        + productOptChoice.getProductOptionChoiceId());
+                throw new NoSuchElementFoundException("선택하신 상품 옵션이 제품의 상품 옵션에 존재하지 않습니다.");
             }
             CartProductChoiceOption cartProductChoiceOption = new CartProductChoiceOption(cartProduct, productOptChoice);
             cartRepository.createCartProductChoicesOption(cartProductChoiceOption);
@@ -125,11 +125,11 @@ public class CartServiceImpl implements CartService {
     public List<CartResponseDto.CartProductResponseDto> findAllCartProduct(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchElementFoundException("member not found"));
         if (member.getCart() == null) {
-            throw new NoSuchElementFoundException("CartService Error : Not Exist Cart with " + memberId);
+            throw new NoSuchElementFoundException("장바구니가 존재하지 않습니다.");
         }
         Cart cart = cartRepository.findCartByCartId(member.getCart().getCartId());
         if (cart == null) {
-            throw new NoSuchElementFoundException("CartService Error : Not Found Cart with " + memberId);
+            throw new NoSuchElementFoundException("장바구니가 존재하지 않습니다.");
         }
 
         List<CartProduct> cartProducts = cartRepository.findCartProductByCartId(cart.getCartId());
@@ -174,7 +174,7 @@ public class CartServiceImpl implements CartService {
     public Long deleteCartProduct(Long cartProductId) {
         CartProduct cartProduct = cartRepository.findCartProduct(cartProductId);
         if (cartProduct.getDeletedAt() != null) {
-            throw new RuntimeException("Invalid Value : This cartProduct is already deleted. :" + cartProductId);
+            throw new NoSuchElementFoundException("장바구니가 존재하지 않습니다.");
         }
         cartRepository.deleteCartProduct(cartProduct);
         return 1L;
@@ -184,7 +184,7 @@ public class CartServiceImpl implements CartService {
     public Long updateCartProduct(Long cartProductId, CartRequestDto.CartProductUpdateRequestDTO cartProductUpdateRequestDto) {
         CartProduct cartProduct = cartRepository.findCartProduct(cartProductId);
         if (cartProduct == null) {
-            throw new RuntimeException("Invalid Value : This cartProduct is not exist. :" + cartProductId);
+            throw new NoSuchElementFoundException("장바구니 상품이 존재하지 않습니다.");
         }
         if (cartProduct.getProductQuantity() + cartProductUpdateRequestDto.getAddProductQuantity() <= 0) {
             return deleteCartProduct(cartProductId);
@@ -200,7 +200,7 @@ public class CartServiceImpl implements CartService {
 
         List<CartProduct> cartProducts = cartRepository.findCartProductByCartId(cartRepository.findCartByMemberId(memberId).getCartId());
         if (cartProducts.size() == 0) {
-            throw new RuntimeException("Invalid Value : This cart is null");
+            throw new NoSuchElementFoundException("장바구니가 비어 있습니다.");
         }
         long result = 0L;
         for (CartProduct cartProduct : cartProducts) {
@@ -222,7 +222,7 @@ public class CartServiceImpl implements CartService {
             throw new NoSuchElementFoundException("해당 구독 ID를 찾을 수 없습니다.");
         }
         if(subscribe.get().getMember().getMemberId() != memberId){
-            throw new IllegalStateException("해당 구독을 맺지 않았습니다.");
+            throw new NoSuchElementFoundException("해당 구독을 맺지 않았습니다.");
         }
         SubTicketType subTicketType = subscribe.get().getSubTicketType();
         double subPeople = subscribe.get().getSubPeople();
@@ -236,7 +236,7 @@ public class CartServiceImpl implements CartService {
         List<CartProduct> cartProducts = cartRepository.findCartProductByCartId(cartRepository.findCartByMemberId(memberId).getCartId());
 
         if (cartProducts.size() == 0) {
-            throw new RuntimeException("Invalid Value : This cart is null");
+            throw new NoSuchElementFoundException("장바구니가 비어있습니다.");
         }
 //        long result = (long) subTicketDeposit;
         long result = 0L;

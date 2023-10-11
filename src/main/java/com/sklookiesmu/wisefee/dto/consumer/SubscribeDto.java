@@ -24,6 +24,9 @@ public class SubscribeDto {
         @ApiModelProperty(value = "구독 PK", required = true)
         private Long subId;
 
+        @ApiModelProperty(value = "카페 아이디", required = true)
+        private Long cafeId;
+
         @ApiModelProperty(value = "구독 금액", required = true)
         private Integer totalPrice;
 
@@ -57,6 +60,7 @@ public class SubscribeDto {
         public static SubscribeResponseDto from(Subscribe subscribe) {
             return new SubscribeResponseDto(
                     subscribe.getSubId(),
+                    subscribe.getCafe().getCafeId(),
                     subscribe.getTotalPrice(),
                     subscribe.getSubComment(),
                     subscribe.getSubStatus(),

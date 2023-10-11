@@ -1,5 +1,6 @@
 package com.sklookiesmu.wisefee.service.seller;
 
+import com.sklookiesmu.wisefee.common.exception.global.NoSuchElementFoundException;
 import com.sklookiesmu.wisefee.domain.Cafe;
 import com.sklookiesmu.wisefee.domain.Product;
 import com.sklookiesmu.wisefee.domain.ProductOptChoice;
@@ -32,7 +33,7 @@ public class CafeProductServiceImpl implements CafeProductService {
         Cafe cafe = cafeRepository.findById(cafeId);
 
         if (cafe == null) {
-            throw new IllegalArgumentException("존재하지 않는 매장입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 매장입니다.");
         }
 
         Product product = new Product();
@@ -54,17 +55,17 @@ public class CafeProductServiceImpl implements CafeProductService {
         Cafe cafe = cafeRepository.findById(cafeId);
 
         if (cafe == null) {
-            throw new IllegalArgumentException("존재하지 않는 매장입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 매장입니다.");
         }
 
         Product product = productRepository.findById(productId);
 
         if (product == null) {
-            throw new IllegalArgumentException("존재하지 않는 상품입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 상품입니다.");
         }
 
         if (!product.getCafe().getCafeId().equals(cafeId)) {
-            throw new IllegalArgumentException("해당 매장에 속하지 않는 상품입니다.");
+            throw new NoSuchElementFoundException("해당 매장에 속하지 않는 상품입니다.");
         }
 
         String newProductName = requestDto.getProductName();
@@ -92,17 +93,17 @@ public class CafeProductServiceImpl implements CafeProductService {
         Cafe cafe = cafeRepository.findById(cafeId);
 
         if (cafe == null) {
-            throw new IllegalArgumentException("존재하지 않는 매장입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 매장입니다.");
         }
 
         Product product = productRepository.findById(productId);
 
         if (product == null) {
-            throw new IllegalArgumentException("존재하지 않는 상품입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 상품입니다.");
         }
 
         if (!product.getCafe().getCafeId().equals(cafeId)) {
-            throw new IllegalArgumentException("해당 매장에 속하지 않는 상품입니다.");
+            throw new NoSuchElementFoundException("해당 매장에 속하지 않는 상품입니다.");
         }
 
         //상품 삭제 시 상품 옵션 삭제
@@ -124,7 +125,7 @@ public class CafeProductServiceImpl implements CafeProductService {
         Product product = productRepository.findById(productId);
 
         if (product == null) {
-            throw new IllegalArgumentException("존재하지 않는 상품입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 상품입니다.");
         }
 
         ProductOption productOption = new ProductOption();
@@ -144,17 +145,17 @@ public class CafeProductServiceImpl implements CafeProductService {
         Product product = productRepository.findById(productId);
 
         if (product == null) {
-            throw new IllegalArgumentException("존재하지 않는 상품입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 상품입니다.");
         }
 
         ProductOption productOption = productOptionRepository.findById(productOptionId);
 
         if (productOption == null) {
-            throw new IllegalArgumentException("존재하지 않는 상품 옵션입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 상품 옵션입니다.");
         }
 
         if (!productOption.getProduct().getProductId().equals(productId)) {
-            throw new IllegalArgumentException("해당 상품에 속하지 않는 상품 옵션입니다.");
+            throw new NoSuchElementFoundException("해당 상품에 속하지 않는 상품 옵션입니다.");
         }
 
         String newProductOptionName = requestDto.getProductOptionName();
@@ -172,17 +173,17 @@ public class CafeProductServiceImpl implements CafeProductService {
         Product product = productRepository.findById(productId);
 
         if (product == null) {
-            throw new IllegalArgumentException("존재하지 않는 상품입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 상품입니다.");
         }
 
         ProductOption productOption = productOptionRepository.findById(productOptionId);
 
         if (productOption == null) {
-            throw new IllegalArgumentException("존재하지 않는 상품 옵션입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 상품 옵션입니다.");
         }
 
         if (!productOption.getProduct().getProductId().equals(productId)) {
-            throw new IllegalArgumentException("해당 상품에 속하지 않는 상품 옵션입니다.");
+            throw new NoSuchElementFoundException("해당 상품에 속하지 않는 상품 옵션입니다.");
         }
 
         //상품 옵션 삭제 시 상품 옵션 선택지 삭제
@@ -204,7 +205,7 @@ public class CafeProductServiceImpl implements CafeProductService {
         ProductOption productOption = productOptionRepository.findById(productOptionId);
 
         if (productOption == null) {
-            throw new IllegalArgumentException("존재하지 않는 상품 옵션입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 상품 옵션입니다.");
         }
 
         ProductOptChoice productOptChoice = new ProductOptChoice();
@@ -224,21 +225,21 @@ public class CafeProductServiceImpl implements CafeProductService {
     public void updateProductOptionChoice(Long productId, Long productOptionId, Long productOptionChoiceId, UpdateProductOptionChoiceRequestDto requestDto) {
         Product product = productRepository.findById(productId);
         if (product == null) {
-            throw new IllegalArgumentException("존재하지 않는 상품입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 상품입니다.");
         }
 
         ProductOption productOption = productOptionRepository.findById(productOptionId);
         if (productOption == null) {
-            throw new IllegalArgumentException("존재하지 않는 상품 옵션입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 상품 옵션입니다.");
         }
 
         ProductOptChoice productOptionChoice = productOptChoiceRepository.findById(productOptionChoiceId);
         if (productOptionChoice == null) {
-            throw new IllegalArgumentException("존재하지 않는 상품 옵션 선택지입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 상품 옵션 선택지입니다.");
         }
 
         if (!productOptionChoice.getProductOption().getProductOptionId().equals(productOptionId)) {
-            throw new IllegalArgumentException("해당 상품 옵션에 속하지 않는 상품 옵션 선택지 입니다.");
+            throw new NoSuchElementFoundException("해당 상품 옵션에 속하지 않는 상품 옵션 선택지 입니다.");
         }
 
         String newProductOptionChoiceName = requestDto.getProductOptionChoiceName();
@@ -261,23 +262,23 @@ public class CafeProductServiceImpl implements CafeProductService {
         Product product = productRepository.findById(productId);
 
         if (product == null) {
-            throw new IllegalArgumentException("존재하지 않는 상품입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 상품입니다.");
         }
 
         ProductOption productOption = productOptionRepository.findById(productOptionId);
 
         if (productOption == null) {
-            throw new IllegalArgumentException("존재하지 않는 상품 옵션입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 상품 옵션입니다.");
         }
 
         ProductOptChoice productOptionChoice = productOptChoiceRepository.findById(productOptionChoiceId);
 
         if (productOptionChoice == null) {
-            throw new IllegalArgumentException("존재하지 않는 상품 옵션 선택지입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 상품 옵션 선택지입니다.");
         }
 
         if (!productOptionChoice.getProductOption().getProductOptionId().equals(productOptionId)) {
-            throw new IllegalArgumentException("해당 상품 옵션에 속하지 않는 상품 옵션 선택지입니다.");
+            throw new NoSuchElementFoundException("해당 상품 옵션에 속하지 않는 상품 옵션 선택지입니다.");
         }
 
         // 상품 옵션 선택지 소프트 삭제
@@ -308,7 +309,7 @@ public class CafeProductServiceImpl implements CafeProductService {
         Cafe cafe = cafeRepository.findById(cafeId);
 
         if (cafe == null) {
-            throw new IllegalArgumentException("존재하지 않는 매장입니다.");
+            throw new NoSuchElementFoundException("존재하지 않는 매장입니다.");
         }
 
         return productRepository.findByCafe(cafe);

@@ -2,16 +2,14 @@ package com.sklookiesmu.wisefee.api.v1.consumer;
 
 import com.sklookiesmu.wisefee.common.auth.SecurityUtil;
 import com.sklookiesmu.wisefee.common.constant.AuthConstant;
-import com.sklookiesmu.wisefee.common.exception.AlreadyExistElementException;
+import com.sklookiesmu.wisefee.common.exception.global.AuthForbiddenException;
 import com.sklookiesmu.wisefee.dto.shared.member.CartRequestDto;
 import com.sklookiesmu.wisefee.dto.shared.member.CartResponseDto;
 import com.sklookiesmu.wisefee.service.shared.CartServiceImpl;
-import com.sklookiesmu.wisefee.service.shared.MemberServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,7 +37,7 @@ public class CartApiController {
             @PathVariable("memberId") Long memberId
     ) {
         if(!(memberId.equals(SecurityUtil.getCurrentMemberPk())))
-            throw new AlreadyExistElementException("invalid ID : The provided ID does not match your current logged-in ID"+memberId);
+            throw new AuthForbiddenException("현재 로그인한 회원의 권한이 아닙니다.");
 
         Long result = cartService.findCartId(memberId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -57,7 +55,7 @@ public class CartApiController {
             @PathVariable("memberId") Long memberId
     ) {
         if(!(memberId.equals(SecurityUtil.getCurrentMemberPk())))
-            throw new AlreadyExistElementException("invalid ID : The provided ID does not match your current logged-in ID"+memberId);
+            throw new AuthForbiddenException("현재 로그인한 회원의 권한이 아닙니다.");
 
         Long result = cartService.calculateCart(memberId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -77,7 +75,7 @@ public class CartApiController {
             @RequestParam("subscribeId") Long subscribeId
     ) {
         if(!(memberId.equals(SecurityUtil.getCurrentMemberPk())))
-            throw new AlreadyExistElementException("invalid ID : The provided ID does not match your current logged-in ID"+memberId);
+            throw new AuthForbiddenException("현재 로그인한 회원의 권한이 아닙니다.");
 
         Long result = cartService.calculateCartWithSubTicket(memberId, subscribeId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -95,7 +93,7 @@ public class CartApiController {
     ){
 
         if(!(memberId.equals(SecurityUtil.getCurrentMemberPk())))
-            throw new AlreadyExistElementException("invalid ID : The provided ID does not match your current logged-in ID"+memberId);
+            throw new AuthForbiddenException("현재 로그인한 회원의 권한이 아닙니다.");
 
         List<CartResponseDto.CartProductResponseDto> result = cartService.findAllCartProduct(memberId);
 
@@ -115,7 +113,7 @@ public class CartApiController {
             @RequestBody CartRequestDto.CartProductRequestDto cartProductRequestDto
             ){
         if(!(memberId.equals(SecurityUtil.getCurrentMemberPk())))
-            throw new AlreadyExistElementException("invalid ID : The provided ID does not match your current logged-in ID"+memberId);
+            throw new AuthForbiddenException("현재 로그인한 회원의 권한이 아닙니다.");
 
         Long result = cartService.addCartProduct(memberId, cartProductRequestDto);
 

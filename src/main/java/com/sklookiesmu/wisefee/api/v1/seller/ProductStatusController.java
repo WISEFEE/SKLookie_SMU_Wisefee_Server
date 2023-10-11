@@ -108,7 +108,7 @@ public class ProductStatusController {
             value = "SELL-D-04 :: 주문 준비 완료",
             notes = "주문 상태를 주문 준비 완료로 합니다."
     )
-    @PostMapping("/{orderId}/complete")
+    @PostMapping("/{orderId}/allset")
     @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
     public void completeOrder(@PathVariable Long orderId) throws IOException {
         orderStatusComponent.completeOrder(orderId);
@@ -136,7 +136,7 @@ public class ProductStatusController {
             value = "SELL-D-05 :: 수령 완료",
             notes = "주문 상태를 수령 완료로 합니다."
     )
-    @PostMapping("/{orderId}/complete")
+    @PostMapping("/{orderId}/receive")
     @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
     public void receiveOrder(@PathVariable Long orderId) throws IOException {
         orderStatusComponent.receiveOrder(orderId);
@@ -164,7 +164,7 @@ public class ProductStatusController {
             value = "SELL-D-06 :: 완료(텀블러 반납)",
             notes = "주문 상태를 완료(텀블러 반납)로 합니다."
     )
-    @PostMapping("/{orderId}/complete")
+    @PostMapping("/{orderId}/done")
     @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
     public void doneOrder(@PathVariable Long orderId) throws IOException {
         orderStatusComponent.doneOrder(orderId);
