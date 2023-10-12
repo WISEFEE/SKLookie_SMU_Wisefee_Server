@@ -33,9 +33,9 @@ public class ProductStatusController {
     private final FCMTokenServiceImpl fcmTokenService;
 
     //로그인한 사용자의 회원의 pk
-    Long pk = SecurityUtil.getCurrentMemberPk();
-
-    List<String> tokens = fcmTokenService.getFbTokenByMember(pk);
+//    Long pk = SecurityUtil.getCurrentMemberPk();
+//
+//    List<String> tokens = fcmTokenService.getFbTokenByMember(pk);
 
     @ApiOperation(
             value = "SELL-D-01 :: 주문 승인",
@@ -47,22 +47,22 @@ public class ProductStatusController {
     public void acceptOrder(@PathVariable Long orderId) throws IOException {
         orderStatusComponent.acceptOrder(orderId);
 
-        if (tokens != null && !tokens.isEmpty()) {
-            for (String token : tokens) {
-                FCMNotificationRequestDto requestDto = new FCMNotificationRequestDto();
-
-                Map<String, String> data = new HashMap<>();
-                data.put("title", "주문 승인 완료");
-                data.put("body", "주문이 승인되었습니다!");
-                requestDto.setData(data);
-                requestDto.setTo(token);
-                requestDto.setPriority("high");
-
-                fcmNotificationService.sendMessageTo(requestDto);
-            }
-        } else {
-            log.warn("사용자에게 알림을 보낼 FCM 토큰이 없습니다. 사용자 pk: " + pk);
-        }
+//        if (tokens != null && !tokens.isEmpty()) {
+//            for (String token : tokens) {
+//                FCMNotificationRequestDto requestDto = new FCMNotificationRequestDto();
+//
+//                Map<String, String> data = new HashMap<>();
+//                data.put("title", "주문 승인 완료");
+//                data.put("body", "주문이 승인되었습니다!");
+//                requestDto.setData(data);
+//                requestDto.setTo(token);
+//                requestDto.setPriority("high");
+//
+//                fcmNotificationService.sendMessageTo(requestDto);
+//            }
+//        } else {
+//            log.warn("사용자에게 알림을 보낼 FCM 토큰이 없습니다. 사용자 pk: " + pk);
+//        }
     }
 
     @ApiOperation(
@@ -75,23 +75,23 @@ public class ProductStatusController {
     public void rejectOrder(@PathVariable Long orderId) throws IOException {
         orderStatusComponent.rejectOrder(orderId);
 
-        if (tokens != null && !tokens.isEmpty()) {
-            for (String token : tokens) {
-                FCMNotificationRequestDto requestDto = new FCMNotificationRequestDto();
-
-                Map<String, String> data = new HashMap<>();
-
-                data.put("title", "주문 거절");
-                data.put("body", "주문이 거절되었습니다.");
-                requestDto.setData(data);
-                requestDto.setTo(token);
-                requestDto.setPriority("high");
-
-                fcmNotificationService.sendMessageTo(requestDto);
-            }
-        } else {
-            log.warn("사용자에게 알림을 보낼 FCM 토큰이 없습니다. 사용자 pk: " + pk);
-        }
+//        if (tokens != null && !tokens.isEmpty()) {
+//            for (String token : tokens) {
+//                FCMNotificationRequestDto requestDto = new FCMNotificationRequestDto();
+//
+//                Map<String, String> data = new HashMap<>();
+//
+//                data.put("title", "주문 거절");
+//                data.put("body", "주문이 거절되었습니다.");
+//                requestDto.setData(data);
+//                requestDto.setTo(token);
+//                requestDto.setPriority("high");
+//
+//                fcmNotificationService.sendMessageTo(requestDto);
+//            }
+//        } else {
+//            log.warn("사용자에게 알림을 보낼 FCM 토큰이 없습니다. 사용자 pk: " + pk);
+//        }
     }
 
     @ApiOperation(
@@ -113,23 +113,23 @@ public class ProductStatusController {
     public void completeOrder(@PathVariable Long orderId) throws IOException {
         orderStatusComponent.completeOrder(orderId);
 
-        if (tokens != null && !tokens.isEmpty()) {
-            for (String token : tokens) {
-                FCMNotificationRequestDto requestDto = new FCMNotificationRequestDto();
-
-                Map<String, String> data = new HashMap<>();
-
-                data.put("title", "주문 준비 완료");
-                data.put("body", "주문 준비가 완료되었습니다!");
-                requestDto.setData(data);
-                requestDto.setTo(token);
-                requestDto.setPriority("high");
-
-                fcmNotificationService.sendMessageTo(requestDto);
-            }
-        } else {
-            log.warn("사용자에게 알림을 보낼 FCM 토큰이 없습니다. 사용자 pk: " + pk);
-        }
+//        if (tokens != null && !tokens.isEmpty()) {
+//            for (String token : tokens) {
+//                FCMNotificationRequestDto requestDto = new FCMNotificationRequestDto();
+//
+//                Map<String, String> data = new HashMap<>();
+//
+//                data.put("title", "주문 준비 완료");
+//                data.put("body", "주문 준비가 완료되었습니다!");
+//                requestDto.setData(data);
+//                requestDto.setTo(token);
+//                requestDto.setPriority("high");
+//
+//                fcmNotificationService.sendMessageTo(requestDto);
+//            }
+//        } else {
+//            log.warn("사용자에게 알림을 보낼 FCM 토큰이 없습니다. 사용자 pk: " + pk);
+//        }
     }
 
     @ApiOperation(
@@ -141,23 +141,23 @@ public class ProductStatusController {
     public void receiveOrder(@PathVariable Long orderId) throws IOException {
         orderStatusComponent.receiveOrder(orderId);
 
-        if (tokens != null && !tokens.isEmpty()) {
-            for (String token : tokens) {
-                FCMNotificationRequestDto requestDto = new FCMNotificationRequestDto();
-
-                Map<String, String> data = new HashMap<>();
-
-                data.put("title", "수령 완료");
-                data.put("body", "수령이 완료되었습니다!");
-                requestDto.setData(data);
-                requestDto.setTo(token);
-                requestDto.setPriority("high");
-
-                fcmNotificationService.sendMessageTo(requestDto);
-            }
-        } else {
-            log.warn("사용자에게 알림을 보낼 FCM 토큰이 없습니다. 사용자 pk: " + pk);
-        }
+//        if (tokens != null && !tokens.isEmpty()) {
+//            for (String token : tokens) {
+//                FCMNotificationRequestDto requestDto = new FCMNotificationRequestDto();
+//
+//                Map<String, String> data = new HashMap<>();
+//
+//                data.put("title", "수령 완료");
+//                data.put("body", "수령이 완료되었습니다!");
+//                requestDto.setData(data);
+//                requestDto.setTo(token);
+//                requestDto.setPriority("high");
+//
+//                fcmNotificationService.sendMessageTo(requestDto);
+//            }
+//        } else {
+//            log.warn("사용자에게 알림을 보낼 FCM 토큰이 없습니다. 사용자 pk: " + pk);
+//        }
     }
 
     @ApiOperation(
@@ -169,22 +169,22 @@ public class ProductStatusController {
     public void doneOrder(@PathVariable Long orderId) throws IOException {
         orderStatusComponent.doneOrder(orderId);
 
-        if (tokens != null && !tokens.isEmpty()) {
-            for (String token : tokens) {
-                FCMNotificationRequestDto requestDto = new FCMNotificationRequestDto();
-
-                Map<String, String> data = new HashMap<>();
-
-                data.put("title", "텀블러 반납 완료");
-                data.put("body", "텀블러 반납이 완료되었습니다!");
-                requestDto.setData(data);
-                requestDto.setTo(token);
-                requestDto.setPriority("high");
-
-                fcmNotificationService.sendMessageTo(requestDto);
-            }
-        } else {
-            log.warn("사용자에게 알림을 보낼 FCM 토큰이 없습니다. 사용자 pk: " + pk);
-        }
+//        if (tokens != null && !tokens.isEmpty()) {
+//            for (String token : tokens) {
+//                FCMNotificationRequestDto requestDto = new FCMNotificationRequestDto();
+//
+//                Map<String, String> data = new HashMap<>();
+//
+//                data.put("title", "텀블러 반납 완료");
+//                data.put("body", "텀블러 반납이 완료되었습니다!");
+//                requestDto.setData(data);
+//                requestDto.setTo(token);
+//                requestDto.setPriority("high");
+//
+//                fcmNotificationService.sendMessageTo(requestDto);
+//            }
+//        } else {
+//            log.warn("사용자에게 알림을 보낼 FCM 토큰이 없습니다. 사용자 pk: " + pk);
+//        }
     }
 }
