@@ -104,7 +104,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler imple
     @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
     public ResponseEntity<Object> handlePreconditionFailException(PreconditionFailException preconditionFailException, WebRequest request) {
         log.error("Failed to doesn't match precondition", preconditionFailException);
-        return buildErrorResponse(preconditionFailException, HttpStatus.INTERNAL_SERVER_ERROR, request);
+        return buildErrorResponse(preconditionFailException, HttpStatus.PRECONDITION_FAILED, request);
     }
 
     // SubscribeExpireException

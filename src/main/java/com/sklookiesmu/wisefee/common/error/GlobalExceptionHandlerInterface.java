@@ -65,11 +65,11 @@ public interface GlobalExceptionHandlerInterface {
     ResponseEntity<Object> handlePreconditionFailException(PreconditionFailException preconditionFailException, WebRequest request);
 
     /**
-     * [SubscribeExpireException 404]
+     * [SubscribeExpireException 412]
      * 만료된 구독권에 접근하려는 경우
      */
     @ExceptionHandler(SubscribeExpireException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
     ResponseEntity<Object> handleSubscribeExpireException(SubscribeExpireException subscribeExpireException, WebRequest request);
 
 }
