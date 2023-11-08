@@ -1,0 +1,62 @@
+version: "3.7"
+networks:
+  wisefee-network:
+    driver: bridge
+
+services:
+  wisefee-database:
+    platform: linux/x86_64 #Mac M1칩 사용 제외하고는 주석처리
+    image: mariadb:10.11.2
+    container_name: wisefee-database
+    environment:
+      MYSQL_DATABASE: "wisefee-database"
+      MYSQL_ROOT_PASSWORD: "1111"
+      REDIS_HOST: "wisefee-redis"  # Redis 호스트 이름 (컨테이너 이름)
+      REDIS_PORT: 6390  # Redis 기본 포트
+    ports:
+      - 3308:3306
+    volumes:
+      - ./volumes/mariadb:/var/lib/mysql
+    networks: #사용할 네트워크 지정
+      - wisefee-network
+
+  wisefee-app:
+    build: #image를 DockerFile 기반으로 사용한다
+      context: ../..    #DockerFile이 있는 디렉토리
+      dockerfile: ./Dockerfile    #기존에 설정해둔 DockerFile을 지정히여 build 된 jar 파일을 container에 올린다.
+    restart: always        #컨테이너 재실행
+    depends_on: #database service가 실행된 이후에 실행
+      - wisefee-database
+      - wisefee-redis
+    ports:
+      - 8081:8080
+    container_name: wisefee-app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://wisefee-database:3306/wisefee-database?characterEncoding=UTF-8&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1111
+      SPRING_REDIS_HOST: wisefee-redis  # Redis 호스트 이름 (컨테이너 이름)
+      SPRING_REDIS_PORT: 6379  # Redis 기본 포트
+    volumes:
+      - ./volumes/storage/upload:/app/wisefee/storage/upload
+      - ./volumes/log:/app/wisefee/log
+    networks:
+      - wisefee-network
+
+  wisefee-redis: # container name
+    image: redis:6.2.6-alpine
+    ports: # 바인딩할 포트:내부 포트
+      - 6390:6379
+    command: redis-server /usr/local/etc/redis/redis.conf
+    container_name: wisefee-redis
+    volumes: # 마운트할 볼륨 설정
+      - ./volumes/redis/data:/data
+      - ./volumes/redis/conf:/usr/local/etc/redis/redis.conf
+    restart: always
+    networks:
+      - wisefee-network
+
+
+
+
+

@@ -1,0 +1,28 @@
+version: "3.7"
+services:
+  wisefee-database:
+    platform: linux/x86_64 #Mac M1칩 사용 제외하고는 주석처리
+    image: mariadb:10.11.2
+    environment:
+      MYSQL_DATABASE: "wisefee-database"
+      MYSQL_ROOT_PASSWORD: "1111"
+    ports:
+      - 3307:3306
+    volumes:
+      - ./volumes/mariadb:/var/lib/mysql
+  wisefee-redis: # container name
+    image: redis:6.2.6-alpine
+    ports: # 바인딩할 포트:내부 포트
+      - 6389:6379
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes: # 마운트할 볼륨 설정
+      - ./volumes/redis/data:/data
+      - ./volumes/redis/conf:/usr/local/etc/redis/redis.conf
+    restart: always
+  wisefee-phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: wisefee-phpmyadmin
+    environment:
+      PMA_HOST: wisefee-database
+    ports:
+      - '9090:80'

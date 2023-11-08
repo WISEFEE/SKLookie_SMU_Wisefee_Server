@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--%logger: 패키지 포함 클래스 정보-->
+<!--        %logger{0}: 패키지를 제외한 클래스 이름만 출력-->
+<!--        %logger{length}: Logger name을 축약할 수 있음. {length}는 최대 자리 수, ex)logger{35}-->
+<!--        %-5level: 로그 레벨, -5는 출력의 고정폭 값(5글자), 로깅레벨이i nfo일 경우 빈칸 하나 추가-->
+<!--        ${PID:-}: 프로세스 아이디-->
+<!--        %d: 로그 기록시간 출력-->
+<!--        %p: 로깅 레벨 출력-->
+<!--        %F: 로깅이 발생한 프로그램 파일명 출력-->
+<!--        %M: 로깅일 발생한 메소드의 명 출력-->
+<!--        %line: 로깅이 발생한 호출지의 라인-->
+<!--        %L: 로깅이 발생한 호출지의 라인-->
+<!--        %thread: 현재 Thread 명-->
+<!--        %t: 로깅이 발생한 Thread 명-->
+<!--        %c: 로깅이 발생한 카테고리-->
+<!--        %C: 로깅이 발생한 클래스 명 (%C{2}는 somePackage.SomeClass 가 출력됨)-->
+<!--        %m: 로그 메시지-->
+<!--        %msg: - 로그 메시지 (=%message)-->
+<!--        %n: 줄바꿈(new line)-->
+<!--        %%: %를 출력-->
+<!--        %r : 애플리케이션 시작 이후부터 로깅이 발생한 시점까지의 시간(ms)-->
+<!--        %d{yyyy-MM-dd-HH:mm:ss:sss}: %d는 date를 의미하며 중괄호에 들어간 문자열은 dateformat을 의미. 따라서 [2021-07-12 12:42:78]과 같은 날짜가 로그에 출력됨.-->
+<!--        %-4relative: %relative는 초 아래 단위 시간(밀리초)을 나타냄. -4를하면 4칸의 출력폼을 고정으로 가지고 출력. 따라서 숫자에 따라 [2021-07-12 12:42:78:232] 혹은 [2021-07-12 12:42:78:2332]와 같이 표현됨-->
+
+<configuration>
+    <timestamp key="BY_DATE" datePattern="yyyy-MM-dd"/>
+    <!--log 생성 패턴-->
+    <property name="LOG_PATTERN"
+              value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
+
+    <appender name="FILE-ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--log 파일 저장 path-->
+        <file>./log/error/error-${BY_DATE}.log</file>
+        <!--Error 만 저장-->
+        <filter class = "ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern> ./backup/error/error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!--        log 파일의 용량이 100MB를 넘어가면 새로운 log 파일 생성
+                        최대 30일동안 log 파일들 보존
+                        총 로그파일 3 GB 이상 초과할 시 Rolling 시작 (오래된 log 부터 덮어씀)-->
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+    <appender name="FILE-INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--log 파일 저장 path-->
+        <file>./log/info/info-${BY_DATE}.log</file>
+        <!--INFO 만 저장-->
+        <filter class = "ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern> ./backup/info/info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!--        log 파일의 용량이 100MB를 넘어가면 새로운 log 파일 생성
+                        최대 30일동안 log 파일들 보존
+                        총 로그파일 3 GB 이상 초과할 시 Rolling 시작 (오래된 log 부터 덮어씀)-->
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+    <appender name="FILE-WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--log 파일 저장 path-->
+        <file>./log/warn/warn-${BY_DATE}.log</file>
+        <!--WARN 만 저장-->
+        <filter class = "ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern> ./backup/warn/warn-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!--        log 파일의 용량이 100MB를 넘어가면 새로운 log 파일 생성
+                        최대 30일동안 log 파일들 보존
+                        총 로그파일 3 GB 이상 초과할 시 Rolling 시작 (오래된 log 부터 덮어씀)-->
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+    <springProfile name="!prod">
+        <include resource="./logback/console-appender.xml"/>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE-INFO"/>
+            <appender-ref ref="FILE-WARN"/>
+            <appender-ref ref="FILE-ERROR"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="prod">
+<!--        <include resource="classpath:logback/file-info-appender.xml"/>-->
+<!--        <include resource="classpath:logback/file-warn-appender.xml"/>-->
+<!--        <include resource="classpath:logback/file-error-appender.xml"/>-->
+
+        <root level="INFO">
+            <appender-ref ref="FILE-INFO"/>
+            <appender-ref ref="FILE-WARN"/>
+            <appender-ref ref="FILE-ERROR"/>
+        </root>
+    </springProfile>
+
+</configuration>
