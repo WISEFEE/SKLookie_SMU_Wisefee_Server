@@ -221,12 +221,13 @@ public class ConsumerOrderServiceImpl implements ConsumerOrderService{
             totalPrice += ordOrderOption.getOrderOption().getOrderOptionPrice();
         }
 
-        int subTicketDeposit = subscribe.getSubTicketType().getSubTicketDeposit() * subscribe.getSubPeople(); //  텀블러 보증금
+//        int subTicketDeposit = subscribe.getSubTicketType().getSubTicketDeposit() * subscribe.getSubPeople(); //  텀블러 보증금
+        int subTicketDeposit = subscribe.getSubTicketType().getSubTicketDeposit() * orderProducts.size(); //  텀블러 보증금
 
-        finalPayment.setPaymentPrice(discountPayment(totalPrice, subscribe)+subTicketDeposit);
+        finalPayment.setPaymentPrice(discountPayment(totalPrice, subscribe) + subTicketDeposit);
 
         log.info("할인된 금액: " + (discountPayment(totalPrice, subscribe)));
-        log.info("할인+보증금 총금액: " + (discountPayment(totalPrice, subscribe)+subTicketDeposit));
+        log.info("할인+보증금 총금액: " + (discountPayment(totalPrice, subscribe) + subTicketDeposit));
         finalPayment.setCreatedAt(LocalDateTime.now());
 
         Order.createOrder(order, orderProducts, orderOptions);
