@@ -140,7 +140,7 @@ public class CafeServiceImpl implements CafeService{
     @Override
     public Long getCafeId(Long memberId) {
         List<Cafe> cafes = memberService.getMember(memberId).getCafes();
-        if (memberService.getMember(memberId).getCafes() == null) {
+        if (cafes.size() == 0) {
             throw new NoSuchElementFoundException("매장이 존재하지 않습니다.");
         }
         return cafes.get(0).getCafeId();
