@@ -136,4 +136,13 @@ public class CafeServiceImpl implements CafeService{
     public List<Subscribe> getSubscribersByCafeId(Long cafeId) {
         return subscribeRepository.findAllByCafeId(cafeId);
     }
+
+    @Override
+    public Long getCafeId(Long memberId) {
+        List<Cafe> cafes = memberService.getMember(memberId).getCafes();
+        if (memberService.getMember(memberId).getCafes() == null) {
+            throw new NoSuchElementFoundException("매장이 존재하지 않습니다.");
+        }
+        return cafes.get(0).getCafeId();
+    }
 }

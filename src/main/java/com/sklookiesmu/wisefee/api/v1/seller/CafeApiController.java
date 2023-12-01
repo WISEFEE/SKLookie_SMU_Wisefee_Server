@@ -12,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -97,6 +98,16 @@ public class CafeApiController {
         List<OrderOption> orderOptionList = cafeOrderService.getOrderOptionsByCafeId(cafeId);
 
         return CafeDetailsDto.fromCafeAndLists(findCafe, productList, orderOptionList);
+    }
+
+    @ApiOperation(
+            value = "SELL-A-05 :: 매장 ID 조회",
+            notes = "회원의 카페 아이디를 반환합니다."
+    )
+    @GetMapping("/api/v1/seller/cafeId/{memberId}")
+    @PreAuthorize(AuthConstant.AUTH_ROLE_SELLER)
+    public ResponseEntity<Long> getCafeIdByMemberId(@PathVariable("memberId") Long memberId) {
+        return ResponseEntity.status(HttpStatus.OK).body(cafeService.getCafeId(memberId));
     }
 
 }
