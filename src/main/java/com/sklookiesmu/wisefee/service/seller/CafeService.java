@@ -62,4 +62,13 @@ public interface CafeService {
      */
     List<Subscribe> getSubscribersByCafeId(Long cafeId);
 
+
+    /**
+     * [매장 아이디 조회]
+     * 회원 아이디를 받아와 회원의 매장 아이디를 조회합니다.
+     * @param memberId
+     * @return cafeId
+     */
+    Long getCafeId(Long memberId);
+
 }

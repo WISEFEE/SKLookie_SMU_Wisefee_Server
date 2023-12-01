@@ -6,6 +6,8 @@ build/
 !**/src/test/**/build/
 firebase/wisefee_service_key.json
 
+./WISEFEE.pem
+
 ### STS ###
 .apt_generated
 .classpath
