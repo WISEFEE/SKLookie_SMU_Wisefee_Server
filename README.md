@@ -37,5 +37,5 @@
 ## API 스펙 상세
 
 <img src="readme/image-3.png">
-<img src="readme/image-4.png">
 <img src="readme/image-5.png">
+<img src="readme/image-4.png">
