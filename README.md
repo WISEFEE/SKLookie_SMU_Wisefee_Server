@@ -33,3 +33,9 @@
 <img src="readme/WISEFEE-video.gif" width = "40%" height="100%">
 
 <br><br>  
+
+## API 스펙 상세
+
+<img src="readme/image-3.png">
+<img src="readme/image-4.png">
+<img src="readme/image-5.png">
