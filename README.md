@@ -13,6 +13,7 @@
 <img src="https://img.shields.io/badge/Java-007396?style=flat-square&logo=apache&logoColor=white"> 
   <img src="https://img.shields.io/badge/MaridDB-003545?style=flat-square&logo=apachekafka&logoColor=white">
   <img src="https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white">
+    <img src="https://img.shields.io/badge/NginX-6DB33F?style=flat-square&logo=nginx&logoColor=white"> 
 
 
 <b>DevOps & Deploy : </b>
