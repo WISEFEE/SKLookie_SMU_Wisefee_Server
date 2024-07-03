@@ -30,8 +30,9 @@
 
 <br><hr><br>  
 
+## API 스펙 명세
 <details>
-  <summary style="font-size:150%">API 스펙 (펼쳐보기)</summary>
+  <summary>펼쳐보기</summary>
   <img src="readme/image-3.png">
   <img src="readme/image-5.png">
   <img src="readme/image-4.png">
