@@ -27,16 +27,17 @@
 ## 시스템 아키텍쳐
 ![alt text](readme/image-2.png)
 
-<br><br>  
+
+<br><hr><br>  
+
+<details>
+  <summary style="font-size:150%">API 스펙 (펼쳐보기)</summary>
+  <img src="readme/image-3.png">
+  <img src="readme/image-5.png">
+  <img src="readme/image-4.png">
+</details>
+
+<br><hr><br>  
 
 ## 결과물
-
 <img src="readme/WISEFEE-video.gif" width = "40%" height="100%">
-
-<br><br>  
-
-## API 스펙 상세
-
-<img src="readme/image-3.png">
-<img src="readme/image-5.png">
-<img src="readme/image-4.png">
